@@ -54,7 +54,7 @@ namespace OOH.API.Controllers
 
                 //IdentityRole role = new IdentityRole(roleName:"user2025");
 
-                //  var dddddd =  await _roleManager.CreateAsync(role);
+                //  var dddddd =  await _roleManager.CreateAsync(role);    
 
 
                 // ------------------
