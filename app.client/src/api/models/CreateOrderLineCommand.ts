@@ -1,0 +1,16 @@
+/* generated using openapi-typescript-codegen -- do not edit */
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+export type CreateOrderLineCommand = {
+    orderHeaderId?: string | null;
+    orderLineNum?: string | null;
+    barcodeItemNum?: string | null;
+    lineDescription?: string | null;
+    orderIncQty?: number;
+    orderDecQty?: number;
+    unitOfMeasure?: string | null;
+    dateTimeVoided?: string;
+    partNum?: string | null;
+    isInvalid?: boolean;
+};

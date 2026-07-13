@@ -1,0 +1,8 @@
+.ag-theme-quartz {
+	--ag-background-color: rgb(255, 255, 255, 1);
+	--ag-header-foreground-color: rgb(255 255 255);
+	--ag-header-background-color: rgb(14 68 145);
+
+	--ag-font-size: 17px;
+	--ag-font-family: monospace;
+}

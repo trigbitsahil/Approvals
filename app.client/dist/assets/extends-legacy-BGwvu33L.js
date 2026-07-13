@@ -1,0 +1,1 @@
+System.register([],function(n,t){function r(){return n("t",r=Object.assign?Object.assign.bind():function(n){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var e in r)({}).hasOwnProperty.call(r,e)&&(n[e]=r[e])}return n}),r.apply(null,arguments)}return n("t",r),{setters:[],execute:function(){}}});

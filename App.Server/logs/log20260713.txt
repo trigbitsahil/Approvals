@@ -1,0 +1,1352 @@
+2026-07-13 12:46:44.365 +05:30 [INF] User profile is available. Using 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-07-13 12:46:44.902 +05:30 [DBG] Registered model binder providers, in the following order: ["Asp.Versioning.ApiVersionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.TryParseModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+2026-07-13 12:46:45.131 +05:30 [DBG] Hosting starting
+2026-07-13 12:46:45.170 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-129e76e9-fdb1-422b-b26d-14a1b3f2ee66.xml'.
+2026-07-13 12:46:45.276 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-1e2cdb9a-3bfa-4182-8658-b4c116322d47.xml'.
+2026-07-13 12:46:45.314 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-6512e37a-ee76-4eb6-8c83-f54b4d9521ec.xml'.
+2026-07-13 12:46:45.354 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-6df947fd-36c3-490a-a77d-0e222502345a.xml'.
+2026-07-13 12:46:45.393 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-9de01909-2275-4ee5-b64a-3ff83f6f2384.xml'.
+2026-07-13 12:46:45.445 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-a69ac205-87f8-41e4-b138-7f22c9a002c7.xml'.
+2026-07-13 12:46:45.493 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-d8c53419-20ea-4da0-b64e-f79f8dedf774.xml'.
+2026-07-13 12:46:45.539 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-e6a7876a-1ca9-40ea-9e24-788f25930d57.xml'.
+2026-07-13 12:46:45.579 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-ecffc5de-f0ad-4505-a5b5-80cee97c9d5d.xml'.
+2026-07-13 12:46:45.618 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-f7e425ae-17a8-42fc-8344-f949244011c7.xml'.
+2026-07-13 12:46:45.653 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-f8fae18a-7d5e-40d4-81c9-dafaef54aef6.xml'.
+2026-07-13 12:46:45.698 +05:30 [DBG] Found key {129e76e9-fdb1-422b-b26d-14a1b3f2ee66}.
+2026-07-13 12:46:45.709 +05:30 [DBG] Found key {1e2cdb9a-3bfa-4182-8658-b4c116322d47}.
+2026-07-13 12:46:45.711 +05:30 [DBG] Found key {6512e37a-ee76-4eb6-8c83-f54b4d9521ec}.
+2026-07-13 12:46:45.714 +05:30 [DBG] Found key {6df947fd-36c3-490a-a77d-0e222502345a}.
+2026-07-13 12:46:45.717 +05:30 [DBG] Found key {9de01909-2275-4ee5-b64a-3ff83f6f2384}.
+2026-07-13 12:46:45.720 +05:30 [DBG] Found key {a69ac205-87f8-41e4-b138-7f22c9a002c7}.
+2026-07-13 12:46:45.722 +05:30 [DBG] Found key {d8c53419-20ea-4da0-b64e-f79f8dedf774}.
+2026-07-13 12:46:45.725 +05:30 [DBG] Found key {e6a7876a-1ca9-40ea-9e24-788f25930d57}.
+2026-07-13 12:46:45.727 +05:30 [DBG] Found key {ecffc5de-f0ad-4505-a5b5-80cee97c9d5d}.
+2026-07-13 12:46:45.729 +05:30 [DBG] Found key {f7e425ae-17a8-42fc-8344-f949244011c7}.
+2026-07-13 12:46:45.732 +05:30 [DBG] Found key {f8fae18a-7d5e-40d4-81c9-dafaef54aef6}.
+2026-07-13 12:46:45.748 +05:30 [DBG] Considering key {d8c53419-20ea-4da0-b64e-f79f8dedf774} with expiration date 2026-10-04 04:25:06Z as default key.
+2026-07-13 12:46:45.768 +05:30 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2026-07-13 12:46:45.776 +05:30 [DBG] Decrypting secret element using Windows DPAPI.
+2026-07-13 12:46:45.781 +05:30 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2026-07-13 12:46:45.805 +05:30 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2026-07-13 12:46:45.811 +05:30 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2026-07-13 12:46:45.816 +05:30 [DBG] Using key {d8c53419-20ea-4da0-b64e-f79f8dedf774} as the default key.
+2026-07-13 12:46:45.820 +05:30 [DBG] Key ring with default key {d8c53419-20ea-4da0-b64e-f79f8dedf774} was loaded during application startup.
+2026-07-13 12:46:46.015 +05:30 [DBG] Middleware loaded
+2026-07-13 12:46:46.025 +05:30 [DBG] Middleware loaded. Script /_framework/aspnetcore-browser-refresh.js (16505 B).
+2026-07-13 12:46:46.030 +05:30 [DBG] Middleware loaded. Script /_framework/blazor-hotreload.js (799 B).
+2026-07-13 12:46:46.324 +05:30 [DBG] Middleware loaded: DOTNET_MODIFIABLE_ASSEMBLIES=debug, __ASPNETCORE_BROWSER_TOOLS=true
+2026-07-13 12:46:46.561 +05:30 [INF] Now listening on: https://localhost:7282
+2026-07-13 12:46:46.563 +05:30 [INF] Now listening on: http://localhost:5298
+2026-07-13 12:46:46.566 +05:30 [DBG] Loaded hosting startup assembly App.Server
+2026-07-13 12:46:46.568 +05:30 [DBG] Loaded hosting startup assembly Microsoft.AspNetCore.SpaProxy
+2026-07-13 12:46:46.570 +05:30 [DBG] Loaded hosting startup assembly Microsoft.AspNetCore.Watch.BrowserRefresh
+2026-07-13 12:46:46.572 +05:30 [DBG] Loaded hosting startup assembly Microsoft.WebTools.BrowserLink.Net
+2026-07-13 12:46:46.574 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 12:46:46.576 +05:30 [INF] Hosting environment: Development
+2026-07-13 12:46:46.578 +05:30 [INF] Content root path: D:\Work\Dev\Projects\OOH\Code\Backup\App\07132026\App\App.Server
+2026-07-13 12:46:46.580 +05:30 [DBG] Hosting started
+2026-07-13 12:46:46.621 +05:30 [DBG] Connection id "0HNN0LQPGTBC6" accepted.
+2026-07-13 12:46:46.622 +05:30 [DBG] Connection id "0HNN0LQPGTBC6" received FIN.
+2026-07-13 12:46:46.625 +05:30 [DBG] Connection id "0HNN0LQPGTBC6" started.
+2026-07-13 12:46:46.681 +05:30 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2026-07-13 12:46:46.817 +05:30 [DBG] Connection id "0HNN0LQPGTBC6" stopped.
+2026-07-13 12:46:46.825 +05:30 [DBG] Connection id "0HNN0LQPGTBC6" sending FIN because: "The Socket transport's send loop completed gracefully."
+2026-07-13 12:46:48.331 +05:30 [DBG] Connection id "0HNN0LQPGTBC7" accepted.
+2026-07-13 12:46:48.338 +05:30 [DBG] Connection id "0HNN0LQPGTBC7" started.
+2026-07-13 12:46:48.421 +05:30 [DBG] Connection 0HNN0LQPGTBC7 established using the following protocol: "Tls13"
+2026-07-13 12:46:48.618 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/swagger/index.html - null null
+2026-07-13 12:46:48.792 +05:30 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2026-07-13 12:46:48.853 +05:30 [DBG] The request path /swagger/index.html does not match an existing file
+2026-07-13 12:46:49.227 +05:30 [DBG] Response markup is scheduled to include Browser Link script injection.
+2026-07-13 12:46:49.236 +05:30 [DBG] Response markup is scheduled to include browser refresh script injection.
+2026-07-13 12:46:49.285 +05:30 [DBG] Response markup was updated to include Browser Link script injection.
+2026-07-13 12:46:49.290 +05:30 [DBG] Response markup was updated to include browser refresh script injection.
+2026-07-13 12:46:49.298 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/swagger/index.html - 200 null text/html;charset=utf-8 701.6809ms
+2026-07-13 12:46:50.011 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/_vs/browserLink - null null
+2026-07-13 12:46:50.011 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/_framework/aspnetcore-browser-refresh.js - null null
+2026-07-13 12:46:50.797 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:5173)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.IsSpaProxyRunning(CancellationToken cancellationToken)
+2026-07-13 12:46:50.866 +05:30 [DBG] Script injected: /_framework/aspnetcore-browser-refresh.js
+2026-07-13 12:46:50.900 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/_framework/aspnetcore-browser-refresh.js - 200 16505 application/javascript; charset=utf-8 888.6218ms
+2026-07-13 12:46:50.902 +05:30 [INF] No SPA development server running at https://localhost:5173 found.
+2026-07-13 12:46:51.029 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/_vs/browserLink - 200 null text/javascript; charset=UTF-8 1018.2082ms
+2026-07-13 12:46:51.137 +05:30 [DBG] Connection id "0HNN0LQPGTBC8" accepted.
+2026-07-13 12:46:51.147 +05:30 [DBG] Connection id "0HNN0LQPGTBC8" started.
+2026-07-13 12:46:51.158 +05:30 [DBG] Connection 0HNN0LQPGTBC8 established using the following protocol: "Tls13"
+2026-07-13 12:46:51.164 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/_framework/aspnetcore-browser-refresh.js - null null
+2026-07-13 12:46:51.173 +05:30 [DBG] Script injected: /_framework/aspnetcore-browser-refresh.js
+2026-07-13 12:46:51.175 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/_framework/aspnetcore-browser-refresh.js - 200 16505 application/javascript; charset=utf-8 11.5591ms
+2026-07-13 12:46:51.303 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/_vs/browserLink - null null
+2026-07-13 12:46:51.335 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/_vs/browserLink - 200 null text/javascript; charset=UTF-8 31.6676ms
+2026-07-13 12:46:51.386 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/swagger/v1/swagger.json - null null
+2026-07-13 12:46:51.396 +05:30 [DBG] The request path /swagger/v1/swagger.json does not match an existing file
+2026-07-13 12:46:51.434 +05:30 [DBG] Watch process 'System.Diagnostics.Process (powershell)' started.
+2026-07-13 12:46:51.483 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/swagger/favicon-32x32.png - null null
+2026-07-13 12:46:51.500 +05:30 [DBG] The request path /swagger/favicon-32x32.png does not match an existing file
+2026-07-13 12:46:51.576 +05:30 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2026-07-13 12:46:51.580 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/swagger/favicon-32x32.png - 200 628 image/png 97.3403ms
+2026-07-13 12:46:53.270 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 1884.4469ms
+2026-07-13 12:46:55.556 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:5173)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:00.694 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:5173)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:01.873 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:03.020 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:04.554 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:15.601 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:26.621 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:30.939 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:34.397 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:37.196 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:45.928 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:49.789 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:50.890 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:52.281 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:53.423 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:54.482 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:55.632 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:47:56.077 +05:30 [DBG] Connection id "0HNN0LQPGTBC9" accepted.
+2026-07-13 12:47:56.082 +05:30 [DBG] Connection id "0HNN0LQPGTBC9" started.
+2026-07-13 12:47:56.120 +05:30 [DBG] Connection 0HNN0LQPGTBC9 established using the following protocol: "Tls13"
+2026-07-13 12:47:56.235 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - null null
+2026-07-13 12:47:56.244 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:47:56.247 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:47:56.627 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 12:47:56.632 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 12:47:56.645 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:47:56.647 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:47:56.650 +05:30 [DBG] The request is a preflight request.
+2026-07-13 12:47:56.656 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - 204 null null 464.9449ms
+2026-07-13 12:48:02.615 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:03.540 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/Project - null null
+2026-07-13 12:48:03.540 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - null null
+2026-07-13 12:48:03.564 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/Folder - null null
+2026-07-13 12:48:03.575 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/Project - null null
+2026-07-13 12:48:03.606 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.575 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/Folder - null null
+2026-07-13 12:48:03.584 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.591 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.598 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.557 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - null null
+2026-07-13 12:48:03.610 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.615 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.619 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.621 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.626 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.634 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.639 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Project'
+2026-07-13 12:48:03.650 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.652 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Project'
+2026-07-13 12:48:03.654 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 12:48:03.668 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Folder'
+2026-07-13 12:48:03.687 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 12:48:03.684 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 12:48:03.737 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:03.714 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 12:48:03.678 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 12:48:03.670 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 12:48:03.680 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Folder'
+2026-07-13 12:48:03.786 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:03.794 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:03.796 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:03.798 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:03.800 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 12:48:03.803 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 12:48:03.805 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:03.809 +05:30 [DBG] The request is a preflight request.
+2026-07-13 12:48:03.811 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:03.813 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:03.816 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 12:48:03.831 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:03.820 +05:30 [DBG] The request is a preflight request.
+2026-07-13 12:48:03.826 +05:30 [DBG] The request is a preflight request.
+2026-07-13 12:48:03.828 +05:30 [DBG] The request is a preflight request.
+2026-07-13 12:48:03.819 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:03.824 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - 204 null null 285.0382ms
+2026-07-13 12:48:03.835 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/Project - 204 null null 298.1402ms
+2026-07-13 12:48:03.837 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/Folder - 204 null null 279.2851ms
+2026-07-13 12:48:03.838 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/Project - 204 null null 262.9429ms
+2026-07-13 12:48:03.833 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:03.847 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/Folder - null null
+2026-07-13 12:48:03.856 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:03.830 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/User/GetLoggedInUser - null null
+2026-07-13 12:48:03.843 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/Project - null null
+2026-07-13 12:48:03.900 +05:30 [DBG] The request is a preflight request.
+2026-07-13 12:48:03.910 +05:30 [DBG] The request is a preflight request.
+2026-07-13 12:48:03.915 +05:30 [DBG] The request path /api/v1/Folder does not match a supported file type
+2026-07-13 12:48:03.916 +05:30 [DBG] The request path /api/v1/User/GetLoggedInUser does not match a supported file type
+2026-07-13 12:48:03.921 +05:30 [DBG] The request path /api/v1/Project does not match a supported file type
+2026-07-13 12:48:03.923 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - 204 null null 372.591ms
+2026-07-13 12:48:03.925 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/Folder - 204 null null 349.8826ms
+2026-07-13 12:48:03.928 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:03.929 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:03.931 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:03.946 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Folder'
+2026-07-13 12:48:03.949 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 12:48:03.951 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Project'
+2026-07-13 12:48:03.963 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 12:48:03.963 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/Folder'
+2026-07-13 12:48:03.971 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:03.986 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:03.992 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:03.989 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:03.991 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:03.964 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/Project'
+2026-07-13 12:48:03.995 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:04.016 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:04.019 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:04.021 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:04.024 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:04.026 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:04.032 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:04.036 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:04.107 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:04.107 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/Folder - null null
+2026-07-13 12:48:04.108 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:04.108 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:04.113 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:04.118 +05:30 [DBG] The request path /api/v1/Folder does not match a supported file type
+2026-07-13 12:48:04.120 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:04.125 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:04.131 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:04.139 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Folder'
+2026-07-13 12:48:04.142 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/Folder'
+2026-07-13 12:48:04.145 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:04.149 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:04.151 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:04.154 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:04.163 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:04.165 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:05.948 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:05.965 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:05.965 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:05.948 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:05.975 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:05.977 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:05.978 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:05.979 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:05.980 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:05.995 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:05.996 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:05.997 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:05.999 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:06.001 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.003 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.006 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.008 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.011 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 499 null null 2181.9546ms
+2026-07-13 12:48:06.012 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 499 null null 1905.8214ms
+2026-07-13 12:48:06.014 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 499 null null 2167.2078ms
+2026-07-13 12:48:06.016 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 499 null null 2173.4023ms
+2026-07-13 12:48:06.023 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 499
+2026-07-13 12:48:06.027 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 499
+2026-07-13 12:48:06.033 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 499
+2026-07-13 12:48:06.037 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 499
+2026-07-13 12:48:06.513 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/User/GetLoggedInUser - null null
+2026-07-13 12:48:06.513 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/Folder - null null
+2026-07-13 12:48:06.514 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/Project - null null
+2026-07-13 12:48:06.521 +05:30 [DBG] The request path /api/v1/User/GetLoggedInUser does not match a supported file type
+2026-07-13 12:48:06.527 +05:30 [DBG] The request path /api/v1/Folder does not match a supported file type
+2026-07-13 12:48:06.536 +05:30 [DBG] The request path /api/v1/Project does not match a supported file type
+2026-07-13 12:48:06.539 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:06.541 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:06.544 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:06.547 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 12:48:06.551 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Folder'
+2026-07-13 12:48:06.553 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Project'
+2026-07-13 12:48:06.557 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 12:48:06.559 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/Folder'
+2026-07-13 12:48:06.561 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/Project'
+2026-07-13 12:48:06.565 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.568 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.571 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.574 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:06.576 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:06.578 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:06.581 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:06.583 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:06.585 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:06.587 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:06.590 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:06.592 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:06.595 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.597 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.598 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.600 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.602 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.604 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.652 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:06.693 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:06.713 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.736 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:06.737 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.744 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:06.746 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.749 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:06.751 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.754 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:06.756 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.759 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 404 0 null 245.5493ms
+2026-07-13 12:48:06.765 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 404 0 null 251.439ms
+2026-07-13 12:48:06.762 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.762 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/User/GetLoggedInUser - null null
+2026-07-13 12:48:06.781 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 404
+2026-07-13 12:48:06.776 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 404
+2026-07-13 12:48:06.784 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 404 0 null 269.9386ms
+2026-07-13 12:48:06.767 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/Folder - null null
+2026-07-13 12:48:06.786 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/api/v1/Project - null null
+2026-07-13 12:48:06.790 +05:30 [DBG] The request path /api/v1/User/GetLoggedInUser does not match a supported file type
+2026-07-13 12:48:06.803 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 404
+2026-07-13 12:48:06.809 +05:30 [DBG] The request path /api/v1/Folder does not match a supported file type
+2026-07-13 12:48:06.816 +05:30 [DBG] The request path /api/v1/Project does not match a supported file type
+2026-07-13 12:48:06.818 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:06.825 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:06.828 +05:30 [DBG] The request path  does not match the path filter
+2026-07-13 12:48:06.831 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 12:48:06.833 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Folder'
+2026-07-13 12:48:06.836 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Project'
+2026-07-13 12:48:06.839 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 12:48:06.842 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/Folder'
+2026-07-13 12:48:06.844 +05:30 [DBG] Endpoint 'Fallback {*path:nonfile}' with route pattern '{*path:nonfile}' is valid for the request path '/api/v1/Project'
+2026-07-13 12:48:06.848 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.852 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.857 +05:30 [DBG] Request matched endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:06.860 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:06.862 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:06.864 +05:30 [DBG] Matched endpoint 'Fallback {*path:nonfile}' is a fallback endpoint.
+2026-07-13 12:48:06.866 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:06.868 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:06.870 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 12:48:06.872 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:06.874 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:06.876 +05:30 [INF] CORS policy execution successful.
+2026-07-13 12:48:06.879 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.881 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.882 +05:30 [INF] Identity.Bearer was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.884 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.887 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.889 +05:30 [INF] Identity.BearerAndApplication was not authenticated. Failure message: Unprotected token failed
+2026-07-13 12:48:06.941 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:06.980 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:06.983 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:07.019 +05:30 [ERR] Error logging activity: The ConnectionString property has not been initialized.
+2026-07-13 12:48:07.019 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:07.026 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:07.027 +05:30 [INF] Executing endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:07.030 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:07.033 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:07.037 +05:30 [DBG] The request path /index.html does not match an existing file
+2026-07-13 12:48:07.039 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:07.039 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:07.041 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 404 0 null 280.2418ms
+2026-07-13 12:48:07.043 +05:30 [INF] Executed endpoint 'Fallback {*path:nonfile}'
+2026-07-13 12:48:07.045 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 404 0 null 278.2355ms
+2026-07-13 12:48:07.066 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 404
+2026-07-13 12:48:07.068 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/index.html - 404 0 null 282.8482ms
+2026-07-13 12:48:07.076 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 404
+2026-07-13 12:48:07.086 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7282/index.html, Response status code: 404
+2026-07-13 12:48:08.087 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:09.128 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:10.163 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:11.203 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:12.233 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:13.271 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:14.368 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 12:48:15.400 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:02:15.007 +05:30 [INF] User profile is available. Using 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-07-13 16:02:15.512 +05:30 [DBG] Registered model binder providers, in the following order: ["Asp.Versioning.ApiVersionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.TryParseModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+2026-07-13 16:02:15.694 +05:30 [DBG] Hosting starting
+2026-07-13 16:02:15.726 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-129e76e9-fdb1-422b-b26d-14a1b3f2ee66.xml'.
+2026-07-13 16:02:15.750 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-1e2cdb9a-3bfa-4182-8658-b4c116322d47.xml'.
+2026-07-13 16:02:15.755 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-6512e37a-ee76-4eb6-8c83-f54b4d9521ec.xml'.
+2026-07-13 16:02:15.764 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-6df947fd-36c3-490a-a77d-0e222502345a.xml'.
+2026-07-13 16:02:15.768 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-9de01909-2275-4ee5-b64a-3ff83f6f2384.xml'.
+2026-07-13 16:02:15.771 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-a69ac205-87f8-41e4-b138-7f22c9a002c7.xml'.
+2026-07-13 16:02:15.775 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-d8c53419-20ea-4da0-b64e-f79f8dedf774.xml'.
+2026-07-13 16:02:15.779 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-e6a7876a-1ca9-40ea-9e24-788f25930d57.xml'.
+2026-07-13 16:02:15.782 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-ecffc5de-f0ad-4505-a5b5-80cee97c9d5d.xml'.
+2026-07-13 16:02:15.788 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-f7e425ae-17a8-42fc-8344-f949244011c7.xml'.
+2026-07-13 16:02:15.792 +05:30 [DBG] Reading data from file 'C:\Users\iamta\AppData\Local\ASP.NET\DataProtection-Keys\key-f8fae18a-7d5e-40d4-81c9-dafaef54aef6.xml'.
+2026-07-13 16:02:15.805 +05:30 [DBG] Found key {129e76e9-fdb1-422b-b26d-14a1b3f2ee66}.
+2026-07-13 16:02:15.813 +05:30 [DBG] Found key {1e2cdb9a-3bfa-4182-8658-b4c116322d47}.
+2026-07-13 16:02:15.815 +05:30 [DBG] Found key {6512e37a-ee76-4eb6-8c83-f54b4d9521ec}.
+2026-07-13 16:02:15.818 +05:30 [DBG] Found key {6df947fd-36c3-490a-a77d-0e222502345a}.
+2026-07-13 16:02:15.820 +05:30 [DBG] Found key {9de01909-2275-4ee5-b64a-3ff83f6f2384}.
+2026-07-13 16:02:15.823 +05:30 [DBG] Found key {a69ac205-87f8-41e4-b138-7f22c9a002c7}.
+2026-07-13 16:02:15.825 +05:30 [DBG] Found key {d8c53419-20ea-4da0-b64e-f79f8dedf774}.
+2026-07-13 16:02:15.827 +05:30 [DBG] Found key {e6a7876a-1ca9-40ea-9e24-788f25930d57}.
+2026-07-13 16:02:15.830 +05:30 [DBG] Found key {ecffc5de-f0ad-4505-a5b5-80cee97c9d5d}.
+2026-07-13 16:02:15.832 +05:30 [DBG] Found key {f7e425ae-17a8-42fc-8344-f949244011c7}.
+2026-07-13 16:02:15.834 +05:30 [DBG] Found key {f8fae18a-7d5e-40d4-81c9-dafaef54aef6}.
+2026-07-13 16:02:15.846 +05:30 [DBG] Considering key {d8c53419-20ea-4da0-b64e-f79f8dedf774} with expiration date 2026-10-04 04:25:06Z as default key.
+2026-07-13 16:02:15.855 +05:30 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2026-07-13 16:02:15.862 +05:30 [DBG] Decrypting secret element using Windows DPAPI.
+2026-07-13 16:02:15.866 +05:30 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2026-07-13 16:02:15.884 +05:30 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2026-07-13 16:02:15.891 +05:30 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2026-07-13 16:02:15.896 +05:30 [DBG] Using key {d8c53419-20ea-4da0-b64e-f79f8dedf774} as the default key.
+2026-07-13 16:02:15.899 +05:30 [DBG] Key ring with default key {d8c53419-20ea-4da0-b64e-f79f8dedf774} was loaded during application startup.
+2026-07-13 16:02:16.042 +05:30 [DBG] Middleware loaded
+2026-07-13 16:02:16.048 +05:30 [DBG] Middleware loaded. Script /_framework/aspnetcore-browser-refresh.js (16505 B).
+2026-07-13 16:02:16.082 +05:30 [DBG] Middleware loaded. Script /_framework/blazor-hotreload.js (799 B).
+2026-07-13 16:02:16.396 +05:30 [DBG] Middleware loaded: DOTNET_MODIFIABLE_ASSEMBLIES=debug, __ASPNETCORE_BROWSER_TOOLS=true
+2026-07-13 16:02:16.615 +05:30 [INF] Now listening on: https://localhost:7282
+2026-07-13 16:02:16.616 +05:30 [INF] Now listening on: http://localhost:5298
+2026-07-13 16:02:16.618 +05:30 [DBG] Loaded hosting startup assembly App.Server
+2026-07-13 16:02:16.619 +05:30 [DBG] Loaded hosting startup assembly Microsoft.AspNetCore.SpaProxy
+2026-07-13 16:02:16.621 +05:30 [DBG] Loaded hosting startup assembly Microsoft.AspNetCore.Watch.BrowserRefresh
+2026-07-13 16:02:16.623 +05:30 [DBG] Loaded hosting startup assembly Microsoft.WebTools.BrowserLink.Net
+2026-07-13 16:02:16.627 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 16:02:16.629 +05:30 [INF] Hosting environment: Development
+2026-07-13 16:02:16.630 +05:30 [INF] Content root path: D:\Work\Dev\Projects\OOH\Code\Approvals\App.Server
+2026-07-13 16:02:16.633 +05:30 [DBG] Hosting started
+2026-07-13 16:02:16.857 +05:30 [DBG] Connection id "0HNN0P81D3D6A" accepted.
+2026-07-13 16:02:16.857 +05:30 [DBG] Connection id "0HNN0P81D3D6B" accepted.
+2026-07-13 16:02:16.867 +05:30 [DBG] Connection id "0HNN0P81D3D6A" started.
+2026-07-13 16:02:16.870 +05:30 [DBG] Connection id "0HNN0P81D3D6B" started.
+2026-07-13 16:02:16.883 +05:30 [DBG] Connection id "0HNN0P81D3D6B" received FIN.
+2026-07-13 16:02:16.883 +05:30 [DBG] Connection id "0HNN0P81D3D6A" received FIN.
+2026-07-13 16:02:16.923 +05:30 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2026-07-13 16:02:16.923 +05:30 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2026-07-13 16:02:17.072 +05:30 [DBG] Connection id "0HNN0P81D3D6A" stopped.
+2026-07-13 16:02:17.072 +05:30 [DBG] Connection id "0HNN0P81D3D6B" stopped.
+2026-07-13 16:02:17.081 +05:30 [DBG] Connection id "0HNN0P81D3D6B" sending FIN because: "The Socket transport's send loop completed gracefully."
+2026-07-13 16:02:17.081 +05:30 [DBG] Connection id "0HNN0P81D3D6A" sending FIN because: "The Socket transport's send loop completed gracefully."
+2026-07-13 16:02:19.616 +05:30 [DBG] Connection id "0HNN0P81D3D6C" accepted.
+2026-07-13 16:02:19.620 +05:30 [DBG] Connection id "0HNN0P81D3D6C" started.
+2026-07-13 16:02:19.718 +05:30 [DBG] Connection 0HNN0P81D3D6C established using the following protocol: "Tls13"
+2026-07-13 16:02:19.955 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/swagger/index.html - null null
+2026-07-13 16:02:20.088 +05:30 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2026-07-13 16:02:20.115 +05:30 [DBG] The request path /swagger/index.html does not match an existing file
+2026-07-13 16:02:20.179 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:5173)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.IsSpaProxyRunning(CancellationToken cancellationToken)
+2026-07-13 16:02:20.186 +05:30 [INF] No SPA development server running at https://localhost:5173 found.
+2026-07-13 16:02:20.382 +05:30 [DBG] Response markup is scheduled to include Browser Link script injection.
+2026-07-13 16:02:20.386 +05:30 [DBG] Response markup is scheduled to include browser refresh script injection.
+2026-07-13 16:02:20.437 +05:30 [DBG] Response markup was updated to include Browser Link script injection.
+2026-07-13 16:02:20.441 +05:30 [DBG] Response markup was updated to include browser refresh script injection.
+2026-07-13 16:02:20.449 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/swagger/index.html - 200 null text/html;charset=utf-8 512.5848ms
+2026-07-13 16:02:20.667 +05:30 [DBG] Watch process 'System.Diagnostics.Process (powershell)' started.
+2026-07-13 16:02:20.748 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/_framework/aspnetcore-browser-refresh.js - null null
+2026-07-13 16:02:20.771 +05:30 [DBG] Script injected: /_framework/aspnetcore-browser-refresh.js
+2026-07-13 16:02:20.784 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/_framework/aspnetcore-browser-refresh.js - 200 16505 application/javascript; charset=utf-8 36.3083ms
+2026-07-13 16:02:20.846 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/_vs/browserLink - null null
+2026-07-13 16:02:21.021 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/_vs/browserLink - 200 null text/javascript; charset=UTF-8 175.3512ms
+2026-07-13 16:02:21.491 +05:30 [DBG] Connection id "0HNN0P81D3D6D" accepted.
+2026-07-13 16:02:21.494 +05:30 [DBG] Connection id "0HNN0P81D3D6D" started.
+2026-07-13 16:02:21.513 +05:30 [DBG] Connection 0HNN0P81D3D6D established using the following protocol: "Tls13"
+2026-07-13 16:02:21.523 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/_framework/aspnetcore-browser-refresh.js - null null
+2026-07-13 16:02:21.523 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/_vs/browserLink - null null
+2026-07-13 16:02:21.533 +05:30 [DBG] Script injected: /_framework/aspnetcore-browser-refresh.js
+2026-07-13 16:02:21.549 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/_framework/aspnetcore-browser-refresh.js - 200 16505 application/javascript; charset=utf-8 28.7802ms
+2026-07-13 16:02:21.578 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/_vs/browserLink - 200 null text/javascript; charset=UTF-8 54.7693ms
+2026-07-13 16:02:21.611 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7282/swagger/v1/swagger.json - null null
+2026-07-13 16:02:21.617 +05:30 [DBG] The request path /swagger/v1/swagger.json does not match an existing file
+2026-07-13 16:02:22.482 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7282/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 871.8521ms
+2026-07-13 16:02:24.781 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:5173)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:02:29.892 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:5173)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:02:40.930 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:02:51.988 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:02:54.929 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:02:58.315 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:02:59.456 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:03:08.731 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:03:10.084 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:03:11.228 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:03:12.372 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:03:13.417 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)
+2026-07-13 16:03:14.020 +05:30 [DBG] Connection id "0HNN0P81D3D6E" accepted.
+2026-07-13 16:03:14.023 +05:30 [DBG] Connection id "0HNN0P81D3D6E" started.
+2026-07-13 16:03:14.032 +05:30 [DBG] Connection 0HNN0P81D3D6E established using the following protocol: "Tls13"
+2026-07-13 16:03:14.037 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - null null
+2026-07-13 16:03:14.041 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/Project - null null
+2026-07-13 16:03:14.038 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/Folder - null null
+2026-07-13 16:03:14.038 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - null null
+2026-07-13 16:03:14.040 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/Folder - null null
+2026-07-13 16:03:14.077 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7282/api/v1/Project - null null
+2026-07-13 16:03:14.093 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.097 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.103 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.108 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.113 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.119 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.122 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.123 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.125 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.128 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.130 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.132 +05:30 [DBG] OPTIONS requests are not supported
+2026-07-13 16:03:14.286 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 16:03:14.286 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Folder'
+2026-07-13 16:03:14.286 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/User/GetLoggedInUser'
+2026-07-13 16:03:14.286 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Folder'
+2026-07-13 16:03:14.286 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Project'
+2026-07-13 16:03:14.286 +05:30 [DBG] 1 candidate(s) found for the request path '/api/v1/Project'
+2026-07-13 16:03:14.291 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 16:03:14.293 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 16:03:14.295 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 16:03:14.299 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 16:03:14.302 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 16:03:14.304 +05:30 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2026-07-13 16:03:14.310 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 16:03:14.310 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 16:03:14.313 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 16:03:14.315 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 16:03:14.317 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 16:03:14.319 +05:30 [DBG] The request has an origin header: 'http://localhost:5173'.
+2026-07-13 16:03:14.322 +05:30 [INF] CORS policy execution successful.
+2026-07-13 16:03:14.323 +05:30 [INF] CORS policy execution successful.
+2026-07-13 16:03:14.326 +05:30 [INF] CORS policy execution successful.
+2026-07-13 16:03:14.329 +05:30 [INF] CORS policy execution successful.
+2026-07-13 16:03:14.332 +05:30 [INF] CORS policy execution successful.
+2026-07-13 16:03:14.334 +05:30 [INF] CORS policy execution successful.
+2026-07-13 16:03:14.337 +05:30 [DBG] The request is a preflight request.
+2026-07-13 16:03:14.338 +05:30 [DBG] The request is a preflight request.
+2026-07-13 16:03:14.340 +05:30 [DBG] The request is a preflight request.
+2026-07-13 16:03:14.344 +05:30 [DBG] The request is a preflight request.
+2026-07-13 16:03:14.354 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - 204 null null 316.853ms
+2026-07-13 16:03:14.342 +05:30 [DBG] The request is a preflight request.
+2026-07-13 16:03:14.345 +05:30 [DBG] The request is a preflight request.
+2026-07-13 16:03:14.350 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/User/GetLoggedInUser - 204 null null 312.3914ms
+2026-07-13 16:03:14.350 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/Folder - 204 null null 312.2529ms
+2026-07-13 16:03:14.403 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/Project - 204 null null 328.2251ms
+2026-07-13 16:03:14.412 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/Folder - 204 null null 371.1548ms
+2026-07-13 16:03:14.413 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7282/api/v1/Project - 204 null null 372.3694ms
+2026-07-13 16:03:20.247 +05:30 [DBG] Failed to connect to the SPA Development proxy.
+System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.Security.Authentication.AuthenticationException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Microsoft.AspNetCore.SpaProxy.SpaProxyLaunchManager.ProbeSpaDevelopmentServerUrl(HttpClient httpClient, CancellationToken cancellationToken)

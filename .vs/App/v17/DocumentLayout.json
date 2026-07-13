@@ -1,0 +1,1095 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\startupextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\startupextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\controllers\\approvalmediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\controllers\\approvalmediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.persistence\\repositories\\global\\approvalmediarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|solutionrelative:app.persistence\\repositories\\global\\approvalmediarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\contracts\\persistence\\global\\iapprovalmediarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\contracts\\persistence\\global\\iapprovalmediarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.persistence\\dapperdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|solutionrelative:app.persistence\\dapperdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.persistence\\persistenceserviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|solutionrelative:app.persistence\\persistenceserviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.persistence\\tenantdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|solutionrelative:app.persistence\\tenantdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\applicationserviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\applicationserviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\controllers\\userintermediatecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\controllers\\userintermediatecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\controllers\\approvalapprovercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\controllers\\approvalapprovercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.persistence\\repositories\\tenders\\expensetransactionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|solutionrelative:app.persistence\\repositories\\tenders\\expensetransactionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.persistence\\repositories\\global\\approvalrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|solutionrelative:app.persistence\\repositories\\global\\approvalrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\expensetypes\\commands\\updateexpensetype\\updateexpensetypecommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\expensetypes\\commands\\updateexpensetype\\updateexpensetypecommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\expenses\\commands\\updateexpense\\updateexpensecommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\expenses\\commands\\updateexpense\\updateexpensecommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\expensetransactions\\commands\\updateexpensetransaction\\updateexpensetransactioncommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\expensetransactions\\commands\\updateexpensetransaction\\updateexpensetransactioncommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\profiles\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\profiles\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\contracts\\persistence\\tenders\\iexpensetransactionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\contracts\\persistence\\tenders\\iexpensetransactionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\expensetransactions\\commands\\createexpensetransaction\\createexpensetransactioncommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\expensetransactions\\commands\\createexpensetransaction\\createexpensetransactioncommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\controllers\\expensetransactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\controllers\\expensetransactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\global\\approvals\\queries\\getapprovalwithtypedetail\\approvalwithtypedetailvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\global\\approvals\\queries\\getapprovalwithtypedetail\\approvalwithtypedetailvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\global\\approvalapprovers\\commands\\updateapprovalapprover\\updateapprovalapprovercommandresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\global\\approvalapprovers\\commands\\updateapprovalapprover\\updateapprovalapprovercommandresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\global\\approvalapprovers\\commands\\updateapprovalapprover\\updateapprovalapprovercommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\global\\approvalapprovers\\commands\\updateapprovalapprover\\updateapprovalapprovercommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3586E3D4-DFEA-47E0-A75A-3CF9A0ABBF15}|App.Identity\\App.Identity.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.identity\\userclaimsprincipalfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3586E3D4-DFEA-47E0-A75A-3CF9A0ABBF15}|App.Identity\\App.Identity.csproj|solutionrelative:app.identity\\userclaimsprincipalfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3586E3D4-DFEA-47E0-A75A-3CF9A0ABBF15}|App.Identity\\App.Identity.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.identity\\oohidentitydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3586E3D4-DFEA-47E0-A75A-3CF9A0ABBF15}|App.Identity\\App.Identity.csproj|solutionrelative:app.identity\\oohidentitydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3586E3D4-DFEA-47E0-A75A-3CF9A0ABBF15}|App.Identity\\App.Identity.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.identity\\identityserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3586E3D4-DFEA-47E0-A75A-3CF9A0ABBF15}|App.Identity\\App.Identity.csproj|solutionrelative:app.identity\\identityserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C50CB432-3CFD-4CF9-9651-BE15D254837B}|App.Infrastructure\\App.Infrastructure.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.infrastructure\\infrastructureserviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C50CB432-3CFD-4CF9-9651-BE15D254837B}|App.Infrastructure\\App.Infrastructure.csproj|solutionrelative:app.infrastructure\\infrastructureserviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\app.server.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\app.server.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.persistence\\repositories\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6B83931-0D1A-4E02-9FD4-B8934A25DFAD}|App.Persistence\\App.Persistence.csproj|solutionrelative:app.persistence\\repositories\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\vendors\\commands\\updatevendor\\updatevendorcommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\vendors\\commands\\updatevendor\\updatevendorcommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\controllers\\govtbodiescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\controllers\\govtbodiescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\cities\\commands\\createcity\\createcitycommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\cities\\commands\\createcity\\createcitycommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\cities\\commands\\updatecity\\updatecitycommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\cities\\commands\\updatecity\\updatecitycommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\cities\\queries\\getcitylist\\getcitylistqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\cities\\queries\\getcitylist\\getcitylistqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\cities\\queries\\getcitydetail\\getcitydetailqueryvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\cities\\queries\\getcitydetail\\getcitydetailqueryvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\cities\\commands\\deletecity\\deletecitycommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\cities\\commands\\deletecity\\deletecitycommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\cities\\queries\\getcitydetail\\getcitydetailqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\cities\\queries\\getcitydetail\\getcitydetailqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\contracts\\persistence\\tenders\\igovtbodyrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\contracts\\persistence\\tenders\\igovtbodyrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.server\\app.server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{DE0A0EA9-C200-4D9B-99C2-C4E1E513B652}|App.Server\\App.Server.csproj|solutionrelative:app.server\\app.server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\contracts\\infrastructure\\iloggedinuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\contracts\\infrastructure\\iloggedinuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\contracts\\infrastructure\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\contracts\\infrastructure\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\contracts\\infrastructure\\icurrenttenantservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\contracts\\infrastructure\\icurrenttenantservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\contracts\\infrastructure\\iblobservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\contracts\\infrastructure\\iblobservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8C8C81D9-5A43-4F21-AE81-56896C506A2F}|app.client\\app.client.esproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.client\\src\\api\\custom\\openapiconfig.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{8C8C81D9-5A43-4F21-AE81-56896C506A2F}|app.client\\app.client.esproj|solutionrelative:app.client\\src\\api\\custom\\openapiconfig.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8C8C81D9-5A43-4F21-AE81-56896C506A2F}|app.client\\app.client.esproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.client\\src\\components\\ticket\\ticketreport.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{8C8C81D9-5A43-4F21-AE81-56896C506A2F}|app.client\\app.client.esproj|solutionrelative:app.client\\src\\components\\ticket\\ticketreport.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20622F7C-DC05-4905-82B7-D9A9A971F3D7}|App.Domain\\App.Domain.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.domain\\entities\\tenders\\city.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20622F7C-DC05-4905-82B7-D9A9A971F3D7}|App.Domain\\App.Domain.csproj|solutionrelative:app.domain\\entities\\tenders\\city.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\cities\\commands\\createcity\\createcitycommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\cities\\commands\\createcity\\createcitycommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\cities\\commands\\createcity\\createctycommandresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\cities\\commands\\createcity\\createctycommandresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|d:\\work\\dev\\projects\\ooh\\code\\approvals\\app.application\\features\\tenders\\cities\\commands\\createcity\\createcitycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B833FB2B-53D0-498C-8556-2BA9346040D1}|App.Application\\App.Application.csproj|solutionrelative:app.application\\features\\tenders\\cities\\commands\\createcity\\createcitycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\DynamicSurveyCreationBackgroundService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Settings.job||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Persistence\\Repositories\\Global\\TicketRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Application\\Features\\Global\\RecurrenceRules\\Commands\\CreateRecurrenceRule\\CreateRecurrenceRuleCommandHandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Survey.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Team.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 32,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "OpenAPIConfig.ts",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\app.client\\src\\api\\custom\\OpenAPIConfig.ts",
+              "RelativeDocumentMoniker": "app.client\\src\\api\\custom\\OpenAPIConfig.ts",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\app.client\\src\\api\\custom\\OpenAPIConfig.ts",
+              "RelativeToolTip": "app.client\\src\\api\\custom\\OpenAPIConfig.ts",
+              "ViewState": "AgIAABEAAAAAAAAAAAAxwBIAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-06-24T04:56:21.48Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:140:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:139:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:138:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:137:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:145:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:146:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:147:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:149:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:151:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{57d563b6-44a5-47df-85be-f4199ad6b651}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:141:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:142:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:143:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:144:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:148:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:150:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:152:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:153:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:154:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ApprovalMediaController.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\ApprovalMediaController.cs",
+              "RelativeDocumentMoniker": "App.Server\\Controllers\\ApprovalMediaController.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\ApprovalMediaController.cs",
+              "RelativeToolTip": "App.Server\\Controllers\\ApprovalMediaController.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAqwIEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T10:26:59.039Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApprovalMediaRepository.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\Repositories\\Global\\ApprovalMediaRepository.cs",
+              "RelativeDocumentMoniker": "App.Persistence\\Repositories\\Global\\ApprovalMediaRepository.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\Repositories\\Global\\ApprovalMediaRepository.cs",
+              "RelativeToolTip": "App.Persistence\\Repositories\\Global\\ApprovalMediaRepository.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAuwDgAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T10:26:41.724Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IApprovalMediaRepository.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Persistence\\Global\\IApprovalMediaRepository.cs",
+              "RelativeDocumentMoniker": "App.Application\\Contracts\\Persistence\\Global\\IApprovalMediaRepository.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Persistence\\Global\\IApprovalMediaRepository.cs",
+              "RelativeToolTip": "App.Application\\Contracts\\Persistence\\Global\\IApprovalMediaRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T10:26:19.94Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StartupExtensions.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\StartupExtensions.cs",
+              "RelativeDocumentMoniker": "App.Server\\StartupExtensions.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\StartupExtensions.cs",
+              "RelativeToolTip": "App.Server\\StartupExtensions.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAArwIMAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T10:09:17.078Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TenantDBContext.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\TenantDBContext.cs",
+              "RelativeDocumentMoniker": "App.Persistence\\TenantDBContext.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\TenantDBContext.cs",
+              "RelativeToolTip": "App.Persistence\\TenantDBContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T09:29:33.549Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ApplicationServiceRegistration.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\ApplicationServiceRegistration.cs",
+              "RelativeDocumentMoniker": "App.Application\\ApplicationServiceRegistration.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\ApplicationServiceRegistration.cs",
+              "RelativeToolTip": "App.Application\\ApplicationServiceRegistration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:57:37.99Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PersistenceServiceRegistration.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\PersistenceServiceRegistration.cs",
+              "RelativeDocumentMoniker": "App.Persistence\\PersistenceServiceRegistration.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\PersistenceServiceRegistration.cs",
+              "RelativeToolTip": "App.Persistence\\PersistenceServiceRegistration.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:08:39.456Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DapperDBContext.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\DapperDBContext.cs",
+              "RelativeDocumentMoniker": "App.Persistence\\DapperDBContext.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\DapperDBContext.cs",
+              "RelativeToolTip": "App.Persistence\\DapperDBContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:18:43.663Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "App.Server\\Controllers\\UserController.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\UserController.cs",
+              "RelativeToolTip": "App.Server\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAK0DAAAAAAAAAAAuwFoEAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:10:35.834Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Program.cs",
+              "RelativeDocumentMoniker": "App.Server\\Program.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Program.cs",
+              "RelativeToolTip": "App.Server\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:13:35.65Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "appsettings.Production.json",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\appsettings.Production.json",
+              "RelativeDocumentMoniker": "App.Server\\appsettings.Production.json",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\appsettings.Production.json",
+              "RelativeToolTip": "App.Server\\appsettings.Production.json",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-13T08:55:27.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "UserIntermediateController.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\UserIntermediateController.cs",
+              "RelativeDocumentMoniker": "App.Server\\Controllers\\UserIntermediateController.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\UserIntermediateController.cs",
+              "RelativeToolTip": "App.Server\\Controllers\\UserIntermediateController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJYAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:10:24.139Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "App.Server\\appsettings.Development.json",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\appsettings.Development.json",
+              "RelativeToolTip": "App.Server\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-13T08:55:26.522Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\appsettings.json",
+              "RelativeDocumentMoniker": "App.Server\\appsettings.json",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\appsettings.json",
+              "RelativeToolTip": "App.Server\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-13T08:55:22.821Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ExpenseTransactionRepository.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\Repositories\\Tenders\\ExpenseTransactionRepository.cs",
+              "RelativeDocumentMoniker": "App.Persistence\\Repositories\\Tenders\\ExpenseTransactionRepository.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\Repositories\\Tenders\\ExpenseTransactionRepository.cs",
+              "RelativeToolTip": "App.Persistence\\Repositories\\Tenders\\ExpenseTransactionRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:53:52.538Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ApprovalRepository.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\Repositories\\Global\\ApprovalRepository.cs",
+              "RelativeDocumentMoniker": "App.Persistence\\Repositories\\Global\\ApprovalRepository.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\Repositories\\Global\\ApprovalRepository.cs",
+              "RelativeToolTip": "App.Persistence\\Repositories\\Global\\ApprovalRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHMBAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:53:09.801Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "UpdateExpenseTypeCommandHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\ExpenseTypes\\Commands\\UpdateExpenseType\\UpdateExpenseTypeCommandHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\ExpenseTypes\\Commands\\UpdateExpenseType\\UpdateExpenseTypeCommandHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\ExpenseTypes\\Commands\\UpdateExpenseType\\UpdateExpenseTypeCommandHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\ExpenseTypes\\Commands\\UpdateExpenseType\\UpdateExpenseTypeCommandHandler.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAwwDoAAABpAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:52:49.887Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ApprovalApproverController.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\ApprovalApproverController.cs",
+              "RelativeDocumentMoniker": "App.Server\\Controllers\\ApprovalApproverController.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\ApprovalApproverController.cs",
+              "RelativeToolTip": "App.Server\\Controllers\\ApprovalApproverController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:33:48.133Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "UpdateExpenseCommandHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Expenses\\Commands\\UpdateExpense\\UpdateExpenseCommandHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Expenses\\Commands\\UpdateExpense\\UpdateExpenseCommandHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Expenses\\Commands\\UpdateExpense\\UpdateExpenseCommandHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Expenses\\Commands\\UpdateExpense\\UpdateExpenseCommandHandler.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAwwD0AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:52:33.167Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "UpdateExpenseTransactionCommandHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\ExpenseTransactions\\Commands\\UpdateExpenseTransaction\\UpdateExpenseTransactionCommandHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\ExpenseTransactions\\Commands\\UpdateExpenseTransaction\\UpdateExpenseTransactionCommandHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\ExpenseTransactions\\Commands\\UpdateExpenseTransaction\\UpdateExpenseTransactionCommandHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\ExpenseTransactions\\Commands\\UpdateExpenseTransaction\\UpdateExpenseTransactionCommandHandler.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAwwDoAAAB3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:51:50.14Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "IExpenseTransactionRepository.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Persistence\\Tenders\\IExpenseTransactionRepository.cs",
+              "RelativeDocumentMoniker": "App.Application\\Contracts\\Persistence\\Tenders\\IExpenseTransactionRepository.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Persistence\\Tenders\\IExpenseTransactionRepository.cs",
+              "RelativeToolTip": "App.Application\\Contracts\\Persistence\\Tenders\\IExpenseTransactionRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:45:16.81Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "CreateExpenseTransactionCommand.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\ExpenseTransactions\\Commands\\CreateExpenseTransaction\\CreateExpenseTransactionCommand.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\ExpenseTransactions\\Commands\\CreateExpenseTransaction\\CreateExpenseTransactionCommand.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\ExpenseTransactions\\Commands\\CreateExpenseTransaction\\CreateExpenseTransactionCommand.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\ExpenseTransactions\\Commands\\CreateExpenseTransaction\\CreateExpenseTransactionCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:41:13.287Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "ExpenseTransactionController.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\ExpenseTransactionController.cs",
+              "RelativeDocumentMoniker": "App.Server\\Controllers\\ExpenseTransactionController.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\ExpenseTransactionController.cs",
+              "RelativeToolTip": "App.Server\\Controllers\\ExpenseTransactionController.cs",
+              "ViewState": "AgIAAPUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:37:04.382Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "MappingProfile.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Profiles\\MappingProfile.cs",
+              "RelativeDocumentMoniker": "App.Application\\Profiles\\MappingProfile.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Profiles\\MappingProfile.cs",
+              "RelativeToolTip": "App.Application\\Profiles\\MappingProfile.cs",
+              "ViewState": "AgIAAG4BAAAAAAAAAAAuwIkBAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:01:59.554Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ApprovalWithTypeDetailVM.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Global\\Approvals\\Queries\\GetApprovalWithTypeDetail\\ApprovalWithTypeDetailVM.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Global\\Approvals\\Queries\\GetApprovalWithTypeDetail\\ApprovalWithTypeDetailVM.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Global\\Approvals\\Queries\\GetApprovalWithTypeDetail\\ApprovalWithTypeDetailVM.cs",
+              "RelativeToolTip": "App.Application\\Features\\Global\\Approvals\\Queries\\GetApprovalWithTypeDetail\\ApprovalWithTypeDetailVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:31:46.787Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "UpdateApprovalApproverCommandResponse.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Global\\ApprovalApprovers\\Commands\\UpdateApprovalApprover\\UpdateApprovalApproverCommandResponse.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Global\\ApprovalApprovers\\Commands\\UpdateApprovalApprover\\UpdateApprovalApproverCommandResponse.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Global\\ApprovalApprovers\\Commands\\UpdateApprovalApprover\\UpdateApprovalApproverCommandResponse.cs",
+              "RelativeToolTip": "App.Application\\Features\\Global\\ApprovalApprovers\\Commands\\UpdateApprovalApprover\\UpdateApprovalApproverCommandResponse.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAwwBwAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:31:26.151Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "UpdateApprovalApproverCommandHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Global\\ApprovalApprovers\\Commands\\UpdateApprovalApprover\\UpdateApprovalApproverCommandHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Global\\ApprovalApprovers\\Commands\\UpdateApprovalApprover\\UpdateApprovalApproverCommandHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Global\\ApprovalApprovers\\Commands\\UpdateApprovalApprover\\UpdateApprovalApproverCommandHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Global\\ApprovalApprovers\\Commands\\UpdateApprovalApprover\\UpdateApprovalApproverCommandHandler.cs",
+              "ViewState": "AgIAAIAAAAAAAAAAAAAwwBYBAABvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:28:41.494Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "UserClaimsPrincipalFactory.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Identity\\UserClaimsPrincipalFactory.cs",
+              "RelativeDocumentMoniker": "App.Identity\\UserClaimsPrincipalFactory.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Identity\\UserClaimsPrincipalFactory.cs",
+              "RelativeToolTip": "App.Identity\\UserClaimsPrincipalFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:19:02.742Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "OOHIdentityDBContext.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Identity\\OOHIdentityDBContext.cs",
+              "RelativeDocumentMoniker": "App.Identity\\OOHIdentityDBContext.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Identity\\OOHIdentityDBContext.cs",
+              "RelativeToolTip": "App.Identity\\OOHIdentityDBContext.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:19:00.31Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "IdentityServiceExtensions.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Identity\\IdentityServiceExtensions.cs",
+              "RelativeDocumentMoniker": "App.Identity\\IdentityServiceExtensions.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Identity\\IdentityServiceExtensions.cs",
+              "RelativeToolTip": "App.Identity\\IdentityServiceExtensions.cs",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T08:18:53.239Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "App.Server",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\App.Server.csproj",
+              "RelativeDocumentMoniker": "App.Server\\App.Server.csproj",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\App.Server.csproj",
+              "RelativeToolTip": "App.Server\\App.Server.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-13T07:13:42.048Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "GovtBodiesController.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\GovtBodiesController.cs",
+              "RelativeDocumentMoniker": "App.Server\\Controllers\\GovtBodiesController.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\Controllers\\GovtBodiesController.cs",
+              "RelativeToolTip": "App.Server\\Controllers\\GovtBodiesController.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAqwJEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:10:46.709Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "InfrastructureServiceRegistration.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Infrastructure\\InfrastructureServiceRegistration.cs",
+              "RelativeDocumentMoniker": "App.Infrastructure\\InfrastructureServiceRegistration.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Infrastructure\\InfrastructureServiceRegistration.cs",
+              "RelativeToolTip": "App.Infrastructure\\InfrastructureServiceRegistration.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAAABwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:09:26.331Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "BaseRepository.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\Repositories\\BaseRepository.cs",
+              "RelativeDocumentMoniker": "App.Persistence\\Repositories\\BaseRepository.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Persistence\\Repositories\\BaseRepository.cs",
+              "RelativeToolTip": "App.Persistence\\Repositories\\BaseRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:12:52.897Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "UpdateVendorCommandHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Vendors\\Commands\\UpdateVendor\\UpdateVendorCommandHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Vendors\\Commands\\UpdateVendor\\UpdateVendorCommandHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Vendors\\Commands\\UpdateVendor\\UpdateVendorCommandHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Vendors\\Commands\\UpdateVendor\\UpdateVendorCommandHandler.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAwwDoAAABfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:09:44.584Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "UpdateCityCommandHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\UpdateCity\\UpdateCityCommandHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Cities\\Commands\\UpdateCity\\UpdateCityCommandHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\UpdateCity\\UpdateCityCommandHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Cities\\Commands\\UpdateCity\\UpdateCityCommandHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:09:27.297Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "GetCityListQueryHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityList\\GetCityListQueryHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityList\\GetCityListQueryHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityList\\GetCityListQueryHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityList\\GetCityListQueryHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:09:21.43Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "CreateCityCommandHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommandHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommandHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommandHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommandHandler.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAIBJwAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T04:42:22.966Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "GetCityDetailQueryValidator.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityDetail\\GetCityDetailQueryValidator.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityDetail\\GetCityDetailQueryValidator.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityDetail\\GetCityDetailQueryValidator.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityDetail\\GetCityDetailQueryValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:08:33.141Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "DeleteCityCommandHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\DeleteCity\\DeleteCityCommandHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Cities\\Commands\\DeleteCity\\DeleteCityCommandHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\DeleteCity\\DeleteCityCommandHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Cities\\Commands\\DeleteCity\\DeleteCityCommandHandler.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAYwBQAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:08:24.361Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "GetCityDetailQueryHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityDetail\\GetCityDetailQueryHandler.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityDetail\\GetCityDetailQueryHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityDetail\\GetCityDetailQueryHandler.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Cities\\Queries\\GetCityDetail\\GetCityDetailQueryHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T07:08:12.831Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "IGovtBodyRepository.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Persistence\\Tenders\\IGovtBodyRepository.cs",
+              "RelativeDocumentMoniker": "App.Application\\Contracts\\Persistence\\Tenders\\IGovtBodyRepository.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Persistence\\Tenders\\IGovtBodyRepository.cs",
+              "RelativeToolTip": "App.Application\\Contracts\\Persistence\\Tenders\\IGovtBodyRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T06:59:17.326Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "App.Server.csproj",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\App.Server.csproj",
+              "RelativeDocumentMoniker": "App.Server\\App.Server.csproj",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\App.Server.csproj",
+              "RelativeToolTip": "App.Server\\App.Server.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-13T06:42:26.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "ILoggedInUserService.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Infrastructure\\ILoggedInUserService.cs",
+              "RelativeDocumentMoniker": "App.Application\\Contracts\\Infrastructure\\ILoggedInUserService.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Infrastructure\\ILoggedInUserService.cs",
+              "RelativeToolTip": "App.Application\\Contracts\\Infrastructure\\ILoggedInUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T06:41:52.143Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "IEmailService.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Infrastructure\\IEmailService.cs",
+              "RelativeDocumentMoniker": "App.Application\\Contracts\\Infrastructure\\IEmailService.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Infrastructure\\IEmailService.cs",
+              "RelativeToolTip": "App.Application\\Contracts\\Infrastructure\\IEmailService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T06:41:51.093Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "ICurrentTenantService.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Infrastructure\\ICurrentTenantService.cs",
+              "RelativeDocumentMoniker": "App.Application\\Contracts\\Infrastructure\\ICurrentTenantService.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Infrastructure\\ICurrentTenantService.cs",
+              "RelativeToolTip": "App.Application\\Contracts\\Infrastructure\\ICurrentTenantService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T06:41:50.158Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "IBlobService.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Infrastructure\\IBlobService.cs",
+              "RelativeDocumentMoniker": "App.Application\\Contracts\\Infrastructure\\IBlobService.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Contracts\\Infrastructure\\IBlobService.cs",
+              "RelativeToolTip": "App.Application\\Contracts\\Infrastructure\\IBlobService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T06:41:48.881Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Program.cs",
+              "RelativeDocumentMoniker": "..\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Program.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Program.cs",
+              "RelativeToolTip": "..\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Program.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-27T07:37:53.247Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "DynamicSurveyCreationBackgroundService.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\DynamicSurveyCreationBackgroundService.cs",
+              "RelativeDocumentMoniker": "..\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\DynamicSurveyCreationBackgroundService.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\DynamicSurveyCreationBackgroundService.cs",
+              "RelativeToolTip": "..\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\DynamicSurveyCreationBackgroundService.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-27T07:28:33.673Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "TicketReport.tsx",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\app.client\\src\\components\\ticket\\TicketReport.tsx",
+              "RelativeDocumentMoniker": "app.client\\src\\components\\ticket\\TicketReport.tsx",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\app.client\\src\\components\\ticket\\TicketReport.tsx",
+              "RelativeToolTip": "app.client\\src\\components\\ticket\\TicketReport.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-08T04:29:20.325Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "Settings.job",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Settings.job",
+              "RelativeDocumentMoniker": "..\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Settings.job",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Settings.job",
+              "RelativeToolTip": "..\\Backup\\App\\07132026\\App\\App.WebJobs.TicketFollowUp\\Settings.job",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-07-07T04:38:14.435Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "Ticket.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Ticket.cs",
+              "RelativeDocumentMoniker": "..\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Ticket.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Ticket.cs",
+              "RelativeToolTip": "..\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Ticket.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T09:13:26.735Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "TicketRepository.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Persistence\\Repositories\\Global\\TicketRepository.cs",
+              "RelativeDocumentMoniker": "..\\Backup\\App\\07132026\\App\\App.Persistence\\Repositories\\Global\\TicketRepository.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Persistence\\Repositories\\Global\\TicketRepository.cs",
+              "RelativeToolTip": "..\\Backup\\App\\07132026\\App\\App.Persistence\\Repositories\\Global\\TicketRepository.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-06T04:24:52.3Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "CreateRecurrenceRuleCommandHandler.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Application\\Features\\Global\\RecurrenceRules\\Commands\\CreateRecurrenceRule\\CreateRecurrenceRuleCommandHandler.cs",
+              "RelativeDocumentMoniker": "..\\Backup\\App\\07132026\\App\\App.Application\\Features\\Global\\RecurrenceRules\\Commands\\CreateRecurrenceRule\\CreateRecurrenceRuleCommandHandler.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Application\\Features\\Global\\RecurrenceRules\\Commands\\CreateRecurrenceRule\\CreateRecurrenceRuleCommandHandler.cs",
+              "RelativeToolTip": "..\\Backup\\App\\07132026\\App\\App.Application\\Features\\Global\\RecurrenceRules\\Commands\\CreateRecurrenceRule\\CreateRecurrenceRuleCommandHandler.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T08:11:29.51Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "City.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Domain\\Entities\\Tenders\\City.cs",
+              "RelativeDocumentMoniker": "App.Domain\\Entities\\Tenders\\City.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Domain\\Entities\\Tenders\\City.cs",
+              "RelativeToolTip": "App.Domain\\Entities\\Tenders\\City.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T06:47:57.554Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
+              "Title": "Survey.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Survey.cs",
+              "RelativeDocumentMoniker": "..\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Survey.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Survey.cs",
+              "RelativeToolTip": "..\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Survey.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T06:42:49.808Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "Team.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Team.cs",
+              "RelativeDocumentMoniker": "..\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Team.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Team.cs",
+              "RelativeToolTip": "..\\Backup\\App\\07132026\\App\\App.Domain\\Entities\\Global\\Team.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T06:42:14.834Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "CreateCityCommandValidator.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommandValidator.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommandValidator.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommandValidator.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommandValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T04:42:25.834Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "CreateCtyCommandResponse.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCtyCommandResponse.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCtyCommandResponse.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCtyCommandResponse.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCtyCommandResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T04:42:19.915Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "CreateCityCommand.cs",
+              "DocumentMoniker": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommand.cs",
+              "RelativeDocumentMoniker": "App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommand.cs",
+              "ToolTip": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommand.cs",
+              "RelativeToolTip": "App.Application\\Features\\Tenders\\Cities\\Commands\\CreateCity\\CreateCityCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T04:42:17.614Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

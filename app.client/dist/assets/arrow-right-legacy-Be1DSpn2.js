@@ -1,0 +1,1 @@
+System.register(["./createLucideIcon-legacy-C8tij5TB.js"],function(e,t){var r;return{setters:[function(e){r=e.t}],execute:function(){e("t",r("arrow-right",[["path",{d:"M5 12h14",key:"1ays0h"}],["path",{d:"m12 5 7 7-7 7",key:"xquz4c"}]]))}}});

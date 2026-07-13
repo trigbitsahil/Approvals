@@ -1,0 +1,311 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print\:border-none,
+  .print\:shadow-none,
+  .print\:border-none *,
+  .print\:shadow-none * {
+    visibility: visible;
+  }
+
+  .print\:border-none {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-desktop: var(--desktop);
+  --color-mobile: var(--mobile);
+}
+
+/* Base Light Theme (Blue Default) */
+:root {
+  --radius: 0.625rem;
+
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(240 5% 4%);
+
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(240 5% 4%);
+
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(240 5% 4%);
+
+  /* DEFAULT THEME → ROSE */
+  --primary: hsl(340 80% 60%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(240 4.8% 95.9%);
+  --secondary-foreground: hsl(240 5.9% 10%);
+
+  --muted: hsl(240 4.8% 95.9%);
+  --muted-foreground: hsl(240 3.8% 46.1%);
+
+  --accent: hsl(240 4.8% 95.9%);
+  --accent-foreground: hsl(240 5.9% 10%);
+
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  --border: hsl(240 5.9% 90%);
+  --input: hsl(240 5.9% 90%);
+
+  /* ROSE ring */
+  --ring: hsl(340 80% 60%);
+
+  /* ROSE desktop/mobile */
+  --desktop: #be123c;
+  --mobile: #f87171;
+
+  --sidebar-tooltip: hsl(0, 0%, 10%);
+  --sidebar-tooltip-foreground: white;
+}
+
+
+.dark {
+  --background: hsl(240 10% 10%);
+  --foreground: hsl(0 0% 100%);
+
+  --card: hsl(240 10% 12%);
+  --card-foreground: hsl(0 0% 100%);
+
+  --popover: hsl(240 10% 12%);
+  --popover-foreground: hsl(0 0% 100%);
+
+  /* ROSE AS DEFAULT IN DARK MODE */
+  --primary: hsl(340 80% 60%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(240 3.7% 15.9%);
+  --secondary-foreground: hsl(0 0% 100%);
+
+  --muted: hsl(240 3.7% 15.9%);
+  --muted-foreground: hsl(240 5% 64.9%);
+
+  --accent: hsl(240 3.7% 15.9%);
+  --accent-foreground: hsl(0 0% 100%);
+
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  --border: hsl(240 3.7% 15.9%);
+  --input: hsl(240 3.7% 15.9%);
+
+  /* ROSE RING */
+  --ring: hsl(340 80% 60%);
+
+  /* ROSE desktop/mobile */
+  --desktop: #be123c;
+  --mobile: #f87171;
+
+  .dark {
+    --sidebar-tooltip: hsl(0, 0%, 90%);
+    --sidebar-tooltip-foreground: black;
+  }
+}
+
+
+/* GREEN Theme */
+[data-color-theme="Green"] {
+  --primary: hsl(142 71% 45%);
+  --primary-foreground: hsl(0 0% 100%);
+  --ring: hsl(142 71% 45%);
+  --desktop: #15803d;
+  --mobile: #4ade80;
+}
+
+[data-color-theme="Rose"] {
+  --primary: hsl(340 80% 60%);
+  --primary-foreground: hsl(0 0% 100%);
+  --ring: hsl(340 80% 60%);
+  --desktop: #be123c;
+  --mobile: #f87171;
+}
+
+[data-color-theme="Blue"] {
+  --primary: hsl(226 70% 55%);
+  --primary-foreground: hsl(0 0% 100%);
+  --ring: hsl(226 70% 55%);
+  --desktop: #2563eb;
+  --mobile: #60a5fa;
+}
+
+[data-color-theme="Violet"] {
+  --primary: hsl(262 83% 58%);
+  --primary-foreground: hsl(0 0% 100%);
+  --ring: hsl(262 83% 58%);
+  --desktop: #7c3aed;
+  --mobile: #c4b5fd;
+}
+
+[data-color-theme="Neutral"] {
+  --primary: hsl(240, 3%, 21%);
+  --primary-foreground: hsl(0 0% 98%);
+  --ring: hsl(240 5.9% 10%);
+  --desktop: #18181b;
+  --mobile: #3f3f46;
+}
+
+.dark [data-color-theme="Neutral"] {
+  --primary: hsl(0 0% 98%);
+  --primary-foreground: hsl(240 5.9% 10%);
+  --ring: hsl(240 4.9% 83.9%);
+  --desktop: #fafafa;
+  --mobile: #71717a;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-300 ease-in-out;
+  }
+
+  /* Fix for date inputs in dark mode */
+  input[type="date"] {
+    position: relative;
+  }
+
+  .dark input[type="date"] {
+    color-scheme: dark;
+  }
+}
+
+/* React Day Picker Custom Styles & Dark Mode Overrides */
+.rdp-root {
+  --rdp-accent-color: var(--primary) !important;
+  --rdp-selected-bg: var(--primary) !important;
+  --rdp-selected-color: var(--primary-foreground) !important;
+  --rdp-range_middle-bg: var(--accent) !important;
+  --rdp-range_middle-color: var(--foreground) !important;
+  --rdp-range_start-bg: var(--primary) !important;
+  --rdp-range_end-bg: var(--primary) !important;
+}
+
+.dark .rdp-root {
+  --rdp-range_middle-bg: hsl(240 3.7% 20%) !important;
+}
+
+/* Reset default selections and colors to align with current theme */
+.rdp-root button.rdp-day {
+  color: inherit !important;
+}
+
+.rdp-root button.rdp-day[aria-selected="true"] {
+  background-color: transparent !important;
+}
+
+.rdp-root [aria-selected="true"] {
+  background-color: transparent !important;
+}
+
+/* Override cell container (td) styles for selection range connect */
+.rdp-root td.rdp-day,
+.rdp-root td[aria-selected="true"],
+.rdp-root td.rdp-range_middle,
+.rdp-root td.rdp-range_start,
+.rdp-root td.rdp-range_end {
+  background-color: transparent !important;
+}
+
+/* Custom styled day buttons matching current theme */
+.rdp-root button[data-selected-single="true"],
+.rdp-root button[data-range-start="true"],
+.rdp-root button[data-range-end="true"] {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-radius: 6px !important;
+  opacity: 1 !important;
+}
+
+.rdp-root button[data-range-middle="true"] {
+  background-color: var(--accent) !important;
+  color: var(--foreground) !important;
+  border-radius: 0px !important;
+  opacity: 1 !important;
+}
+
+.dark .rdp-root button[data-range-middle="true"] {
+  background-color: hsl(240 3.7% 20%) !important;
+  color: var(--foreground) !important;
+}
+
+/* Background connector styling for table cells */
+.rdp-root td.rdp-range_middle {
+  background-color: var(--accent) !important;
+}
+
+.dark .rdp-root td.rdp-range_middle {
+  background-color: hsl(240 3.7% 20%) !important;
+}
+
+.rdp-root td.rdp-range_start {
+  background-color: var(--accent) !important;
+  border-top-left-radius: 6px !important;
+  border-bottom-left-radius: 6px !important;
+}
+
+.dark .rdp-root td.rdp-range_start {
+  background-color: hsl(240 3.7% 20%) !important;
+}
+
+.rdp-root td.rdp-range_end {
+  background-color: var(--accent) !important;
+  border-top-right-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+}
+
+.dark .rdp-root td.rdp-range_end {
+  background-color: hsl(240 3.7% 20%) !important;
+}

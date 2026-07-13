@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Features\Global\Accounts\**" />
+    <Compile Remove="Features\Tenders\Documents\**" />
+    <Compile Remove="Features\Tenders\Reports\**" />
+    <EmbeddedResource Remove="Features\Global\Accounts\**" />
+    <EmbeddedResource Remove="Features\Tenders\Documents\**" />
+    <EmbeddedResource Remove="Features\Tenders\Reports\**" />
+    <None Remove="Features\Global\Accounts\**" />
+    <None Remove="Features\Tenders\Documents\**" />
+    <None Remove="Features\Tenders\Reports\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Contracts\Persistence\Global\IAccountRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.10.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\App.Domain\App.Domain.csproj" />
+  </ItemGroup>
+
+  
+  
+</Project>

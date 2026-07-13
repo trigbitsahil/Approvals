@@ -1,0 +1,1704 @@
+"use client";
+
+import { useState, useRef } from "react";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import Scheduled from "@/components/kanban/Scheduled";
+import { SheetTitle } from "@/components/ui/sheet";
+import {
+  X,
+  CalendarDays,
+  Clock,
+  ChevronUp,
+  ChevronDown,
+  Minus,
+  ListTodo,
+  Paperclip,
+  PauseCircle,
+  MoreHorizontal,
+  MoreVertical,
+  Pencil,
+  Trash2,
+  Tag,
+  Repeat,
+  Info,
+  Users,
+} from "lucide-react";
+
+import type { Card } from "@/components/kanban/types";
+import { TASK_TYPES, getTypeColor } from "@/components/kanban/taskTypes";
+import { useEffect } from "react";
+import { TaskTypeService } from "@/api/services/TaskTypeService";
+import { TaskStatusService } from "@/api/services/TaskStatusService";
+import { TaskTypeListVM } from "@/api/models/TaskTypeListVM";
+import { TaskStatusListVM } from "@/api/models/TaskStatusListVM";
+import { TaskPriorityService } from "@/api/services/TaskPriorityService";
+import { TaskPriorityListVM } from "@/api/models/TaskPriorityListVM";
+import { useSearchParams } from "react-router-dom";
+import { Calendar } from "@/components/ui/calendar";
+import { toast } from "sonner";
+import { TaskService } from "@/api/services/TaskService";
+
+import { UserService } from "@/api/services/UserService";
+import { IoAdd } from "react-icons/io5";
+import { TaskRecurrenceModal } from "@/components/kanban/TaskRecurrenceModal";
+import { RecurrenceRuleService } from "@/api/services/RecurrenceRuleService";
+import { RecurrenceRuleListVM } from "@/api/models/RecurrenceRuleListVM";
+import { EventTypeService } from "@/api/services/EventTypeService";
+import { EventService } from "@/api/services/EventService";
+import { Settings, CheckCircle2 } from "lucide-react";
+
+interface TaskDetailSheetProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  task: Card | any | null;
+  onUpdateTask?: (task: any) => void;
+  onDeleteTask?: (taskId: string) => void;
+  isEvent?: boolean;
+}
+/* ---------------- STATUS CONFIG ---------------- */
+const defaultStatuses = [
+  { id: "new", label: "New task", color: "bg-gray-500", emoji: "🗒️" },
+  { id: "scheduled", label: "Scheduled", color: "bg-yellow-500", emoji: "📅" },
+  { id: "inprogress", label: "In progress", color: "bg-blue-500", emoji: "🔧" },
+  { id: "completed", label: "Completed", color: "bg-green-500", emoji: "✅" },
+];
+
+/* ---------------- TYPE CONFIG ---------------- */
+// Imported from shared taskTypes.ts
+
+
+/* ---------------- TIME OPTIONS ---------------- */
+const timeOptions = [
+  "15 min",
+  "30 min",
+  "45 min",
+  "1 hour",
+  "1:30 hours",
+  "2 hours",
+];
+
+const timeToHoursMap: Record<string, number> = {
+  "15 min": 0.25,
+  "30 min": 0.5,
+  "45 min": 0.75,
+  "1 hour": 1,
+  "1:30 hours": 1.5,
+  "2 hours": 2,
+};
+
+const hoursToTimeLabel = (hours: number | undefined | null): string => {
+  if (hours === undefined || hours === null) return "0h";
+  const entry = Object.entries(timeToHoursMap).find(([_, v]) => v === hours);
+  return entry ? entry[0] : `${hours}h`;
+};
+
+/* ---------------- PRIORITY ---------------- */
+
+
+export const TaskDetailSheet = ({
+  open,
+  onOpenChange,
+  task,
+  onUpdateTask: onUpdateTaskProp,
+  onDeleteTask: onDeleteTaskProp,
+  isEvent,
+}: TaskDetailSheetProps) => {
+  const onUpdateTask = (updatedTask: any) => {
+    if (onUpdateTaskProp) {
+      onUpdateTaskProp(updatedTask);
+      toast.success(isEvent ? "Event updated" : "Task updated");
+    }
+  };
+
+  const [searchParams] = useSearchParams();
+  const projectIdFromUrl = searchParams.get("projectId");
+  const projectId = projectIdFromUrl || localStorage.getItem("activeProjectId") || "";
+
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [localTitle, setLocalTitle] = useState(task?.title || "");
+  const [localDesc, setLocalDesc] = useState(task?.description || "");
+  const [localLocation, setLocalLocation] = useState(task?.location || "");
+
+  useEffect(() => {
+    if (task) {
+      setLocalTitle(task.title || "");
+      setLocalDesc(task.description || "");
+      setLocalLocation(task.location || "");
+      setDueDate(task.dueDate ? new Date(task.dueDate) : null);
+      setEstimatedTime(hoursToTimeLabel(task.estimatedHours));
+    }
+  }, [task?.title, task?.description, task?.location, task?.dueDate, task?.estimatedHours, task?.taskPriorityId]);
+  const [tasks, setTasks] = useState([]);
+  const [showStatus, setShowStatus] = useState<boolean>(false);
+  const [showType, setShowType] = useState<boolean>(false);
+  const [showCalendar, setShowCalendar] = useState<boolean>(false);
+
+  const [timeLogs, setTimeLogs] = useState<any[]>([]);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const [currentStatus, setCurrentStatus] = useState<(typeof defaultStatuses)[number]>(
+    defaultStatuses[0],
+  );
+  const [openLogModal, setOpenLogModal] = useState(false);
+  const [logs, setLogs] = useState<any[]>([]);
+
+  const handleAddLog = (log: any) => {
+    setLogs((prev) => [...prev, log]);
+  };
+  const [currentType, setCurrentType] = useState<(typeof TASK_TYPES)[number]>(
+    TASK_TYPES[0],
+  );
+
+  const [dynamicTaskTypes, setDynamicTaskTypes] = useState<TaskTypeListVM[]>([]);
+  const [dynamicTaskStatuses, setDynamicTaskStatuses] = useState<TaskStatusListVM[]>([]);
+  const [dynamicTaskPriorities, setDynamicTaskPriorities] = useState<TaskPriorityListVM[]>([]);
+  const [dynamicUsers, setDynamicUsers] = useState<any[]>([]);
+  useEffect(() => {
+    if (open && projectId) {
+      if (isEvent) {
+        // Fetch Event Types
+        EventTypeService.getApiVEventType("1", "Project", projectId)
+          .then((response) => {
+            if (response.success && response.data) {
+              setDynamicTaskTypes(response.data as any);
+            }
+          })
+          .catch((error) => console.error("Failed to fetch event types:", error));
+      } else {
+        // Fetch Task Types
+        TaskTypeService.taskTypeGet("1", "Project", projectId)
+          .then((response) => {
+            if (response.success && response.data) {
+              setDynamicTaskTypes(response.data);
+            }
+          })
+          .catch((error) => console.error("Failed to fetch task types:", error));
+      }
+
+      // Fetch Statuses
+      TaskStatusService.getApiVTaskStatus("1", "Project", projectId)
+        .then((response) => {
+          if (response.success && response.data) {
+            setDynamicTaskStatuses(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to fetch task statuses:", error);
+        });
+
+      // Fetch Priorities
+      if (!isEvent) {
+        TaskPriorityService.getApiVTaskPriority("1")
+          .then((response) => {
+            if (response.success && response.data) {
+              setDynamicTaskPriorities(response.data);
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to fetch task priorities:", error);
+          });
+      }
+
+      // Fetch Users for Assignee dropdown
+      UserService.getApiVUser("1")
+        .then((response) => {
+          if (response.success && response.data) {
+            setDynamicUsers(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to fetch users:", error);
+        });
+
+      // NEW: Fetch subtasks
+      if (task?.id && !isEvent) {
+        TaskService.taskGet("1", "task", task.id)
+          .then((response) => {
+            if (response.success && response.data) {
+              setSubtasks(response.data.map((t: any) => ({
+                id: t.taskId,
+                name: t.name,
+                dueDate: t.endDate ? new Date(t.endDate) : null,
+                time: hoursToTimeLabel(t.estimatedHours),
+                assignee: t.assignedTo || "",
+                completed: t.status === "completed" || t.status === "3e9b7b9b-7e9b-4e9b-8e9b-7e9b7e9b7e9b", // handle both ID and name
+              })));
+            }
+          })
+          .catch((error) => console.error("Failed to fetch subtasks:", error));
+      }
+
+      // Fetch Recurrence Rule
+      if (task?.id) {
+        RecurrenceRuleService.getApiVRecurrenceRule("1", isEvent ? "Events" : "task", task.id)
+          .then((response) => {
+            if (response.success && response.data && response.data.length > 0) {
+              setRecurrenceRule(response.data[0]);
+            } else {
+              setRecurrenceRule(null);
+            }
+          })
+          .catch((error) => console.error("Failed to fetch recurrence rule:", error));
+      }
+    }
+  }, [open, projectId, task?.id, isEvent]);
+
+  // Sync currentStatus with task.status and dynamicTaskStatuses
+  useEffect(() => {
+    if (task?.status) {
+      const dynamicStatus = dynamicTaskStatuses.find(s => s.taskStatusId === task.status);
+      if (dynamicStatus) {
+        setCurrentStatus({
+          id: dynamicStatus.taskStatusId || "",
+          label: dynamicStatus.name || "",
+          color: "bg-zinc-800",
+          emoji: dynamicStatus.colorOrIcon || "🗒️"
+        });
+      } else {
+        const defaultStatus = defaultStatuses.find(s => s.id === task.status);
+        if (defaultStatus) {
+          setCurrentStatus(defaultStatus);
+        }
+      }
+    }
+  }, [task?.status, dynamicTaskStatuses]);
+
+  // Helper to get Type Name from taskTypeId (NEW)
+  const getTypeNameFromId = (taskTypeId?: string | null): string => {
+    if (!taskTypeId) return "No type";
+    const foundType = dynamicTaskTypes.find((t) => (t.taskTypeId === taskTypeId || (t as any).eventTypeId === taskTypeId));
+    return foundType?.name || taskTypeId; // fallback to ID if name not found
+  };
+
+  // Updated getDynamicTypeColor to support both name and taskTypeId
+  const getDynamicTypeColor = (typeIdentifier?: string | null) => {
+    if (!typeIdentifier) return "#94a3b8";
+
+    // Try by name
+    const byName = dynamicTaskTypes.find((t) => t.name === typeIdentifier);
+    if (byName?.colorOrIcon) return byName.colorOrIcon;
+
+    // Try by taskTypeId or eventTypeId
+    const byId = dynamicTaskTypes.find((t) => t.taskTypeId === typeIdentifier || (t as any).eventTypeId === typeIdentifier);
+    if (byId?.colorOrIcon) return byId.colorOrIcon;
+
+    return getTypeColor(typeIdentifier);
+  };
+
+  const [showFileMenu, setShowFileMenu] = useState(false);
+  const [dueDate, setDueDate] = useState<Date | null>(task?.dueDate ? new Date(task.dueDate) : null);
+  const [estimatedTime, setEstimatedTime] = useState<string>("0h");
+  const [priority, setPriority] = useState<{ label: string; color: string } | null>(null);
+  const [isTimerPaused, setIsTimerPaused] = useState<boolean>(false);
+  const [showMoreMenu, setShowMoreMenu] = useState<boolean>(false);
+  const [showLogTime, setShowLogTime] = useState<boolean>(false);
+  const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
+  const [showTaskCalendar, setShowTaskCalendar] = useState<boolean>(false);
+  const [showAddSubtaskInput, setShowAddSubtaskInput] = useState(false);
+  const [showSubtaskCalendar, setShowSubtaskCalendar] =
+    useState<boolean>(false);
+  const [attachedFile, setAttachedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [showSubtasks, setShowSubtasks] = useState<boolean>(false);
+  const [subtask, setSubtask] = useState<string>("");
+  const [assigneeSearch, setAssigneeSearch] = useState("");
+
+  // Filtered users based on search
+  const filteredUsers = dynamicUsers.filter((user) => {
+    const searchTerm = assigneeSearch.toLowerCase();
+    return (
+      (user.email && user.email.toLowerCase().includes(searchTerm)) ||
+      (user.name && user.name.toLowerCase().includes(searchTerm))
+    );
+  });
+  const [openCalendarIndex, setOpenCalendarIndex] = useState<number | null>(
+    null,
+  );
+  const [subtaskTime, setSubtaskTime] = useState("");
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [subtasks, setSubtasks] = useState<
+    {
+      id?: string;
+      name: string;
+      dueDate: Date | null;
+      time: string;
+      assignee: string;
+      completed?: boolean;
+    }[]
+  >([]);
+  const [subtaskDueDate, setSubtaskDueDate] = useState<Date | null>(null);
+  const [recurrenceRule, setRecurrenceRule] = useState<RecurrenceRuleListVM | null>(null);
+
+  // Helper to format days of week (1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun)
+  const getDayName = (day: string) => {
+    const days: Record<string, string> = {
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday",
+      "7": "Sunday",
+    };
+    return days[day] || "";
+  };
+
+  const getRecurrenceSummary = (rule: RecurrenceRuleListVM | null) => {
+    if (!rule) return "Repeat task";
+    const { frequency, interval, daysOfWeek } = rule;
+
+    let summary = "";
+    if (interval === 1) {
+      summary = `Every ${frequency?.toLowerCase()}`;
+    } else {
+      summary = `Every ${interval} ${frequency?.toLowerCase()}s`;
+    }
+
+    if (frequency === "Week" && daysOfWeek) {
+      const dayNames = daysOfWeek.split(",").map(getDayName).filter(Boolean);
+      if (dayNames.length > 0) {
+        summary += ` on ${dayNames.join(", ")}`;
+      }
+    }
+
+    return summary;
+  };
+
+  const [showRepeatMenu, setShowRepeatMenu] = useState(false);
+  const [showRecurrenceModal, setShowRecurrenceModal] = useState(false);
+  const [initialRecurrenceRule, setInitialRecurrenceRule] = useState<any>(null);
+
+  const handleRepeatOption = (option: string) => {
+    setShowRepeatMenu(false);
+    let rule: any = { frequency: "Day", interval: 1 };
+
+    switch (option) {
+      case "Every day":
+        rule = { frequency: "Day", interval: 1 };
+        break;
+      case "Every workday":
+        rule = { frequency: "Day", interval: 1, skipWeekends: true }; // Modal logic handles skip weekends
+        break;
+      case "Every week":
+        rule = { frequency: "Week", interval: 1 };
+        break;
+      case "Every month":
+        rule = { frequency: "Month", interval: 1 };
+        break;
+      case "Every year":
+        rule = { frequency: "Year", interval: 1 };
+        break;
+    }
+
+    setInitialRecurrenceRule(rule);
+    setShowRecurrenceModal(true);
+  };
+
+  const handleSaveRecurrence = async (rule: any) => {
+    try {
+      if (task?.id) {
+        let response;
+        const ruleId = recurrenceRule?.recurrenceRuleId;
+        if (ruleId) {
+          // Update existing rule using new RecurrenceRuleService
+          response = await RecurrenceRuleService.putApiVRecurrenceRule("1", {
+            ...rule,
+            recurrenceRuleId: ruleId,
+          });
+          toast.success("Recurrence rule updated");
+        } else {
+          // Create new rule using new RecurrenceRuleService
+          response = await RecurrenceRuleService.postApiVRecurrenceRule("1", {
+            ...rule,
+            category: isEvent ? "Events" : "task",
+            categoryId: task.id,
+          });
+          toast.success("Recurrence rule created");
+        }
+
+        // Update the local rule so the Repeat row reflects the change immediately
+        if (response && response.data) {
+          setRecurrenceRule(response.data as any);
+        } else {
+          setRecurrenceRule({
+            ...rule,
+            category: isEvent ? "Events" : "task",
+            categoryId: task.id,
+            recurrenceRuleId: ruleId
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Failed to save recurrence rule:", error);
+      toast.error("Failed to save recurrence rule");
+    }
+  };
+
+  if (!task) return null;
+  const taskName = task.title;
+  const firstLetter = taskName.charAt(0).toUpperCase();
+  const formatDate = (date: Date | null) => {
+    if (!date) return "No due date";
+    return date.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+    });
+  };
+
+  const toggle = (name: string) => {
+    setActiveDropdown((prev) => (prev === name ? null : name));
+  };
+
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent
+        side="right"
+        className="w-full sm:w-[600px] lg:w-[700px] border-l border-border bg-background p-6 sm:p-8 overflow-y-auto [&>button]:hidden"
+      >
+        <SheetTitle className="sr-only">Task Details</SheetTitle>
+
+        {/* Header */}
+        <div className="flex items-start justify-between mb-8">
+          <div>
+            <p className="text-sm text-gray-500 dark:text-zinc-400">
+              Personal Workspace / Project
+            </p>
+
+            <input
+              type="text"
+              className="text-2xl sm:text-3xl font-bold mt-1 w-full bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground focus:ring-0"
+              value={localTitle}
+              onChange={(e) => setLocalTitle(e.target.value)}
+              onBlur={() => {
+                if (localTitle.trim() !== task.title && onUpdateTask) {
+                  onUpdateTask({ ...task, title: localTitle.trim() });
+                }
+              }}
+              placeholder="Task title"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={async () => {
+                if (window.confirm(`Are you sure you want to delete this ${isEvent ? "event" : "task"}?`)) {
+                  if (onDeleteTaskProp) {
+                    onDeleteTaskProp(task.id);
+                    onOpenChange(false);
+                  } else {
+                    try {
+                      if (isEvent) {
+                        await EventService.deleteEvent(task.id, "1");
+                        toast.success("Event deleted");
+                      } else {
+                        await TaskService.taskDelete(task.id, "1");
+                        toast.success("Task deleted");
+                      }
+                      onOpenChange(false);
+                    } catch (error) {
+                      toast.error(`Failed to delete ${isEvent ? "event" : "task"}`);
+                    }
+                  }
+                }
+              }}
+              className="p-2  hover:text-red-500 rounded-md hover:bg-gray-200 dark:hover:bg-zinc-800 transition"
+              title="Delete task"
+            >
+              <Trash2 size={20} />
+            </button>
+            <button
+              onClick={() => onOpenChange(false)}
+              className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-zinc-800 transition"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* MAIN DETAILS */}
+        <div className="space-y-6 text-sm">
+          {/* isEvent CONDITIONAL BRANCH */}
+          {isEvent ? (
+            <>
+              {/* DATE & TIME  (for events) */}
+              <div className="relative text-gray-800 dark:text-zinc-200">
+                <DetailRow
+                  label="Date & Time"
+                  value={
+                    <span className="flex items-center gap-2 text-sm text-foreground">
+                      <CalendarDays size={14} className="opacity-60" />
+                      {task.startDate ? (
+                        `${new Date(task.startDate).toLocaleDateString()} ${new Date(task.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                      ) : "None"}
+                      {task.endDate && ` – ${new Date(task.endDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
+                    </span>
+                  }
+                />
+              </div>
+
+              {/* LOCATION */}
+              <div className="relative text-gray-800 dark:text-zinc-200">
+                <DetailRow
+                  label="Location"
+                  value={
+                    <div className="flex items-center w-64 max-w-full">
+                      <input
+                        type="text"
+                        value={localLocation}
+                        onChange={(e) => setLocalLocation(e.target.value)}
+                        onBlur={() => {
+                          if (localLocation !== task.location && onUpdateTask) {
+                            onUpdateTask({ ...task, location: localLocation });
+                          }
+                        }}
+                        placeholder="Location"
+                        className="flex-1 bg-zinc-900 border border-zinc-700/50 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-zinc-500 transition-colors"
+                      />
+                    </div>
+                  }
+                />
+              </div>
+
+              {/* REMINDER */}
+              <div className="relative text-gray-800 dark:text-zinc-200">
+                <DetailRow
+                  label="Reminder"
+                  value={
+                    <span className="text-sm font-medium text-foreground">
+                      Don't remind
+                    </span>
+                  }
+                />
+              </div>
+            </>
+          ) : (
+            // REGULAR TASK FIELDS
+            <>
+              {/* STATUS */}
+              <div className="relative text-gray-800 dark:text-zinc-200">
+                <DetailRow
+                  label="Status"
+                  value={
+                    <span className="flex items-center gap-2 text-sm text-foreground">
+                      <span className="text-base">{currentStatus.emoji}</span>
+                      {currentStatus.label}
+                    </span>
+                  }
+                  onClick={() => {
+                    setShowStatus(!showStatus);
+                    setShowType(false);
+                    setShowCalendar(false);
+                    setActiveDropdown(null);
+                  }}
+                />
+
+                {showStatus && (
+                  <div className="absolute top-10 right-0 w-52 rounded-lg border border-border bg-popover shadow-xl z-50 overflow-hidden">
+                    {dynamicTaskStatuses.length > 0 ? (
+                      dynamicTaskStatuses.map((s) => (
+                        <button
+                          key={s.taskStatusId}
+                          onClick={() => {
+                            const newStatus = {
+                              id: s.taskStatusId || "",
+                              label: s.name || "",
+                              color: "bg-zinc-800",
+                              emoji: s.colorOrIcon || "🗒️"
+                            };
+                            setCurrentStatus(newStatus);
+                            setShowStatus(false);
+                            if (task && onUpdateTask) {
+                              onUpdateTask({ ...task, status: s.taskStatusId as string });
+                            }
+                          }}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-left text-sm text-foreground hover:bg-muted transition"
+                        >
+                          <span className="text-base">{s.colorOrIcon || "🗒️"}</span>
+                          {s.name}
+                        </button>
+                      ))
+                    ) : (
+                      defaultStatuses.map((s) => (
+                        <button
+                          key={s.label}
+                          onClick={() => {
+                            setCurrentStatus(s);
+                            setShowStatus(false);
+                            if (task && onUpdateTask) {
+                              onUpdateTask({ ...task, status: s.id as any });
+                            }
+                          }}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-left text-sm text-zinc-200 hover:bg-zinc-800 transition"
+                        >
+                          <span className="text-base">{s.emoji}</span>
+                          {s.label}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* TYPE */}
+              {/* TYPE - Now shows Type Name instead of ID */}
+              <div className="relative text-gray-800 dark:text-zinc-200">
+                <DetailRow
+                  label="Type"
+                  value={
+                    <span className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg text-sm text-foreground">
+                      <span
+                        className="w-5 h-5 rounded-md shrink-0"
+                        style={{ backgroundColor: getDynamicTypeColor(task.taskTypeId || task.type) }}
+                      />
+                      {getTypeNameFromId(task.taskTypeId || task.type)}
+                    </span>
+                  }
+                  onClick={() => {
+                    setShowType(!showType);
+                    setShowStatus(false);
+                    setShowCalendar(false);
+                    setActiveDropdown(null);
+                  }}
+                />
+
+                {showType && (
+                  <div className="absolute top-10 right-0 w-52 rounded-lg border border-border bg-popover shadow-xl z-50 overflow-hidden">
+                    {dynamicTaskTypes.length > 0 ? (
+                      dynamicTaskTypes.map((t) => (
+                        <button
+                          key={t.taskTypeId || (t as any).eventTypeId}
+                          onClick={() => {
+                            if (task && onUpdateTask) {
+                              onUpdateTask({
+                                ...task,
+                                type: t.name || "",
+                                taskTypeId: t.taskTypeId || (t as any).eventTypeId
+                              });
+                            }
+                            setShowType(false);
+                          }}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-left text-sm text-foreground hover:bg-muted transition"
+                        >
+                          <span
+                            className="w-5 h-5 rounded-md shrink-0"
+                            style={{ backgroundColor: t.colorOrIcon || "#3b82f6" }}
+                          />
+                          {t.name}
+                        </button>
+                      ))
+                    ) : (
+                      TASK_TYPES.map((t) => (
+                        <button
+                          key={t.label}
+                          onClick={() => {
+                            if (task && onUpdateTask) {
+                              onUpdateTask({ ...task, type: t.label });
+                            }
+                            setShowType(false);
+                          }}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-left text-sm text-foreground hover:bg-muted transition"
+                        >
+                          <span
+                            className="w-5 h-5 rounded-md shrink-0"
+                            style={{ backgroundColor: t.color }}
+                          />
+                          {t.label}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {!isEvent && (
+                <>
+                  {!isEvent && (
+                    <>
+                      {/* DUE DATE */}
+                      <div className="relative">
+                        <DetailRow
+                          label="Due date"
+                          value={
+                            <span className="flex items-center gap-2 text-sm text-foreground">
+                              <CalendarDays size={14} className="opacity-60" />
+                              {formatDate(dueDate)}
+                            </span>
+                          }
+                          onClick={() => {
+                            setShowCalendar(!showCalendar);
+                            setShowStatus(false);
+                            setShowType(false);
+                            setActiveDropdown(null);
+                          }}
+                        />
+
+                        {showCalendar && (
+                          <CalendarDropdown
+                            selected={dueDate}
+                            onSelect={(date) => {
+                              setDueDate(date);
+                              setShowCalendar(false);
+                              if (task && onUpdateTask) {
+                                onUpdateTask({ ...task, dueDate: date ? date.toISOString() : undefined });
+                              }
+                            }}
+                            onClear={() => {
+                              setDueDate(null);
+                              setShowCalendar(false);
+                              if (task && onUpdateTask) {
+                                onUpdateTask({ ...task, dueDate: undefined });
+                              }
+                            }}
+                          />
+                        )}
+                      </div>
+
+                      {/* ASSIGNEE / PARTICIPANTS */}
+                      {!isEvent && (
+                        <div className="relative">
+                          <DetailRow
+                            label="Assignee"
+                            value={
+                              <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary text-xs font-semibold text-white shrink-0">
+                                  {task?.assignee ? task.assignee.charAt(0).toUpperCase() : firstLetter}
+                                </div>
+                                <span className=" text-sm truncate">
+                                  {task?.assignee || "Unassigned"}
+                                </span>
+                              </div>
+                            }
+                            onClick={() => {
+                              toggle("assignee");
+                              setAssigneeSearch("");
+                            }}
+                          />
+
+                          {activeDropdown === "assignee" && (
+                            <div
+                              className="absolute top-12 right-0 w-80  border bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl z-[60] overflow-hidden"
+                            >
+                              {/* Search Input */}
+                              <div className="p-3 border-b border-zinc-700">
+                                <input
+                                  type="text"
+                                  placeholder="Search users..."
+                                  value={assigneeSearch}
+                                  onChange={(e) => setAssigneeSearch(e.target.value)}
+                                  className="w-full border border-zinc-600 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-primary"
+                                  autoFocus
+                                />
+                              </div>
+
+                              {/* Scrollable User List */}
+                              <div className="max-h-[340px] overflow-y-auto py-1 custom-scroll">
+                                {filteredUsers.length > 0 ? (
+                                  filteredUsers.map((user) => {
+                                    const displayName = user.email || user.name || "Unknown";
+                                    const initial = (user.email || user.name || "?").charAt(0).toUpperCase();
+                                    return (
+                                      <button
+                                        key={user.userId || user.email}
+                                        onClick={() => {
+                                          const newAssignee = user.email || user.name || "";
+                                          if (task && onUpdateTask) {
+                                            onUpdateTask({
+                                              ...task,
+                                              assignee: newAssignee,
+                                              assignedTo: user.userId || newAssignee,
+                                            });
+                                          }
+                                          setActiveDropdown(null);
+                                          setAssigneeSearch("");
+                                        }}
+                                        className="flex items-center gap-3 w-full px-4 py-3 transition-colors text-left"
+                                      >
+                                        <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
+                                          {initial}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                          <p className="text-sm  truncate">{displayName}</p>
+                                          {user.name && user.email && user.name !== user.email && (
+                                            <p className="text-xs truncate">{user.name}</p>
+                                          )}
+                                        </div>
+                                      </button>
+                                    );
+                                  })
+                                ) : (
+                                  <div className="px-4 py-8 text-center text-zinc-500 text-sm">
+                                    No users found
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {!isEvent && (
+                        <>
+                          {/* ESTIMATED TIME */}
+
+                          {!isEvent && (
+                            <>
+                              {/* ESTIMATED TIME */}
+                              <div className="relative">
+                                <DetailRow
+                                  label="Estimated time"
+                                  value={
+                                    <span className="flex items-center gap-2 text-sm text-foreground">
+                                      <Clock size={14} className="opacity-60" />
+                                      {estimatedTime}
+                                    </span>
+                                  }
+                                  onClick={() => toggle("time")}
+                                />
+
+                                {activeDropdown === "time" && (
+                                  <Dropdown>
+                                    {timeOptions.map((time) => (
+                                      <DropdownItem
+                                        key={time}
+                                        onClick={() => {
+                                          const numericHours = timeToHoursMap[time] || 0;
+                                          setEstimatedTime(time);
+                                          setActiveDropdown(null);
+
+                                          if (task && onUpdateTask) {
+                                            onUpdateTask({
+                                              ...task,
+                                              estimatedHours: numericHours,
+                                            });
+                                          }
+                                        }}
+                                      >
+                                        {time}
+                                      </DropdownItem>
+                                    ))}
+                                  </Dropdown>
+                                )}
+                              </div>
+
+                              {/* PRIORITY */}
+                              <div className="relative">
+                                <DetailRow
+                                  label="Priority"
+                                  value={
+                                    (() => {
+                                      const p = dynamicTaskPriorities.find(pr => pr.taskPriorityId === task.taskPriorityId);
+                                      return (
+                                        <span className="text-sm font-medium text-foreground">
+                                          {p ? p.name : "None"}
+                                        </span>
+                                      );
+                                    })()
+                                  }
+                                  onClick={() => toggle("priority")}
+                                />
+
+                                {activeDropdown === "priority" && (
+                                  <Dropdown>
+                                    <DropdownItem
+                                      onClick={() => {
+                                        if (task && onUpdateTask) {
+                                          onUpdateTask({
+                                            ...task,
+                                            taskPriorityId: null,
+                                          });
+                                        }
+                                        setActiveDropdown(null);
+                                      }}
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        <span className="">None</span>
+                                      </div>
+                                    </DropdownItem>
+                                    {dynamicTaskPriorities.map((p) => (
+                                      <DropdownItem
+                                        key={p.taskPriorityId}
+                                        onClick={() => {
+                                          if (task && onUpdateTask) {
+                                            onUpdateTask({
+                                              ...task,
+                                              taskPriorityId: p.taskPriorityId as string,
+                                            });
+                                          }
+                                          setActiveDropdown(null);
+                                        }}
+                                      >
+                                        <div className="flex items-center gap-2">
+                                          <ChevronUp size={14} className="" />
+                                          <span className="">{p.name}</span>
+                                        </div>
+                                      </DropdownItem>
+                                    ))}
+                                  </Dropdown>
+                                )}
+                              </div>
+
+                              {/* REPEAT */}
+                              <div className="relative">
+                                <DetailRow
+                                  label="Repeat"
+                                  value={
+                                    <span className="flex items-center gap-2 text-sm text-foreground">
+                                      <Repeat size={14} className={recurrenceRule ? "text-primary" : "opacity-60"} />
+                                      {getRecurrenceSummary(recurrenceRule)}
+                                    </span>
+                                  }
+                                  onClick={() => setShowRepeatMenu(!showRepeatMenu)}
+                                />
+
+                                {showRepeatMenu && (
+                                  <div className="absolute top-10 right-0 w-56 bg-popover border border-border rounded-xl shadow-2xl z-[70] overflow-hidden">
+                                    <div className="p-2 space-y-1">
+                                      <div className="px-3 py-2 text-[11px] font-bold text-muted-foreground uppercase tracking-wider flex items-center justify-between">
+                                        After completion
+                                        <Info size={14} className="text-muted-foreground/50" />
+                                      </div>
+                                      <div className="h-px bg-border mx-2 my-1" />
+                                      <div className="px-3 py-2 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                                        Time-based
+                                      </div>
+                                      {["Every day", "Every workday", "Every week", "Every month", "Every year"].map((opt) => (
+                                        <button
+                                          key={opt}
+                                          onClick={() => handleRepeatOption(opt)}
+                                          className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
+                                        >
+                                          {opt}
+                                        </button>
+                                      ))}
+                                      <div className="h-px bg-border mx-2 my-1" />
+                                      <button
+                                        onClick={() => { setInitialRecurrenceRule(recurrenceRule); setShowRepeatMenu(false); setShowRecurrenceModal(true); }}
+                                        className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors flex items-center gap-2"
+                                      >
+                                        <Settings size={14} /> Customize repeat
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      {!isEvent && showSubtasks && (
+                        <button
+                          onClick={() => setShowAddSubtaskInput(true)}
+                          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground py-2 transition"
+                        >
+                          + Add subtask
+                        </button>
+                      )}
+
+                      {/* SUBTASKS SECTION */}
+                      {!isEvent && (
+                        <div className="mt-8 border-t border-border pt-6">
+                          <div
+                            className="flex items-center justify-between cursor-pointer mb-4"
+                            onClick={() => setShowSubtasks(!showSubtasks)}
+                          >
+                            <div className="flex items-center gap-2 text-sm text-foreground">
+                              <ListTodo size={16} />
+                              Subtasks <span className="ml-1 px-2 py-0.5 bg-muted rounded-full text-xs font-bold">{subtasks.length}</span>
+                            </div>
+                            {showSubtasks ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                          </div>
+
+                          {showSubtasks && (
+                            <div className="space-y-4">
+                              {/* SUBTASK LIST */}
+                              <div className="space-y-2">
+                                {subtasks.map((s, i) => (
+                                  <div key={i}>
+                                    {editingIndex === i ? (
+                                      <div className="flex items-center gap-3 bg-background border border-border rounded-lg px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-primary/30">
+                                        <input
+                                          type="text"
+                                          value={subtask}
+                                          onChange={(e) => setSubtask(e.target.value)}
+                                          className="flex-1 bg-transparent outline-none text-sm text-foreground"
+                                          autoFocus
+                                        />
+                                        <div className="relative flex items-center gap-1">
+                                          <button
+                                            onClick={() => setShowTimePicker(!showTimePicker)}
+                                            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                                          >
+                                            {subtaskTime || "hh:mm"}
+                                          </button>
+                                          {showTimePicker && (
+                                            <div className="absolute top-full left-0 mt-2 z-50 min-w-[100px]">
+                                              <Dropdown>
+                                                {timeOptions.map((t) => (
+                                                  <DropdownItem
+                                                    key={t}
+                                                    onClick={() => {
+                                                      setSubtaskTime(t);
+                                                      setShowTimePicker(false);
+                                                    }}
+                                                  >
+                                                    <span className="text-xs text-foreground">{t}</span>
+                                                  </DropdownItem>
+                                                ))}
+                                              </Dropdown>
+                                            </div>
+                                          )}
+                                        </div>
+
+                                        <div className="relative">
+                                          <button onClick={() => setShowSubtaskCalendar(!showSubtaskCalendar)} className="text-muted-foreground hover:text-foreground">
+                                            <CalendarDays size={16} />
+                                          </button>
+                                          {showSubtaskCalendar && (
+                                            <div className="absolute top-full right-0 mt-2 z-50">
+                                              <CalendarDropdown
+                                                selected={subtaskDueDate}
+                                                onSelect={(date) => { setSubtaskDueDate(date); setShowSubtaskCalendar(false); }}
+                                                onClear={() => { setSubtaskDueDate(null); setShowSubtaskCalendar(false); }}
+                                              />
+                                            </div>
+                                          )}
+                                        </div>
+                                        <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-[10px] font-bold">
+                                          {s.assignee?.charAt(0).toUpperCase() || "U"}
+                                        </div>
+                                        <Button
+                                          size="sm"
+                                          className="h-7 px-3 text-xs  hover:bg-primary/80 text-white"
+                                          onClick={async () => {
+                                            if (!subtask.trim()) return;
+                                            try {
+                                              await TaskService.taskPut("1", {
+                                                taskId: s.id,
+                                                name: subtask,
+                                                status: s.completed ? "completed" : task.status,
+                                                description: task.description,
+                                                endDate: subtaskDueDate?.toISOString() || null,
+                                                estimatedHours: subtaskTime ? timeToHoursMap[subtaskTime] : null,
+                                              } as any);
+                                              setSubtasks(prev => prev.map((item, idx) => idx === i ? {
+                                                ...item,
+                                                name: subtask,
+                                                dueDate: subtaskDueDate,
+                                                time: subtaskTime,
+                                              } : item));
+                                              setEditingIndex(null);
+                                              setSubtask("");
+                                              setSubtaskDueDate(null);
+                                              toast.success("Subtask updated");
+                                            } catch (e) {
+                                              toast.error("Failed to update subtask");
+                                            }
+                                          }}
+                                        >
+                                          Save
+                                        </Button>
+                                      </div>
+                                    ) : (
+                                      <div
+                                        className="flex items-center justify-between px-3 py-2 rounded-md text-sm group transition bg-muted/50 border border-border hover:border-muted-foreground/30"
+                                        onClick={() => {
+                                          setEditingIndex(i);
+                                          setSubtask(s.name);
+                                          setSubtaskDueDate(s.dueDate);
+                                          setSubtaskTime(s.time);
+                                        }}
+                                      >
+                                        <div className="flex items-center gap-3">
+                                          <input
+                                            type="checkbox"
+                                            checked={s.completed}
+                                            onChange={async (e) => {
+                                              e.stopPropagation();
+                                              const newCompleted = !s.completed;
+                                              try {
+                                                await TaskService.taskPut("1", {
+                                                  taskId: s.id,
+                                                  name: s.name,
+                                                  status: newCompleted ? "completed" : task.status, // toggle
+                                                  description: task.description,
+                                                } as any);
+                                                setSubtasks(prev => prev.map((item, idx) => idx === i ? { ...item, completed: newCompleted } : item));
+                                              } catch (e) {
+                                                toast.error("Failed to update status");
+                                              }
+                                            }}
+                                            className="accent-primary cursor-pointer"
+                                          />
+                                          <span className={s.completed ? "line-through opacity-60" : ""}>{s.name}</span>
+                                        </div>
+                                        <div className="flex items-center gap-4 text-xs text-zinc-500">
+                                          {s.time && <span className="flex items-center gap-1"><Clock size={12} /> {s.time}</span>}
+                                          {s.dueDate && <span>{new Date(s.dueDate).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</span>}
+                                          <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-[10px] font-bold">
+                                            {s.assignee?.charAt(0).toUpperCase() || "U"}
+                                          </div>
+                                          <button
+                                            onClick={async (e) => {
+                                              e.stopPropagation();
+                                              if (window.confirm("Delete subtask?")) {
+                                                try {
+                                                  await TaskService.taskDelete(s.id!, "1");
+                                                  setSubtasks(prev => prev.filter((_, idx) => idx !== i));
+                                                  toast.success("Subtask deleted");
+                                                } catch (e) {
+                                                  toast.error("Failed to delete subtask");
+                                                }
+                                              }
+                                            }}
+                                            className="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                          >
+                                            <Trash2 size={14} />
+                                          </button>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* ADD SUBTASK BUTTON */}
+                              <button
+                                onClick={() => setShowAddSubtaskInput(true)}
+                                className="flex items-center gap-2 text-sm text-primary font-medium hover:text-primary/80 transition-colors pl-1"
+                              >
+                                <IoAdd />
+                                Add subtask
+                              </button>
+
+                              {showAddSubtaskInput && (
+                                <div className="flex items-center gap-3 bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2">
+                                  <input
+                                    type="text"
+                                    placeholder="Subtask name"
+                                    value={subtask}
+                                    onChange={(e) => setSubtask(e.target.value)}
+                                    className="flex-1 bg-transparent outline-none text-sm text-black dark:text-white"
+                                    autoFocus
+                                  />
+                                  <Button
+                                    size="sm"
+                                    className="h-7 px-3 text-xs bg-primary text-white"
+                                    onClick={async () => {
+                                      if (!subtask.trim()) return;
+                                      try {
+                                        const res = await TaskService.taskPost("1", {
+                                          name: subtask,
+                                          description: task.description,
+                                          status: task.status,
+                                          category: "task",
+                                          categoryId: task.id,
+                                        } as any);
+                                        if (res.success) {
+                                          setSubtasks(prev => [...prev, {
+                                            id: res.data?.taskId || undefined,
+                                            name: subtask,
+                                            dueDate: null,
+                                            time: "0h",
+                                            assignee: "",
+                                            completed: false
+                                          }]);
+                                          setSubtask("");
+                                          setShowAddSubtaskInput(false);
+                                          toast.success("Subtask added");
+                                        }
+                                      } catch (e) {
+                                        toast.error("Failed to add subtask");
+                                      }
+                                    }}
+                                  >
+                                    Add
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-7 px-2"
+                                    onClick={() => { setShowAddSubtaskInput(false); setSubtask(""); }}
+                                  >
+                                    <X size={14} />
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+            </div>
+          )}
+                </div>
+            </div>
+
+          {/* ACTION BUTTONS */}
+          {!isEvent && (
+            <div className="mt-6 pt-5 border-t border-zinc-800 flex flex-wrap gap-2">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center gap-2 border border-zinc-700 px-3 py-2 rounded-full text-sm  transition"
+              >
+                <Paperclip size={14} /> Attach file
+              </button>
+
+              <input type="file" ref={fileInputRef} className="hidden" accept="application/pdf"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) setAttachedFile(f); e.target.value = ""; }}
+              />
+
+              <button
+                onClick={() => setIsTimerPaused(!isTimerPaused)}
+                className="flex items-center gap-2 border border-zinc-700 px-3 py-2 rounded-full text-sm  transition"
+              >
+                <PauseCircle size={14} /> {isTimerPaused ? "Resume timer" : "Start timer"}
+              </button>
+
+              <button
+                onClick={() => setShowLogTime(true)}
+                className="flex items-center gap-2 border border-zinc-700 px-3 py-2 rounded-full text-sm  transition"
+              >
+                <Clock size={14} /> Log time
+              </button>
+
+              <button
+                onClick={() => setShowMoreMenu(!showMoreMenu)}
+                className="flex items-center gap-2 border border-zinc-700 px-3 py-2 rounded-full text-sm transition"
+              >
+                <Tag size={14} /> Add tag
+              </button>
+
+              <Scheduled taskName={taskName} />
+
+              {/* ATTACHED FILE PREVIEW */}
+              {attachedFile && (
+                <div className="mt-2 flex items-center justify-between px-3 py-2 rounded-lg text-sm w-[260px] relative bg-zinc-900 border border-zinc-700">
+                  <span className="truncate text-zinc-200">{attachedFile.name}</span>
+                  <button onClick={() => setShowFileMenu(!showFileMenu)} className="p-1 rounded hover:bg-zinc-800">
+                    <MoreVertical size={16} />
+                  </button>
+                  {showFileMenu && (
+                    <div className="absolute right-0 top-10 w-40 bg-zinc-900 border border-zinc-700 rounded-lg shadow z-50">
+                      <button onClick={() => { const url = URL.createObjectURL(attachedFile); const a = document.createElement("a"); a.href = url; a.download = attachedFile.name; a.click(); }} className="block w-full text-left px-3 py-2 hover:bg-zinc-800 text-zinc-200">Download</button>
+                      <button onClick={() => { setAttachedFile(null); setShowFileMenu(false); }} className="block w-full text-left px-3 py-2 text-red-400 hover:bg-zinc-800">Delete</button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* DESCRIPTION / AGENDA */}
+          <div className="mt-6 border-t border-border pt-6">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+              <ListTodo size={14} />
+              <span className="font-medium">{isEvent ? "Agenda" : "Description"}</span>
+            </div>
+            <textarea
+              className="w-full text-sm text-foreground bg-transparent border border-transparent hover:border-border focus:border-muted-foreground/30 outline-none resize-y min-h-[100px] p-2 rounded-md transition-colors"
+              value={localDesc}
+              onChange={(e) => setLocalDesc(e.target.value)}
+              onBlur={() => {
+                if (localDesc !== task.description && onUpdateTask) {
+                  onUpdateTask({ ...task, description: localDesc });
+                }
+              }}
+              placeholder={isEvent ? "Event agenda..." : "Task description..."}
+            />
+          </div>
+
+          {/* PARTICIPANTS FOR EVENTS */}
+          {isEvent && (
+            <div className="mt-6 border-t border-zinc-800 pt-6">
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
+                  <Users size={16} /> Participants
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  1 person approved out of 1
+                  <ChevronDown size={14} className="opacity-70" />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#0d9488] text-white text-sm font-semibold">
+                    M
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 bg-zinc-900 rounded-full border border-zinc-600">
+                    <CheckCircle2 size={12} className="text-green-500 bg-black rounded-full" />
+                  </div>
+                </div>
+                <span className="text-sm font-medium text-foreground">Me</span>
+              </div>
+
+              <button className="flex items-center gap-2 mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <IoAdd size={16} /> Add participants
+              </button>
+            </div>
+          )}
+      </SheetContent>
+      <LogTimeModal
+        open={openLogModal}
+        onClose={() => setOpenLogModal(false)}
+        taskName={taskName}
+        onSave={handleAddLog}
+      />
+      <TaskRecurrenceModal
+        open={showRecurrenceModal}
+        onOpenChange={setShowRecurrenceModal}
+        onSave={handleSaveRecurrence}
+        onDelete={() => setRecurrenceRule(null)}
+        initialRule={initialRecurrenceRule}
+      />
+    </Sheet>
+  );
+};
+
+/* ---------------- COMPONENTS ---------------- */
+
+function DetailRow({
+  label,
+  value,
+  onClick,
+}: {
+  label: string;
+  value: React.ReactNode;
+  onClick?: () => void;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      className="flex justify-between items-center border-b border-border py-3.5 hover:border-muted-foreground/30 cursor-pointer"
+    >
+      <span className="text-muted-foreground text-sm uppercase tracking-tight">{label}</span>
+      {value}
+    </div>
+  );
+}
+
+function ColoredBadge({ label, color }: { label: string; color: string }) {
+  return (
+    <div className="flex items-center gap-2   px-3 py-1 rounded-md">
+      <div className={`w-3 h-3 rounded-full ${color}`} />
+      {label}
+    </div>
+  );
+}
+
+function Dropdown({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="absolute right-0 mt-2 w-56 rounded-lg border border-border bg-popover shadow-xl p-2 z-50 space-y-1">
+      {children}
+    </div>
+  );
+}
+
+function DropdownItem({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      className="px-3 py-2 rounded-md cursor-pointer transition"
+    >
+      {children}
+    </div>
+  );
+}
+
+function PriorityBadge({
+  label,
+  Icon,
+  color,
+}: {
+  label: string;
+  Icon: any;
+  color: string;
+}) {
+  return (
+    <div className="flex items-center gap-2  px-3 py-1 rounded-md">
+      {Icon && <Icon size={14} className={color} />}
+      <span className={color}>{label}</span>
+    </div>
+  );
+}
+function CalendarDropdown({
+  selected,
+  onSelect,
+  onClear,
+}: {
+  selected: Date | null;
+  onSelect: (date: Date) => void;
+  onClear: () => void;
+}) {
+  return (
+    <div className="absolute right-0 mt-2 w-auto bg-popover border border-border rounded-3xl shadow-xl z-50 overflow-hidden">
+      <Calendar
+        mode="single"
+        selected={selected || undefined}
+        onSelect={(day) => {
+          if (day) onSelect(day);
+        }}
+        initialFocus
+        className="w-auto p-2"
+      />
+      <div className="mt-1 border-t border-border pt-3 pb-3 px-4 bg-popover">
+        <button
+          onClick={onClear}
+          className="text-sm font-semibold text-red-500 hover:text-red-400 focus:outline-none w-full text-left"
+        >
+          No due date
+        </button>
+      </div>
+    </div>
+  );
+}
+function ActionButton({
+  icon: Icon,
+  label,
+  onClick,
+}: {
+  icon: any;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-2 px-4 py-2 rounded-lg transition text-sm"
+    >
+      <Icon size={16} />
+      {label}
+    </button>
+  );
+}
+function LogTimeModal({
+  open,
+  onClose,
+  taskName,
+  onSave,
+}: {
+  open: boolean;
+  onClose: () => void;
+  taskName: string;
+  onSave: (log: any) => void;
+}) {
+  const [billable, setBillable] = useState(false);
+  const [loggedTime, setLoggedTime] = useState("");
+  const [showTimeOptions, setShowTimeOptions] = useState(false);
+  const [comment, setComment] = useState("");
+  const [date, setDate] = useState("");
+
+  const [logs, setLogs] = useState<any[]>([]);
+
+  const timeOptions = [
+    "15 min",
+    "30 min",
+    "45 min",
+    "1 hour",
+    "1:30 hours",
+    "1:00 hours",
+    "2:00 hours",
+    "3:00 hours",
+    "4:00 hours",
+    "5:00 hours",
+    "6:00 hours",
+    "7:00 hours",
+  ];
+
+  const firstLetter = taskName?.charAt(0).toUpperCase();
+
+  const handleSave = () => {
+    const newLog = {
+      date: date || new Date().toISOString().split('T')[0],
+      user: firstLetter || "User",
+      comment,
+      billable,
+      time: loggedTime,
+    };
+
+    setLogs((prev) => [...prev, newLog]);
+    onSave(newLog);
+
+    setLoggedTime("");
+    setComment("");
+    setDate("");
+
+    onClose();
+  };
+
+  return (
+    <>
+      {/* MODAL */}
+      {open && (
+        <div className="fixed inset-0 flex items-center justify-center z-[100] bg-black/40">
+          <div className="w-full max-w-lg bg-black text-white rounded-2xl shadow-2xl p-8 border border-zinc-800">
+            <h2 className="text-2xl font-semibold mb-6">Log time</h2>
+
+            <div className="space-y-5 text-sm">
+              {/* Date */}
+              <div>
+                <label className="text-zinc-400 block mb-2">Date</label>
+
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2"
+                />
+              </div>
+
+              {/* Logged Time */}
+              <div className="relative">
+                <label className="text-zinc-400 block mb-2">Logged time</label>
+
+                <div
+                  onClick={() => setShowTimeOptions(!showTimeOptions)}
+                  className="flex items-center gap-2 cursor-pointer w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2"
+                >
+                  👤
+                  <input
+                    type="text"
+                    value={loggedTime}
+                    placeholder="0h"
+                    readOnly
+                    className="bg-transparent outline-none flex-1"
+                  />
+                </div>
+
+                {showTimeOptions && (
+                  <div className="absolute top-11 left-0 w-full rounded-lg border border-zinc-700 bg-zinc-900 shadow-lg max-h-48 overflow-y-auto">
+                    {timeOptions.map((time) => (
+                      <div
+                        key={time}
+                        onClick={() => {
+                          setLoggedTime(time);
+                          setShowTimeOptions(false);
+                        }}
+                        className="px-4 py-2 hover:bg-zinc-800 cursor-pointer"
+                      >
+                        {time}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Assignee */}
+              <div>
+                <label className="text-zinc-400 block mb-2">Assignee</label>
+
+                <div className="flex items-center gap-3 px-3 py-2 border border-zinc-700 rounded-lg bg-zinc-900">
+                  <div className="w-7 h-7 flex items-center justify-center rounded-full bg-purple-600 text-white text-xs">
+                    {firstLetter}
+                  </div>
+
+                  <span>{taskName}</span>
+                </div>
+              </div>
+
+              {/* Billable */}
+              <div>
+                <label className="text-zinc-400 block mb-2">Billable</label>
+
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setBillable(true)}
+                    className={`px-4 py-2 rounded-lg border ${billable
+                      ? "bg-blue-600 border-blue-600 text-white"
+                      : "border-zinc-700"
+                      }`}
+                  >
+                    Yes
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setBillable(false)}
+                    className={`px-4 py-2 rounded-lg border ${!billable
+                      ? "bg-blue-600 border-blue-600 text-white"
+                      : "border-zinc-700"
+                      }`}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+
+              {/* Comment */}
+              <div>
+                <label className="text-zinc-400 block mb-2">Comment</label>
+
+                <textarea
+                  rows={4}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Your comment..."
+                  className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3"
+                />
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-4 mt-8">
+              <button onClick={onClose} className="text-zinc-400">
+                Cancel
+              </button>
+
+              <button
+                onClick={handleSave}
+                className="px-6 py-2 bg-blue-600 rounded-lg"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* LOGGED TIME LIST (DIV KE NICHE SHOW HOGA) */}
+      {logs.length > 0 && (
+        <div className="mt-8 border-t border-zinc-700 pt-6">
+          <h3 className="text-lg font-semibold mb-4">
+            Logged time ({logs.length})
+          </h3>
+
+          <div className="grid grid-cols-6 text-xs text-zinc-400 border-b border-zinc-700 pb-2 mb-3">
+            <span>Date</span>
+            <span>User</span>
+            <span className="col-span-2">Comment</span>
+            <span>Billable</span>
+            <span className="text-right">Time</span>
+          </div>
+
+          {logs.map((log, i) => (
+            <div
+              key={i}
+              className="grid grid-cols-6 items-center py-3 border-b border-zinc-800 text-sm"
+            >
+              <span>{log.date || "-"}</span>
+
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs">
+                  {log.user}
+                </div>
+              </div>
+
+              <span className="col-span-2">{log.comment || "-"}</span>
+
+              <span className="text-blue-400">{log.billable ? "$" : "-"}</span>
+
+              <span className="text-right font-medium">{log.time}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}

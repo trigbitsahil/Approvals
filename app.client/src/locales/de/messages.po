@@ -1,0 +1,1055 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-06-18 23:16+0530\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: de\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signUp/index.tsx:37
+#: my-app/src/modules/auth/signUp/index.tsx:156
+#: my-app/src/components/sidebar/Sidebar.tsx:217
+msgid "Sign Up"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signUp/index.tsx:47
+#: my-app/src/components/user/UserTable.tsx:126
+msgid "First Name"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signUp/index.tsx:61
+#: my-app/src/components/user/UserTable.tsx:127
+msgid "Last Name"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signUp/index.tsx:77
+#: my-app/src/modules/auth/signIn/index.tsx:39
+#: my-app/src/components/user/UserTable.tsx:141
+msgid "Email"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signUp/index.tsx:92
+msgid "Phone Number"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signUp/index.tsx:109
+#: my-app/src/components/user/UserTable.tsx:131
+msgid "Gender"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signUp/index.tsx:138
+msgid "Or continue with"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signUp/index.tsx:161
+msgid "Already have an account?"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signUp/index.tsx:167
+msgid "Sign in"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signIn/index.tsx:33
+#: my-app/src/modules/auth/signIn/index.tsx:53
+msgid "Sign In"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signIn/index.tsx:46
+msgid "Password"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signIn/index.tsx:53
+msgid "Signing In..."
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signIn/index.tsx:58
+msgid "Don't have an account?"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/signIn/index.tsx:64
+msgid "Sign up"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:71
+msgid "Choose a language"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:128
+msgid "Age"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:148
+msgid "Phone"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:157
+msgid "Update"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:161
+msgid "Delete"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:166
+msgid "Are you absolutely sure"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:169
+msgid "This action cannot be undone."
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:174
+msgid "Cancel"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:177
+msgid "Continue"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:219
+msgid "Add"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:224
+msgid "Columns"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:281
+msgid "No results."
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:293
+msgid "of"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:294
+msgid "row(s) selected."
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:303
+msgid "Previous"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserTable.tsx:311
+msgid "Next"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:194
+msgid "Acme Inc"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:196
+msgid "Enterprise"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:199
+msgid "Acme Corp."
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:201
+msgid "Startup"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:204
+msgid "Evil Corp."
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:206
+msgid "Free"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:211
+msgid "Playground"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:216
+msgid "Home"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:218
+msgid "Data"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:219
+msgid "Inbox"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:220
+msgid "Calendar"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:225
+msgid "Models"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:229
+msgid "Genesis"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:230
+msgid "Explorer"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:231
+msgid "Quantum"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:235
+msgid "Documentation"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:239
+msgid "Introduction"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:240
+msgid "Get Started"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:241
+msgid "Tutorials"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:242
+msgid "Changelog"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:246
+msgid "Settings"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:250
+msgid "General"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:251
+msgid "Team"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:252
+msgid "Billing"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Sidebar.tsx:253
+msgid "Limits"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:42
+#~ msgid "Alert Dialog"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:43
+#~ msgid "A modal dialog that interrupts the user with important content and expects a response."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:46
+#~ msgid "Hover Card"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:47
+#~ msgid "For sighted users to preview content available behind a link."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:50
+#~ msgid "Progress"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:51
+#~ msgid "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:54
+#~ msgid "Scroll-area"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:55
+#~ msgid "Visually or semantically separates content."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:58
+#~ msgid "Tabs"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:59
+#~ msgid "A set of layered sections of content—known as tab panels—that are displayed one at a time."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:62
+#~ msgid "Tooltip"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:63
+#~ msgid "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:85
+#~ msgid "shadcn/ui"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:94
+#~ msgid "Reusable components built using Radix UI and Tailwind CSS."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:97
+#~ msgid "How to install dependencies and structure your app."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:107
+#: my-app/src/components/NavigationMenu.tsx:138
+#: my-app/src/components/NavigationMenu.tsx:197
+#: my-app/src/components/NavigationMenu.tsx:213
+#~ msgid "Components"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:128
+#: my-app/src/components/NavigationMenu.tsx:207
+#~ msgid "Docs"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:144
+#: my-app/src/components/NavigationMenu.tsx:219
+#~ msgid "Blocks"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:152
+#: my-app/src/components/NavigationMenu.tsx:224
+#~ msgid "With Icon"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:158
+#: my-app/src/components/NavigationMenu.tsx:228
+#~ msgid "Backlog"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:163
+#: my-app/src/components/NavigationMenu.tsx:233
+#~ msgid "To Do"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:168
+#: my-app/src/components/NavigationMenu.tsx:238
+#~ msgid "Done"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:43
+#~ msgid "Projects"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:58
+#: my-app/src/components/sidebar/nav-projects.tsx:86
+#~ msgid "More"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:68
+#~ msgid "View Project"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:72
+#~ msgid "Share Project"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:77
+#~ msgid "Delete Project"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/SidebarFooter.tsx:28
+#~ msgid "User"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/SidebarFooter.tsx:41
+#~ msgid "Account"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/SidebarFooter.tsx:54
+#~ msgid "Sign Out"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/ScrollArea.tsx:18
+#~ msgid "Tags"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:88
+#~ msgid "Beautifully designed components built with Tailwind CSS."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:20
+#~ msgid "Login to your account"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:23
+#~ msgid "Enter your email below to login to your account"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:60
+#~ msgid "Forgot your password?"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:79
+#~ msgid "Login"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:86
+#~ msgid "Login with Google"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:58
+#~ msgid "Select Your Language"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:61
+#~ msgid "Choose your preferred language to personalize your experience."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:67
+#~ msgid "Available Languages"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:84
+#~ msgid "This change will reload the app to apply the selected language."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:95
+#~ msgid "Confirm"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserFormDialog.tsx:89
+#~ msgid "Fill in the details below."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/form/SignUp/index.tsx:98
+#~ msgid "I agree to the"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/form/SignUp/index.tsx:100
+#~ msgid "Terms and Conditions"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/form/SignUp/index.tsx:102
+#~ msgid "and"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/form/SignUp/index.tsx:104
+#~ msgid "Privacy Policy"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/modules/auth/form/SignUp/index.tsx:117
+#~ msgid "Signing Up..."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/Sidebar.tsx:46
+#~ msgid "Select Workspace"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/Sidebar.tsx:67
+#: my-app/src/components/App/Sidebar.tsx:89
+#~ msgid "Application"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/Sidebar.tsx:113
+#~ msgid "Help"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/NavigationMenu.tsx:48
+#~ msgid "Today"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/NavigationMenu.tsx:53
+#~ msgid "Group By"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/NavigationMenu.tsx:58
+#~ msgid "Filter"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/DataTable.tsx:180
+#~ msgid "Actions"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/DataTable.tsx:198
+#~ msgid "This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/DataTable.tsx:213
+#~ msgid "View Details"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/DataTable.tsx:368
+#~ msgid "Update User"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/Add.tsx:59
+#~ msgid "Create profile"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/App/Add.tsx:97
+#~ msgid "Submit"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:25
+#~ msgid "ui.account"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:56
+msgid "ui.Change your password here. After saving, you&apos;ll be logged out"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:62
+msgid "ui.Current Password"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:23
+msgid "ui.Enter your email below to login to your account"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:33
+msgid "ui.Make.changes.to.your.account.here.Click.save.when.you&apos;redone"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:66
+msgid "ui.New Password"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:71
+msgid "ui.Save Password"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:45
+msgid "ui.A modal dialog that interrupts the user with important content and expects a response"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:80
+msgid "ui.A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:73
+msgid "ui.A set of layered sections of content—known as tab panels—that are displayed one at a time"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:25
+#: my-app/src/components/Account.tsx:31
+msgid "ui.Account"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Team-Switcher.tsx:183
+msgid "ui.Add Team"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:42
+msgid "ui.Alert Dialog"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:67
+msgid "ui.Available Languages"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/ThemeSwitcher.tsx:67
+msgid "ui.AvailableThemes"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:178
+#: my-app/src/components/NavigationMenu.tsx:248
+msgid "ui.Backlog"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Inbox.tsx:9
+msgid "ui.Badge"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:106
+msgid "ui.Beautifully designed components built with Tailwind CSS"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:164
+#: my-app/src/components/NavigationMenu.tsx:239
+msgid "ui.Blocks"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/ThemeSwitcher.tsx:95
+#: my-app/src/components/LanguageToggle.tsx:92
+#: my-app/src/components/user/UserFormDialog.tsx:135
+msgid "ui.Cancel"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:60
+msgid "ui.Choose your preferred language to personalize your experience"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/ThemeSwitcher.tsx:58
+msgid "ui.ChooseThemeDescription"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:127
+#: my-app/src/components/NavigationMenu.tsx:158
+#: my-app/src/components/NavigationMenu.tsx:217
+#: my-app/src/components/NavigationMenu.tsx:233
+msgid "ui.Components"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/ThemeSwitcher.tsx:100
+#: my-app/src/components/LanguageToggle.tsx:97
+msgid "ui.Confirm"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:77
+msgid "ui.Delete Project"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Inbox.tsx:12
+msgid "ui.Destructive"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:59
+msgid "ui.Displays an indicator showing the completion progress of a task, typically displayed as a progress bar"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:148
+#: my-app/src/components/NavigationMenu.tsx:227
+msgid "ui.Docs"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:161
+#: my-app/src/components/NavigationMenu.tsx:236
+msgid "ui.Documentation"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:188
+#: my-app/src/components/NavigationMenu.tsx:258
+msgid "ui.Done"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Calendar.tsx:37
+msgid "ui.Dropdown"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:42
+msgid "ui.Email"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserFormDialog.tsx:89
+msgid "ui.Fill in the details below"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:52
+msgid "ui.For sighted users to preview content available behind a link"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:64
+msgid "ui.Forgot Your Password"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/user/UserFormDialog.tsx:110
+msgid "ui.Gender"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:93
+#: my-app/src/components/NavigationMenu.tsx:214
+msgid "ui.Home"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:49
+msgid "ui.Hover Card"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:115
+msgid "ui.How to install dependencies and structure your app"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:114
+msgid "ui.Installation"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:111
+msgid "ui.Introduction"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:84
+msgid "ui.Login"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:20
+msgid "ui.Login to your account"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:92
+msgid "ui.Login with Google"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/UserMenu.tsx:29
+msgid "ui.Logout"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Calendar.tsx:56
+msgid "ui.Month and Year"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Calendar.tsx:58
+msgid "ui.Month Only"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:58
+#: my-app/src/components/sidebar/nav-projects.tsx:86
+msgid "ui.More"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/UserMenu.tsx:21
+msgid "ui.My Account"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:38
+msgid "ui.Name"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:39
+msgid "input.Name"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Inbox.tsx:13
+msgid "ui.Outline"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:57
+#: my-app/src/components/Account.tsx:26
+#: my-app/src/components/Account.tsx:54
+msgid "ui.Password"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-main.tsx:38
+msgid "ui.Platform"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/UserMenu.tsx:24
+msgid "ui.Profile"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:56
+msgid "ui.Progress"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:43
+msgid "ui.Projects"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:112
+msgid "ui.Reusable components built using Radix UI and Tailwind CSS."
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:47
+msgid "ui.Save Changes"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:63
+msgid "ui.Scroll-area"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Inbox.tsx:11
+msgid "ui.Secondary"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/ThemeSwitcher.tsx:74
+msgid "ui.SelectThemePlaceholder"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:57
+msgid "ui.Select your language"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/ThemeSwitcher.tsx:55
+msgid "ui.SelectTheme"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:103
+msgid "ui.shadcn/ui"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:72
+msgid "ui.Share Project"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Login.tsx:31
+msgid "ui.Sign Up"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:230
+msgid "ui.Simple"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:153
+msgid "Simple"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:119
+msgid "Styles for headings, paragraphs, lists...etc"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:70
+msgid "ui.Tabs"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/ScrollArea.tsx:18
+msgid "ui.Tags"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/Team-Switcher.tsx:163
+msgid "ui.Teams"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/ThemeSwitcher.tsx:85
+msgid "ui.ThemeApplyNote"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/LanguageToggle.tsx:84
+msgid "ui.This change will reload the app to apply the selected language"
+msgstr ""
+
+#: my-app/src/components/App/ExampleComponent.tsx:8
+#~ msgid "This text will be automatically extracted for translation"
+#~ msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:183
+#: my-app/src/components/NavigationMenu.tsx:253
+msgid "ui.To Do"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:77
+msgid "ui.Tooltip"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:118
+msgid "ui.Typography"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:42
+msgid "ui.Username"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Account.tsx:43
+msgid "input.Username"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Inbox.tsx:21
+msgid "ui.Verified"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/sidebar/nav-projects.tsx:68
+msgid "ui.View Projects"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:66
+msgid "ui.Visually or semantically separates content"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/NavigationMenu.tsx:172
+#: my-app/src/components/NavigationMenu.tsx:244
+msgid "ui.With Icon"
+msgstr ""
+
+#. js-lingui-explicit-id
+#: my-app/src/components/Calendar.tsx:59
+msgid "ui.Year Only"
+msgstr ""

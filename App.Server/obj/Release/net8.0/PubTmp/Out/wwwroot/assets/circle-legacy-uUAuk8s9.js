@@ -1,0 +1,1 @@
+System.register(["./createLucideIcon-legacy-C8tij5TB.js"],function(e,c){var t;return{setters:[function(e){t=e.t}],execute:function(){e("t",t("circle",[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}]]))}}});

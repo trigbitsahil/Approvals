@@ -1,0 +1,1 @@
+System.register(["./index-legacy-C9XIcYyT.js"],function(e,t){var n;return{setters:[function(e){n=e.R}],execute:function(){e("UserTable",n),e("default",n)}}});

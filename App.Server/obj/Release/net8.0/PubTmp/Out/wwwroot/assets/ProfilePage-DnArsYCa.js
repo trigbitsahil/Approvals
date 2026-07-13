@@ -1,0 +1,1 @@
+import{C as e}from"./index-BzUoYeXw.js";export{e as ProfilePage,e as default};
