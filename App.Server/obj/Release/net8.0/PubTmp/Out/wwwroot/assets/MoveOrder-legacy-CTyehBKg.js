@@ -1,1 +1,0 @@
-System.register(["./jsx-runtime-legacy-D6asEH_O.js","./MoveOrderList-legacy-BvXNcrnM.js"],function(e,t){var n,s,c;return e("default",function(){return(0,c.jsx)("div",{className:"container mx-auto py-10",children:(0,c.jsx)("div",{className:"flex flex-col gap-4",children:(0,c.jsx)(s,{})})})}),{setters:[function(e){n=e.t},function(e){s=e.t}],execute:function(){c=n()}}});

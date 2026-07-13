@@ -1,1 +1,0 @@
-System.register(["./createLucideIcon-legacy-C8tij5TB.js"],function(e,t){var n;return{setters:[function(e){n=e.t}],execute:function(){e("t",n("chevrons-up-down",[["path",{d:"m7 15 5 5 5-5",key:"1hf1tw"}],["path",{d:"m7 9 5-5 5 5",key:"sgt6xg"}]]))}}});

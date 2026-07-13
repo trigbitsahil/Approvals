@@ -1,1 +1,0 @@
-import{g as e}from"./index-BzUoYeXw.js";export{e as UserManagementPage,e as default};

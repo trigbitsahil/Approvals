@@ -1,1 +1,0 @@
-System.register(["./createLucideIcon-legacy-C8tij5TB.js"],function(e,t){var n;return{setters:[function(e){n=e.t}],execute:function(){e("t",n("download",[["path",{d:"M12 15V3",key:"m9g1x1"}],["path",{d:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4",key:"ih7n3h"}],["path",{d:"m7 10 5 5 5-5",key:"brsn70"}]]))}}});

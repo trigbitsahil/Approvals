@@ -1,1 +1,0 @@
-System.register(["./createLucideIcon-legacy-C8tij5TB.js"],function(e,t){var c;return{setters:[function(e){c=e.t}],execute:function(){e("t",c("circle-check-big",[["path",{d:"M21.801 10A10 10 0 1 1 17 3.335",key:"yps3ct"}],["path",{d:"m9 11 3 3L22 4",key:"1pflzl"}]]))}}});

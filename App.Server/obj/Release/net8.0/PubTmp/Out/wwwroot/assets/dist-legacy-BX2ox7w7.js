@@ -1,1 +1,0 @@
-System.register(["./chunk-legacy-Mtsv3yTe.js","./jsx-runtime-legacy-D6asEH_O.js"],function(t,e){var n,c,r,u,o;return t("t",function(t){const e=u.useContext(o);return t||e||"ltr"}),{setters:[function(t){n=t.o},function(t){c=t.n,r=t.t}],execute:function(){u=n(c(),1),r(),o=u.createContext(void 0)}}});
