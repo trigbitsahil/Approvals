@@ -1,1 +1,0 @@
-import{t as e}from"./axios-BAc1KzgL.js";import{V as t}from"./index-BzUoYeXw.js";var n=e.create({baseURL:`${t.BASE}/api/v1/Products`,headers:{"Content-Type":`application/json`}}),r=async e=>{let{data:t}=await n.get(`/barcode/${e.trim()}`);return t},i=async e=>{let{data:t}=await n.post(``,e);return t};export{r as n,i as t};

@@ -1,34 +1,18 @@
-import Cookies from "js-cookie";
-import { encryptToken, decryptToken } from "@/utils/encryption";
-
 export function storeTokens(accessToken: string, refreshToken: string) {
-  const isSecure = window.location.protocol === "https:";
-  Cookies.set("accessToken", encryptToken(accessToken), {
-    expires: 365,
-    secure: isSecure,
-    sameSite: "lax",
-  });
-
-  Cookies.set("refreshToken", encryptToken(refreshToken), {
-    expires: 365,
-    secure: isSecure,
-    sameSite: "lax",
-  });
+  // We no longer store tokens directly! The backend sets an HttpOnly cookie.
+  // We just set a flag so the frontend knows the user is logged in.
+  localStorage.setItem("isLoggedIn", "true");
 }
 
 export function getAccessToken(): string | null {
-  const token = Cookies.get("accessToken");
-  if (!token) return null;
-  return decryptToken(token);
+  // The token is handled automatically by the browser via HttpOnly cookie.
+  return null; 
 }
 
 export function getRefreshToken(): string | null {
-  const token = Cookies.get("refreshToken");
-  if (!token) return null;
-  return decryptToken(token);
+  return null;
 }
 
 export function clearTokens() {
-  Cookies.remove("accessToken");
-  Cookies.remove("refreshToken");
+  localStorage.removeItem("isLoggedIn");
 }

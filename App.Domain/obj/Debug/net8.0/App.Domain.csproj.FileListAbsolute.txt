@@ -1,0 +1,13 @@
+/Users/sahilrattan/Desktop/approvals/App.Domain/bin/Debug/net8.0/App.Domain.deps.json
+/Users/sahilrattan/Desktop/approvals/App.Domain/bin/Debug/net8.0/App.Domain.dll
+/Users/sahilrattan/Desktop/approvals/App.Domain/bin/Debug/net8.0/App.Domain.pdb
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/App.Domain.csproj.AssemblyReference.cache
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/App.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/App.Domain.AssemblyInfoInputs.cache
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/App.Domain.AssemblyInfo.cs
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/App.Domain.csproj.CoreCompileInputs.cache
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/App.Domain.sourcelink.json
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/App.Domain.dll
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/refint/App.Domain.dll
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/App.Domain.pdb
+/Users/sahilrattan/Desktop/approvals/App.Domain/obj/Debug/net8.0/ref/App.Domain.dll

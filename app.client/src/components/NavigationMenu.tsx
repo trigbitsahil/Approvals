@@ -18,7 +18,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,7 +28,6 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { Button } from "@/components/ui/button";
 import ModeToggle from "./ModeToggle";
 // import { LanguageDialog } from "./LanguageToggle";
@@ -38,69 +37,14 @@ import { Trans } from "@lingui/react";
 import { i18n } from "@lingui/core";
 import InstallButton from "./InstallButton";
 
-// const components = [
-//   {
-//     title: <Trans id="ui.Alert Dialog" />,
-//     to: "/docs/primitives/alert-dialog",
-//     description: (
-//       <Trans id="ui.Alert Dialog Desc">
-//         A modal dialog that interrupts the user with important content and expects a response.
-//       </Trans>
-//     ),
-//   },
-//   {
-//     title: <Trans id="ui.Hover Card" />,
-//     to: "/docs/primitives/hover-card",
-//     description: (
-//       <Trans id="ui.Hover Card Desc">
-//         For sighted users to preview content available behind a link.
-//       </Trans>
-//     ),
-//   },
-//   {
-//     title: <Trans id="ui.Progress" />,
-//     to: "/docs/primitives/progress",
-//     description: (
-//       <Trans id="ui.Progress Desc">
-//         Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.
-//       </Trans>
-//     ),
-//   },
-//   {
-//     title: <Trans id="ui.Scroll-area" />,
-//     to: "/docs/primitives/scroll-area",
-//     description: (
-//       <Trans id="ui.Scroll-area Desc">
-//         Visually or semantically separates content.
-//       </Trans>
-//     ),
-//   },
-//   {
-//     title: <Trans id="ui.Tabs" />,
-//     to: "/docs/primitives/tabs",
-//     description: (
-//       <Trans id="ui.Tabs Desc">
-//         A set of layered sections of content—known as tab panels—that are displayed one at a time.
-//       </Trans>
-//     ),
-//   },
-//   {
-//     title: <Trans id="ui.Tooltip" />,
-//     to: "/docs/primitives/tooltip",
-//     description: (
-//       <Trans id="ui.Tooltip Desc">
-//         A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
-//       </Trans>
-//     ),
-//   },
-// ]
-
 export const NavigationMenuBar = () => {
   return (
     <div className="w-full border-b bg-background relative z-50">
       <div className="container mx-auto flex flex-wrap items-center justify-between gap-2 px-4 py-3">
-        <NavigationMenu className="hidden md:flex">
-          <NavigationMenuList className="gap-2">
+        <div className="flex items-center gap-2">
+            <SidebarTrigger />
+            <NavigationMenu className="hidden md:flex">
+              <NavigationMenuList className="gap-2">
             <NavigationMenuItem>
               {/* <NavigationMenuTrigger> */}
               {/* <Trans id="ui.Home" /> */}
@@ -223,6 +167,7 @@ export const NavigationMenuBar = () => {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
+        </div>
 
         <div className="flex items-center gap-2 ml-auto">
           <ModeToggle />

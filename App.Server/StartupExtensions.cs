@@ -14,6 +14,7 @@ using OOH.Identity.Models;
 using OOH.API.Middleware;
 using OOH.Application.Contracts.Infrastructure;
 using OOH.API.Filter;
+using Microsoft.AspNetCore.RateLimiting;
 
 
 namespace OOH.API
@@ -114,6 +115,18 @@ namespace OOH.API
                 setupAction.DefaultApiVersion = new ApiVersion(1, 0);
             }).AddMvc();
 
+            builder.Services.AddRateLimiter(options =>
+            {
+                options.AddFixedWindowLimiter("fixed", limiterOptions =>
+                {
+                    limiterOptions.PermitLimit = 5; // Temporarily lowered so you can test it easily!
+                    limiterOptions.Window = TimeSpan.FromMinutes(1);
+                    limiterOptions.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+                    limiterOptions.QueueLimit = 0; // Disabled queue so it rejects immediately
+                });
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            });
+
 
 
             builder.Services.AddCors(options =>
@@ -149,13 +162,16 @@ namespace OOH.API
         public static WebApplication ConfigurePipeline(this WebApplication app)
         {
 
-            app.MapGroup("api/v{version:apiVersion}/identity").MapIdentityApi<ApplicationUser>();
+            app.MapGroup("api/v{version:apiVersion}/identity")
+               .MapIdentityApi<ApplicationUser>()
+               .RequireRateLimiting("fixed");
 
 
             if (!app.Environment.IsDevelopment())
             {
                 // app.UseExceptionHandler();
                 app.UseDeveloperExceptionPage();
+                app.UseHsts();
             }
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -169,6 +185,8 @@ namespace OOH.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseRateLimiter();
 
             app.UseCors("open");
 
@@ -189,11 +207,11 @@ namespace OOH.API
 
             // app.MapIdentityApi<ApplicationUser>();
 
-            //app.MapPost("/Logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>
-            //{
-            //    await signInManager.SignOutAsync();
-            //    return TypedResults.Ok();
-            //});
+            app.MapPost("/Logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>
+            {
+                await signInManager.SignOutAsync();
+                return TypedResults.Ok();
+            });
 
            // app.UseCors("ViteCors");
 

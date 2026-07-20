@@ -5,7 +5,9 @@
 export type ApprovalListVM = {
     approvalID?: string | null;
     name?: string | null;
+    reference?: string | null;
     description?: string | null;
+    details?: string | null;
     approvalType?: string | null;
     approvalTypeId?: string | null;
     approvalStatusName?: string | null;
@@ -17,6 +19,7 @@ export type ApprovalListVM = {
     category?: string | null;
     categoryId?: string | null;
     isVoided?: boolean;
+    vendorId?: string | null;
     createdBy?: string | null;
     createdDate?: string;
     lastModifiedBy?: string | null;
@@ -25,5 +28,9 @@ export type ApprovalListVM = {
     dateOfLetter?: string | null;
     departmentId?: string | null;
     departmentName?: string | null;
+    fromBankId?: string | null;
+    toBankId?: string | null;
+    transactionAmount?: number | null;
+    isReversed?: boolean;
 };
 

@@ -23,8 +23,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = () => {
-      const token = getAccessToken();
-      setIsAuthenticated(!!token);
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      setIsAuthenticated(isLoggedIn);
       setAuthReady(true);
     };
 
@@ -45,7 +45,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setAuthReady(true);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await fetch("http://localhost:5298/Logout", {
+        method: "POST",
+        credentials: "include"
+      });
+    } catch (e) {
+      console.error("Logout request failed", e);
+    }
     clearTokens();
     setIsAuthenticated(false);
   };

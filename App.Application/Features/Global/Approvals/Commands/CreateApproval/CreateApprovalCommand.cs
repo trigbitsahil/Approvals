@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OOH.Application.Features.Global.Approvals.Commands.CreateApproval
 {
-    public class CreateApprovalCommand : IRequest<CreateApprovalCommandResponse>
+    public class CreateApprovalCommand : IRequest<CreateApprovalCommandResponse>, OOH.Application.Contracts.Infrastructure.ITransactionalCommand
     {
 
 
@@ -11,8 +11,10 @@ namespace OOH.Application.Features.Global.Approvals.Commands.CreateApproval
  
 
         public string Name { get; set; }
+        public string? Reference { get; set; }
 
         public string Description { get; set; }
+        public string? Details { get; set; }
 
         public string ApprovalType { get; set; }
 
@@ -38,8 +40,9 @@ namespace OOH.Application.Features.Global.Approvals.Commands.CreateApproval
 
          public string? DepartmentId { get; set; }
 
- 
-
-
+        public string? FromBankId { get; set; }
+        public string? ToBankId { get; set; }
+        public decimal? TransactionAmount { get; set; }
+        public string? VendorId { get; set; }
     }
 }

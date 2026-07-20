@@ -5,8 +5,10 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail
         public string ApprovalID { get; set; }
 
         public string Name { get; set; }
+        public string? Reference { get; set; }
 
         public string Description { get; set; }
+        public string? Details { get; set; }
 
         public string ApprovalType { get; set; }
 
@@ -43,6 +45,9 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail
 
         public DateTime? DateOfLetter { get; set; }
 
+        public string? VendorId { get; set; }
+        public string? VendorName { get; set; }
+
         public string? DepartmentId { get; set; }
 
         public string? DepartmentName { get; set; }
@@ -51,6 +56,10 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail
 
         public string? ContractName { get; set; }
  
-
+        public string? FromBankId { get; set; }
+        public string? ToBankId { get; set; }
+        public string? FromBankName { get; set; }
+        public string? ToBankName { get; set; }
+        public decimal? TransactionAmount { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,9 +26,9 @@ namespace OOH.Identity.Models
 
         public bool IsActive { get; set; }
 
-        public string CreatedBy { get; set; }
+        public string CreatedBy { get; set; } = "System";
  
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
  
         public string? LastModifiedBy { get; set; }
      

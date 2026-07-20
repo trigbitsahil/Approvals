@@ -15,5 +15,8 @@ export type CreateApprovalCommand = {
     mediaId?: string | null;
     dateOfLetter?: string | null;
     departmentId?: string | null;
+    fromBankId?: string | null;
+    toBankId?: string | null;
+    transactionAmount?: number | null;
 };
 

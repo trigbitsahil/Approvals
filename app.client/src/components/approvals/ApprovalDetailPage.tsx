@@ -28,6 +28,7 @@ import {
   ThumbsDown,
   DollarSign,
   MessageSquare,
+  BadgeIndianRupee
 } from "lucide-react";
 
 import { FilePreviewDialog } from "@/components/FilePreview";
@@ -45,7 +46,7 @@ import { ApprovalService } from "@/api/services/ApprovalService";
 import { ApprovalApproverService } from "@/api/services/ApprovalApproverService";
 import { ApprovalCommentService } from "@/api/services/ApprovalCommentService";
 import { ExpenseTransactionService } from "@/api/services/ExpenseTransactionService";
-import { DocumentsService } from "@/api/services/DocumentsService";
+// import { DocumentsService } from "@/api/services/DocumentsService";
 import { UserService } from "@/api/services/UserService";
 import { ApprovalStatusService } from "@/api/services/ApprovalStatusService";
 import {
@@ -127,38 +128,55 @@ export default function ApprovalDetailPage() {
 
     const fetchData = async () => {
       setLoading(true);
+      
       try {
-        const [approvalRes, approverRes, docRes, userRes] = await Promise.all([
-          ApprovalService.getApprovalById(id, "1"),
-          ApprovalApproverService.getApiVApprovalApprover("1", id),
-          DocumentsService.getApiVDocuments("1", "Approval", id),
-          UserService.getLoggedInUser("1"),
-        ]);
-
+        const approvalRes = await ApprovalService.getApprovalById(id, "1");
         if (approvalRes.success && approvalRes.data) {
           setApproval(approvalRes.data);
         }
+      } catch (err) {
+        console.error("Error fetching approval:", err);
+        toast.error("Failed to load approval details.");
+      }
+
+      try {
+        const approverRes = await ApprovalApproverService.getApiVApprovalApprover("1", id);
         if (approverRes.success && approverRes.data) {
           setApprovers(approverRes.data.sort((a, b) => (a.approvalOrder || 0) - (b.approvalOrder || 0)));
         }
-        if (docRes.success && docRes.data) {
-          setDocuments(docRes.data);
-        }
+      } catch (err) {
+        console.error("Error fetching approvers:", err);
+      }
+
+      // try {
+      //   const docRes = await DocumentsService.getApiVDocuments("1", "Approval", id);
+      //   if (docRes.success && docRes.data) {
+      //     setDocuments(docRes.data);
+      //   }
+      // } catch (err) {
+      //   console.error("Error fetching documents:", err);
+      // }
+
+      try {
+        const userRes = await UserService.getLoggedInUser("1");
         if (userRes.success && userRes.data) {
           setLoggedInUserEmail(userRes.data.email || null);
         }
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
 
+      try {
         // Fetch comments
         const commentRes = await ApprovalCommentService.getApiVApprovalComment("1", id);
         if (commentRes.success && commentRes.data) {
           setComments(commentRes.data.sort((a, b) => new Date(b.createdDate!).getTime() - new Date(a.createdDate!).getTime()));
         }
       } catch (error) {
-        console.error("Error fetching approval details:", error);
-        toast.error("Failed to load approval details.");
-      } finally {
-        setLoading(false);
-      }
+        console.error("Error fetching comments:", error);
+      } 
+      
+      setLoading(false);
     };
 
     fetchData();
@@ -184,77 +202,77 @@ export default function ApprovalDetailPage() {
     setIsConfirmOpen(true);
   };
 
-  const confirmDeleteDocument = async () => {
-    if (!docToDelete) return;
+  // const confirmDeleteDocument = async () => {
+  //   if (!docToDelete) return;
 
-    const docId = docToDelete.documentUrlID || docToDelete.documentID;
-    if (!docId) {
-      toast.error("Invalid document ID.");
-      setIsConfirmOpen(false);
-      return;
-    }
+  //   const docId = docToDelete.documentUrlID || docToDelete.documentID;
+  //   if (!docId) {
+  //     toast.error("Invalid document ID.");
+  //     setIsConfirmOpen(false);
+  //     return;
+  //   }
 
-    try {
-      await DocumentsService.deleteDocumentUrl(docId, "1");
-      setDocuments(prev => prev.filter(d => {
-        const dId = (d as any).documentUrlID || d.documentID;
-        return dId !== docId;
-      }));
-      toast.success("Document deleted.");
-    } catch (error) {
-      console.error("Delete error:", error);
-      toast.error("Failed to delete document.");
-    } finally {
-      setIsConfirmOpen(false);
-      setDocToDelete(null);
-    }
-  };
+  //   try {
+  //     await DocumentsService.deleteDocumentUrl(docId, "1");
+  //     setDocuments(prev => prev.filter(d => {
+  //       const dId = (d as any).documentUrlID || d.documentID;
+  //       return dId !== docId;
+  //     }));
+  //     toast.success("Document deleted.");
+  //   } catch (error) {
+  //     console.error("Delete error:", error);
+  //     toast.error("Failed to delete document.");
+  //   } finally {
+  //     setIsConfirmOpen(false);
+  //     setDocToDelete(null);
+  //   }
+  // };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !id) return;
+  // const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file || !id) return;
 
-    setIsUploading(true);
-    try {
-      const base64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result?.toString() || "");
-        reader.onerror = reject;
-      });
-      const base64Content = base64.split(",")[1];
-      const ext = getFileExtension(file.name);
-      const extension = ext.startsWith(".") ? ext : `.${ext}`;
+  //   setIsUploading(true);
+  //   try {
+  //     const base64 = await new Promise<string>((resolve, reject) => {
+  //       const reader = new FileReader();
+  //       reader.readAsDataURL(file);
+  //       reader.onload = () => resolve(reader.result?.toString() || "");
+  //       reader.onerror = reject;
+  //     });
+  //     const base64Content = base64.split(",")[1];
+  //     const ext = getFileExtension(file.name);
+  //     const extension = ext.startsWith(".") ? ext : `.${ext}`;
 
-      const res = await DocumentsService.postApiVDocuments("1", {
-        name: file.name,
-        description: `Approval Attachment`,
-        content: base64Content,
-        category: "Approval",
-        categoryId: id,
-        extension: extension,
-        contentType: file.type || getMimeType(file.name),
-        documentFileName: file.name
-      } as any);
+  //     const res = await DocumentsService.postApiVDocuments("1", {
+  //       name: file.name,
+  //       description: `Approval Attachment`,
+  //       content: base64Content,
+  //       category: "Approval",
+  //       categoryId: id,
+  //       extension: extension,
+  //       contentType: file.type || getMimeType(file.name),
+  //       documentFileName: file.name
+  //     } as any);
 
-      if (res.success) {
-        toast.success("File uploaded successfully.");
-        // Refresh documents
-        const docRes = await DocumentsService.getApiVDocuments("1", "Approval", id);
-        if (docRes.success && docRes.data) {
-          setDocuments(docRes.data);
-        }
-      } else {
-        toast.error(res.message || "Failed to upload file.");
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      toast.error("An error occurred during upload.");
-    } finally {
-      setIsUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    }
-  };
+  //     if (res.success) {
+  //       toast.success("File uploaded successfully.");
+  //       // Refresh documents
+  //       const docRes = await DocumentsService.getApiVDocuments("1", "Approval", id);
+  //       if (docRes.success && docRes.data) {
+  //         setDocuments(docRes.data);
+  //       }
+  //     } else {
+  //       toast.error(res.message || "Failed to upload file.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Upload error:", error);
+  //     toast.error("An error occurred during upload.");
+  //   } finally {
+  //     setIsUploading(false);
+  //     if (fileInputRef.current) fileInputRef.current.value = "";
+  //   }
+  // };
 
   const handleViewDocument = (doc: DocumentUrlListVM) => {
     setSelectedDoc(doc);
@@ -294,8 +312,8 @@ export default function ApprovalDetailPage() {
       // Step 1: Mark approver as approved (PascalCase fallback for backend binding)
       const updatePayload: any = {
         ...approvingApprover,
-        approvalID: approvingApprover.approvalId || approval.approvalID, // Match C# Screenshot
-        approvalId: approvingApprover.approvalId || approval.approvalID, // Match TS Model
+        approvalID: approvingApprover.approvalId || approval.approvalID, 
+        approvalId: approvingApprover.approvalId || approval.approvalID, 
         isResponded: true,
         isApproved: !isRejectMode,
         remarks: approveRemarks || "",
@@ -381,8 +399,8 @@ export default function ApprovalDetailPage() {
 
       // Refresh data
       const [newApprovalRes, newApproverRes] = await Promise.all([
-        ApprovalService.getApprovalById(id, "1"),
-        ApprovalApproverService.getApiVApprovalApprover("1", id),
+        ApprovalService.getApprovalById(id!, "1"),
+        ApprovalApproverService.getApiVApprovalApprover("1", id!),
       ]);
 
       if (newApprovalRes.success && newApprovalRes.data) {
@@ -467,7 +485,7 @@ export default function ApprovalDetailPage() {
           <h2 className="text-2xl font-black text-foreground mb-2">Approval Not Found</h2>
           <p className="text-muted-foreground max-w-xs mx-auto">The approval request you're looking for doesn't exist or you don't have access.</p>
         </div>
-        <Button onClick={() => navigate(`/approvals${projectId ? `?projectId=${projectId}` : ""}`)} variant="outline" className="rounded-2xl gap-2 font-black uppercase text-xs">
+        <Button onClick={() => navigate(`/approvals`)} variant="outline" className="rounded-2xl gap-2 font-black uppercase text-xs">
           <ArrowLeft className="h-4 w-4" /> Go Back to Approvals
         </Button>
       </div>
@@ -492,7 +510,7 @@ export default function ApprovalDetailPage() {
           <div className="space-y-4">
             <Button
               variant="ghost"
-              onClick={() => navigate(`/approvals${projectId ? `?projectId=${projectId}` : ""}`)}
+              onClick={() => navigate(`/approvals`)}
               className="group -ml-3 p-2 h-auto hover:bg-transparent text-muted-foreground hover:text-foreground transition-all"
             >
               <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
@@ -509,17 +527,19 @@ export default function ApprovalDetailPage() {
                   <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-tight">{approval.approvalStatusName || "Pending"}</span>
                 </div>
               </div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-foreground uppercase tracking-tight leading-tight bg-gradient-to-br from-foreground via-foreground to-foreground/40 bg-clip-text break-words">
-                {approval.name}
+            <motion.div className="space-y-4 sm:space-y-6">
+              <h1 className="text-3xl sm:text-2xl font-black text-foreground uppercase tracking-tight leading-none mt-2">
+                {approval.name || approval.reference || "No Name"}
               </h1>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[10px] sm:text-xs text-muted-foreground font-medium">
+              
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-4 sm:mt-6 text-muted-foreground">
                 <span className="bg-muted/50 px-2 py-0.5 rounded-md whitespace-nowrap">ID: {approval.approvalID?.slice(-8).toUpperCase()}</span>
-                <span className="hidden sm:inline">•</span>
+                <span className="text-border">•</span>
                 <span className="flex items-center gap-1.5 whitespace-nowrap text-sm"><Calendar className="h-3.5 w-3.5" /> {approval.requestedDate ? new Date(approval.requestedDate).toLocaleDateString() : "No Date"}</span>
-                <span className="hidden sm:inline text-sm">•</span>
+                <span className="text-border hidden sm:inline">•</span>
                 <span className="flex items-center gap-1.5 text-sm"><User className="h-3.5 w-3.5" /> Requested by <span className="text-foreground font-bold">{approval.requestedBy || approval.createdBy || "System"}</span></span>
               </div>
-            </div>
+            </motion.div>  </div>
           </div>
 
           {/* FOLLOW-UP BUTTON */}
@@ -561,9 +581,9 @@ export default function ApprovalDetailPage() {
                 <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                 Request Description
               </h3>
-              <p className="text-sm md:text-base text-foreground/90 leading-relaxed font-medium whitespace-pre-wrap">
-                {approval.description || "No description provided for this approval request."}
-              </p>
+              <div className="text-sm font-medium leading-relaxed mt-1 break-words">
+                {approval.description || approval.details || "No description provided for this approval request."}
+              </div>
             </motion.div>
 
             {/* INFO GRID */}
@@ -571,9 +591,9 @@ export default function ApprovalDetailPage() {
               {[
                 { label: "Category", value: approval.category || "General", icon: ShieldCheck },
                 { label: "Type", value: approval.approvalType || "Other", icon: BadgeCheck },
-                { label: "Department", value: approval.departmentName || "General", icon: Users },
-                { label: "Media/Contract", value: approval.mediaName || approval.contractName || "None", icon: FileText },
+                { label: "Amount", value: approval.transactionAmount != null ? (sessionStorage.getItem('view_password') ? approval.transactionAmount : approval.transactionAmount / 1000) : "General", icon: BadgeIndianRupee},
                 { label: "Requirement", value: approval.allApproverApprove ? "All must approve" : "Any one can approve", icon: Info },
+                ...(approval.vendorName ? [{ label: "Vendor", value: approval.vendorName, icon: User }] : [])
               ].map((item, idx) => (
                 <motion.div
                   key={item.label}
@@ -593,76 +613,7 @@ export default function ApprovalDetailPage() {
               ))}
             </div>
 
-            {/* DOCUMENTS */}
-            {/* <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-card/60 border border-border/40 rounded-3xl md:rounded-[2.5rem] p-6 md:p-8 backdrop-blur-3xl shadow-2xl ring-1 ring-white/5"
-            >
-              <div className="flex items-center justify-between mb-8">
-                <h3 className="text-[10px] font-black uppercase text-muted-foreground tracking-[0.2em] flex items-center gap-2">
-                  <Paperclip className="h-4 w-4" />
-                  Attachments ({documents.length})
-                </h3>
-                <Button
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isUploading}
-                  variant="outline"
-                  className="rounded-xl h-9 px-4 gap-2 font-black uppercase text-[10px] border-primary/20 hover:bg-primary/5 transition-all"
-                >
-                  {isUploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
-                  {isUploading ? "Uploading..." : "Add Attachment"}
-                </Button>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-              </div>
-
-              {documents.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-10 text-center bg-muted/20 border border-dashed border-border/40 rounded-3xl">
-                  <FileIcon className="h-10 w-10 text-muted-foreground/30 mb-3" />
-                  <p className="text-xs font-bold text-muted-foreground">No documents attached</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {documents.map((doc) => {
-                    const docId = (doc as any).documentUrlID || doc.documentID;
-                    return (
-                      <div key={docId || Math.random().toString()} className="group flex items-center gap-4 p-4 bg-card/60 border border-border/30 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-all shadow-lg ring-1 ring-white/5">
-                        <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform shadow-inner">
-                          <FileText className="h-6 w-6" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-foreground truncate">{doc.name}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-9 w-9 rounded-xl hover:bg-primary/10 hover:text-primary transition-all duration-300"
-                            onClick={() => handleViewDocument(doc)}
-                          >
-                            <ExternalLink className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-9 w-9 rounded-xl text-destructive hover:bg-destructive/10 transition-all duration-300"
-                            onClick={() => handleDeleteDocument(doc)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </motion.div> */}
+             
 
             {/* COMMENTS & AUDIT TRAIL */}
             <motion.div
@@ -869,7 +820,7 @@ export default function ApprovalDetailPage() {
           document={selectedDoc}
         />
 
-        <ConfirmationModal
+        {/* <ConfirmationModal
           open={isConfirmOpen}
           onCancel={() => {
             setIsConfirmOpen(false);
@@ -880,7 +831,7 @@ export default function ApprovalDetailPage() {
           description={`Are you sure you want to delete "${docToDelete?.name}"? This action cannot be undone.`}
           yesLabel="Delete"
           noLabel="Cancel"
-        />
+        /> */}
 
         {/* ── Approve Dialog ── */}
         <Dialog open={isApproveDialogOpen} onOpenChange={(open) => { if (!open) setIsApproveDialogOpen(false); }}>

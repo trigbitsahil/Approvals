@@ -3,6 +3,7 @@ using MediatR;
 using OOH.Application.Contracts.Persistence;
 using OOH.Application.Exceptions;
 using OOH.Domain.Entities.Global;
+using OOH.Application.Contracts.Infrastructure;
 
 namespace OOH.Application.Features.Global.Approvals.Commands.UpdateApproval
 {
@@ -13,12 +14,14 @@ namespace OOH.Application.Features.Global.Approvals.Commands.UpdateApproval
         private readonly IMapper _mapper;
 
         //   private readonly IEmailService _emailService;
+        private readonly IEncryptionService _encryptionService;
 
-        public UpdateApprovalCommandHandler(IMapper mapper, IApprovalRepository ApprovalRepository)
+        public UpdateApprovalCommandHandler(IMapper mapper, IApprovalRepository ApprovalRepository, IEncryptionService encryptionService)
         {
             _mapper = mapper;
             _ApprovalRepository = ApprovalRepository;
             // _emailService = emailService;
+            _encryptionService = encryptionService;
         }
 
 
@@ -27,7 +30,7 @@ namespace OOH.Application.Features.Global.Approvals.Commands.UpdateApproval
         public async Task<UpdateApprovalCommandResponse> Handle(UpdateApprovalCommand request, CancellationToken cancellationToken)
         {
 
-            var recordToUpdate = await _ApprovalRepository.GetByIdAsync(request.ApprovalID);
+            var recordToUpdate = await _ApprovalRepository.GetByIdForUpdateAsync(request.ApprovalID);
 
             if (recordToUpdate == null)
             {
@@ -58,7 +61,14 @@ namespace OOH.Application.Features.Global.Approvals.Commands.UpdateApproval
 
                 _mapper.Map(request, recordToUpdate, typeof(UpdateApprovalCommand), typeof(Approval));
 
-           
+                // Encrypt sensitive fields
+                recordToUpdate.Name = !string.IsNullOrEmpty(recordToUpdate.Name) ? _encryptionService.Encrypt(recordToUpdate.Name) : recordToUpdate.Name;
+                recordToUpdate.Description = !string.IsNullOrEmpty(recordToUpdate.Description) ? _encryptionService.Encrypt(recordToUpdate.Description) : recordToUpdate.Description;
+                recordToUpdate.Reference = !string.IsNullOrEmpty(recordToUpdate.Reference) ? _encryptionService.Encrypt(recordToUpdate.Reference) : recordToUpdate.Reference;
+                recordToUpdate.Details = !string.IsNullOrEmpty(recordToUpdate.Details) ? _encryptionService.Encrypt(recordToUpdate.Details) : recordToUpdate.Details;
+                recordToUpdate.ApprovalType = !string.IsNullOrEmpty(recordToUpdate.ApprovalType) ? _encryptionService.Encrypt(recordToUpdate.ApprovalType) : recordToUpdate.ApprovalType;
+                recordToUpdate.Priority = !string.IsNullOrEmpty(recordToUpdate.Priority) ? _encryptionService.Encrypt(recordToUpdate.Priority) : recordToUpdate.Priority;
+
                 // await _eventRepository.UpdateAsync(eventToUpdate);
 
 

@@ -1,4 +1,4 @@
-﻿using OOH.Application.Contracts.Infrastructure;
+using OOH.Application.Contracts.Infrastructure;
 using System.Security.Claims;
 
 namespace OOH.API.Services
@@ -28,12 +28,16 @@ namespace OOH.API.Services
         {
             get
             {
-                //var kkk = _contextAccessor.HttpContext?.User?.Identity.Name;
-
-
-                //var sss =  _contextAccessor.HttpContext?.User?.Identity.
-
                 return _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
+            }
+        }
+
+        public string UserRole
+        {
+            get
+            {
+                return _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role) 
+                       ?? _contextAccessor.HttpContext?.User?.FindFirstValue("role");
             }
         }
 

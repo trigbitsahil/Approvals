@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +11,10 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalListByUse
         public string ApprovalID { get; set; }
 
         public string Name { get; set; }
+        public string? Reference { get; set; }
 
         public string Description { get; set; }
+        public string? Details { get; set; }
 
         public string ApprovalType { get; set; }
 
@@ -51,7 +53,9 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalListByUse
         public string? DepartmentId { get; set; }
 
         public string DepartmentName { get; set; }
- 
 
+        public string? FromBankId { get; set; }
+        public string? ToBankId { get; set; }
+        public decimal? TransactionAmount { get; set; }
     }
 }

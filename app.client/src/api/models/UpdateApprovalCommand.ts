@@ -14,5 +14,13 @@ export type UpdateApprovalCommand = {
     mediaId?: string | null;
     dateOfLetter?: string | null;
     departmentId?: string | null;
+    nameTo?: string | null;
+    reference?: string | null;
+    details?: string | null;
+    descriptionTo?: string | null;
+    fromBankId?: string | null;
+    toBankId?: string | null;
+    transactionAmount?: number | null;
+    vendorId?: string | null;
 };
 

@@ -1,1 +1,0 @@
-import{R as e}from"./index-BzUoYeXw.js";export{e as UserTable,e as default};

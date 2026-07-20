@@ -5,7 +5,7 @@ import { storeTokens } from "@/utils/authToken";
 /* --------------------------------------------------------------------- */
 /* Configuration constants — adjust BASE / VERSION if needed             */
 /* --------------------------------------------------------------------- */
-const BASE = "https://localhost:7282";
+const BASE = "http://localhost:5298";
 //const BASE = "https://oohapi-b7eud8e8hzg0c8bp.centralindia-01.azurewebsites.net";
 const VERSION = "1";
 
@@ -31,57 +31,8 @@ function isTokenExpired(token: string): boolean {
 export const CustomOpenAPIConfig = {
   BASE,
   VERSION,
-  WITH_CREDENTIALS: false,
+  WITH_CREDENTIALS: true,
   CREDENTIALS: "include",
-
-  /* TOKEN must be an async function that returns a *fresh* access token */
-  TOKEN: async (): Promise<string> => {
-    const encAccess = Cookies.get("accessToken");
-    const encRefresh = Cookies.get("refreshToken");
-
-    /* No cookies → user is not authenticated */
-    if (!encAccess || !encRefresh) return "";
-
-    const accessToken = decryptToken(encAccess);
-    const refreshToken = decryptToken(encRefresh);
-
-    /* If access token is still valid, just return it */
-    if (!isTokenExpired(accessToken)) return accessToken;
-
-    /* ----------------------------------------------------------------- */
-    /* Access token expired → need to refresh                            */
-    /* Use single‑flight so parallel calls share one refresh request     */
-    /* ----------------------------------------------------------------- */
-    if (!refreshingPromise) {
-      refreshingPromise = (async () => {
-        try {
-          const res = await fetch(`${BASE}/api/v${VERSION}/identity/refresh`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ refreshToken }),
-          });
-
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-          const data: { accessToken: string; refreshToken: string } =
-            await res.json();
-
-          /* Store new tokens in cookies (encrypted) */
-          storeTokens(data.accessToken, data.refreshToken);
-
-          return data.accessToken;
-        } catch (err) {
-          /* Hard fail → clear cookies so app forces re‑login */
-          console.error("Token refresh failed:", err);
-          Cookies.remove("accessToken");
-          Cookies.remove("refreshToken");
-          return "";
-        } finally {
-          refreshingPromise = null; // reset for next expiry
-        }
-      })();
-    }
-
-    return refreshingPromise;
-  },
+  /* Token is handled by the browser automatically (HttpOnly Cookie) */
+  TOKEN: undefined,
 };

@@ -1,1 +1,0 @@
-System.register(["./createLucideIcon-legacy-C8tij5TB.js"],function(e,t){var n;return{setters:[function(e){n=e.t}],execute:function(){e("t",n("chevron-down",[["path",{d:"m6 9 6 6 6-6",key:"qrunsl"}]]))}}});

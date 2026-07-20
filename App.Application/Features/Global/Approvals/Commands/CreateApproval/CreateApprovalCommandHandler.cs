@@ -16,13 +16,15 @@ namespace OOH.Application.Features.Global.Approvals.Commands.CreateApproval
         private readonly IEmailService _emailService;
 
         private readonly ILoggedInUserService _loggedInUserService;
+        private readonly IEncryptionService _encryptionService;
 
-        public CreateApprovalCommandHandler(IMapper mapper, IApprovalRepository ApprovalRepository, IEmailService emailService , ILoggedInUserService loggedInUserService)
+        public CreateApprovalCommandHandler(IMapper mapper, IApprovalRepository ApprovalRepository, IEmailService emailService , ILoggedInUserService loggedInUserService, IEncryptionService encryptionService)
         {
             _mapper = mapper;
             _ApprovalRepository = ApprovalRepository;
             _emailService = emailService;
             _loggedInUserService = loggedInUserService; 
+            _encryptionService = encryptionService;
         }
 
 
@@ -62,6 +64,14 @@ namespace OOH.Application.Features.Global.Approvals.Commands.CreateApproval
 
                 entity.RequestedBy = _loggedInUserService.UserEmail;
                 entity.RequestedDate = DateTime.UtcNow;
+
+                // Encrypt sensitive fields
+                entity.Name = !string.IsNullOrEmpty(entity.Name) ? _encryptionService.Encrypt(entity.Name) : entity.Name;
+                entity.Description = !string.IsNullOrEmpty(entity.Description) ? _encryptionService.Encrypt(entity.Description) : entity.Description;
+                entity.Reference = !string.IsNullOrEmpty(entity.Reference) ? _encryptionService.Encrypt(entity.Reference) : entity.Reference;
+                entity.Details = !string.IsNullOrEmpty(entity.Details) ? _encryptionService.Encrypt(entity.Details) : entity.Details;
+                entity.ApprovalType = !string.IsNullOrEmpty(entity.ApprovalType) ? _encryptionService.Encrypt(entity.ApprovalType) : entity.ApprovalType;
+                entity.Priority = !string.IsNullOrEmpty(entity.Priority) ? _encryptionService.Encrypt(entity.Priority) : entity.Priority;
 
 
 

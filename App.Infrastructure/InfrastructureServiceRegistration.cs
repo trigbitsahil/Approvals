@@ -37,6 +37,8 @@ namespace OOH.Infrastructure
             });
 
 
+
+
             services.AddScoped<ICurrentTenantService, CurrentTenantService>();
 
 

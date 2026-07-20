@@ -1,4 +1,4 @@
-﻿using Asp.Versioning;
+using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +16,7 @@ namespace OOH.API.Controllers
     [ApiController]
     [Route("api/v{version:apiVersion}/Account")]
     [ApiVersion(1)]
+    [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("fixed")]
     public class AccountController : ControllerBase
     {
         private readonly IMediator _mediator;

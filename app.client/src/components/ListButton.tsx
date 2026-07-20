@@ -2,7 +2,7 @@
 
 import React from "react";
 import exportFromJSON, { type ExportType } from "export-from-json";
-import { Button } from "@/components/ui/button"; // Shadcn UI button
+import { Button } from "@/components/ui/button";
 
 const fileName = "data";
 const exportType = exportFromJSON.types.csv;

@@ -28,12 +28,13 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
         private readonly IMapper _mapper;
 
         private readonly IApprovalRepository _approvalRepository;
- 
+        private readonly IBankRepository _bankRepository;
+        private readonly IBankTransactionRepository _bankTransactionRepository;
 
         //private readonly IDocumentUrlRepository _documentUrlRepository;
 
         //private readonly IExpenseTransactionRepository _expenseTransactionRepository;
- 
+
 
 
 
@@ -47,7 +48,9 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
 
         public UpdateApprovalApproverCommandHandler(IMapper mapper, IApprovalApproverRepository ApprovalApproverRepository, 
             IApprovalRepository approvalRepository, 
-             IEmailService emailService  
+             IEmailService emailService,
+             IBankRepository bankRepository,
+             IBankTransactionRepository bankTransactionRepository
             // IDocumentUrlRepository documentUrlRepository,
             //IExpenseTransactionRepository expenseTransactionRepository 
  
@@ -56,6 +59,8 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
             _mapper = mapper;
             _ApprovalApproverRepository = ApprovalApproverRepository;
             _approvalRepository = approvalRepository;
+            _bankRepository = bankRepository;
+            _bankTransactionRepository = bankTransactionRepository;
         
             _emailService = emailService;
          
@@ -231,6 +236,32 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
 
                         int i1 = await _approvalRepository.UpdateAsync(objApproval);
 
+                        if (!string.IsNullOrEmpty(objApproval.FromBankId) && !string.IsNullOrEmpty(objApproval.ToBankId) && objApproval.TransactionAmount.HasValue && objApproval.TransactionAmount > 0)
+                        {
+                            var fromBank = await _bankRepository.GetByIdAsync(objApproval.FromBankId);
+                            var toBank = await _bankRepository.GetByIdAsync(objApproval.ToBankId);
+
+                            if (fromBank != null && toBank != null)
+                            {
+                                var transaction = new BankTransaction
+                                {
+                                    TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                                    FromBankId = fromBank.BankId,
+                                    ToBankId = toBank.BankId,
+                                    ApprovalId = objApproval.ApprovalId,
+                                    TransactionType = "Transfer",
+                                    Amount = objApproval.TransactionAmount.Value,
+                                    Withdrawal = objApproval.TransactionAmount.Value,
+                                    Deposit = objApproval.TransactionAmount.Value,
+                                    RunningBalance = 0, // Calculated dynamically on read
+                                    CreatedBy = "System",
+                                    CreatedDate = DateTime.UtcNow,
+                                    TenantId = objApproval.TenantId,
+                                    VendorId = objApproval.VendorId
+                                };
+                                await _bankTransactionRepository.AddAsync(transaction);
+                            }
+                        }
 
 
                         updateApprovalApproverCommandResponse.Approval = objApproval;

@@ -1,88 +1,59 @@
 
-//using Asp.Versioning;
-//using AutoMapper;
-//using Azure;
-//using DocumentFormat.OpenXml.Spreadsheet;
-//using DocumentFormat.OpenXml.Wordprocessing;
-//using MediatR;
-//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Http.HttpResults;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.WebUtilities;
-//using OOH.API.Models;
-//using OOH.Application.Contracts.Infrastructure;
-//using OOH.Application.Features.Global.Users.Commands.CreateUser;
-//using OOH.Application.Features.Global.Users.Commands.DeleteUser;
-//using OOH.Application.Features.Global.Users.Commands.ForgotPassword;
-//using OOH.Application.Features.Global.Users.Commands.UpdateUser;
-//using OOH.Application.Features.Global.Users.Queries.GetRoles;
-//using OOH.Application.Features.Global.Users.Queries.GetUserActivity;
-//using OOH.Application.Features.Global.Users.Queries.GetUserDetail;
-//using OOH.Application.Features.Global.Users.Queries.GetUserList;
-//using OOH.Application.Features.Tenders.ContractMedias.Commands.UpdateContractMedia;
-//using OOH.Application.Models.Mail;
-//using OOH.Domain.Entities.Global;
-//using OOH.Domain.Entities.Tenders;
-//using OOH.Identity.Models;
+using Asp.Versioning;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using OOH.Application.Features.Global.Users.Queries.GetUserList;
+using OOH.Application.Features.Global.Users.Queries.GetUserDetail;
+using OOH.Application.Contracts.Infrastructure;
 
-//namespace OOH.API.Controllers
-//{
+namespace OOH.API.Controllers
+{
+    [ApiController]
+    [Route("api/v{version:apiVersion}/User")]
+    [ApiVersion("1")]
+    [Authorize]
+    public class UserController : ControllerBase
+    {
+        private readonly IMediator _mediator;
+        private readonly ILoggedInUserService _loggedInUser;
 
-//    [ApiController]
-//    [Route("api/v{version:apiVersion}/User")]
-//    [ApiVersion(1)]
+        public UserController(IMediator mediator, ILoggedInUserService loggedInUser)
+        {
+            _mediator = mediator;
+            _loggedInUser = loggedInUser;
+        }
 
-//    [Authorize]
-//    public class UserController : ControllerBase
-//    {
-//        private readonly IMediator _mediator;
-//        private readonly ILoggedInUserService _loggedInUser;
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<GetUserListQueryResponse>> GetUserList()
+        {
+            var dtos = await _mediator.Send(new GetUserListQuery());
+            return Ok(dtos);
+        }
 
-//        private readonly IEmailService _emailService;
+        [HttpGet("GetLoggedInUser", Name = "GetLoggedInUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<GetUserDetailQueryResponse>> GetLoggedInUser()
+        {
+            var getEntityDetailQuery = new GetUserDetailQuery() { Id = _loggedInUser.UserId };
 
+            var dtos = await _mediator.Send(getEntityDetailQuery);
 
-
-//        private readonly IMapper _mapper;
-
-//        private readonly UserManager<ApplicationUser> _userManager;
-//        private readonly RoleManager<IdentityRole> _roleManager;
-//        public UserController(IMediator mediator, ILoggedInUserService loggedInUser, IMapper mapper, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IEmailService emailService)
-//        {
-//            _userManager = userManager ?? throw new ArgumentNullException();
-//            _roleManager = roleManager ?? throw new ArgumentNullException();
-
-//            _mediator = mediator;
-//            _loggedInUser = loggedInUser;
-//            _mapper = mapper;
-//            _emailService = emailService;
-//        }
-
-
-
-//        [HttpGet]
-
-//        [ProducesResponseType(StatusCodes.Status200OK)]
-
-//        public async Task<ActionResult<GetUserListQueryResponse>> GetUserList()
-//        {
-//            //var abd = _loggedInUser.UserId;
-//            //var def = _loggedInUser.UserEmail;
-
-//            //var xyz = _loggedInUser.TenantId;
-
-//            //var getEntityListQuery = new GetUserListQuery() { CategoryID = categoryId, Category = category };
-
-//            //var dtos = await _mediator.Send(getEntityListQuery);
-
-//            var dtos = await _mediator.Send(new GetUserListQuery());
-
-//            return Ok(dtos);
-//        }
-
-
-
-
+            if (dtos.Data != null)
+            {
+                return Ok(dtos);
+            }
+            else
+            {
+                return NotFound(dtos);
+            }
+        }
+    }
+}
 //        [HttpGet("{id}", Name = "GetUserByID")]
 
 //        [ProducesResponseType(StatusCodes.Status200OK)]
@@ -124,46 +95,6 @@
 
 
 
-//        [HttpGet("GetLoggedInUser", Name = "GetLoggedInUser")]
-
-
-//        [ProducesResponseType(StatusCodes.Status200OK)]
-//        [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-//        public async Task<ActionResult<GetUserDetailQueryResponse>> GetLoggedInUser(   )
-//        {
-
-//            var getEntityDetailQuery = new GetUserDetailQuery() { Id = _loggedInUser.UserId };
-
-//            //   ApplicationUser user = await _userManager.FindByIdAsync(id);
-
-//            var dtos = await _mediator.Send(getEntityDetailQuery);
-
-//            //  dtos.Data = new UserDetailVM();
-
-//            //  var mapping =  _mapper.Map(user, dtos.Data, typeof(ApplicationUser), typeof(UserDetailVM));
-
-
-//            // dtos.Data = _mapper.Map<UserDetailVM>(user);
-
-//            if (dtos.Data != null)
-//            {
-
-//                return Ok(dtos);
-
-
-//            }
-//            else
-//            {
-//                return NotFound(dtos);
-
-//            }
-
-
-//        }
-
-
-//        [HttpPost]
 //        [ProducesResponseType(StatusCodes.Status200OK)]
 //        [ProducesResponseType(StatusCodes.Status400BadRequest)]
 //        public async Task<ActionResult<CreateUserCommandResponse>> PostUser([FromBody] CreateUserCommand createEntityCommand)

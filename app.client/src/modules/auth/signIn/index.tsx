@@ -124,15 +124,13 @@ const SignInForm = () => {
         twoFactorRecoveryCode: "",
       };
 
-      AppServerService.postApiVIdentityLogin(false, false, requestBody)
-        .then(async (response: AccessTokenResponse) => {
-          const { accessToken, refreshToken } = response;
+      AppServerService.postApiVIdentityLogin(true, false, requestBody)
+        .then(async () => {
+          // No need to store actual tokens anymore!
+          storeTokens("", ""); 
 
-          storeTokens(accessToken ?? "", refreshToken ?? "");
-
-          OpenAPI.TOKEN = CustomOpenAPIConfig.TOKEN;
-
-          login(accessToken ?? "", refreshToken ?? ""); // Update auth state with token
+          // Update auth state (sets isLoggedIn to true and authReady)
+          login("", ""); 
 
           try {
             // Fetch User Email

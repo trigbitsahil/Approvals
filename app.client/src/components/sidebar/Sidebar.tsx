@@ -7,7 +7,7 @@ import { NavUser } from "@/components/sidebar/nav-user";
 import { TeamSwitcher } from "@/components/sidebar/Team-Switcher";
 import { SecondarySidebar } from "@/components/sidebar/SidebarSubmenu";
 import { useAuth } from "@/contexts/AuthContext";
-import { CreateProjectDialog } from "./CreateProjectDialog";
+
 import {
   MapPin,
   Barcode,
@@ -28,13 +28,13 @@ import {
   Coins
 } from "lucide-react";
 import { UserService } from "@/api/services/UserService";
-import { ProjectService } from "@/api/services/ProjectService";
-import { FolderService } from "@/api/services/FolderService";
+
+
 import { FolderIntermediateService } from "@/api/services/FolderIntermediateService";
 import type { ProjectListVM } from "@/api/models/ProjectListVM";
 import type { FolderListVM } from "@/api/models/FolderListVM";
-import type { CreateProjectCommand } from "@/api/models/CreateProjectCommand";
-import { CreateFolderDialog } from "./CreateFolderDialog";
+
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,13 +59,13 @@ import {
   closestCenter,
   pointerWithin
 } from "@dnd-kit/core";
-import { Pencil, MoreVertical, Trash2 } from "lucide-react";
+import { Pencil, MoreVertical, Trash2, Landmark } from "lucide-react";
 import { toast } from "sonner";
 import type { FolderIntermediateListByFolderVM } from "@/api/models/FolderIntermediateListByFolderVM";
 
 /* --------------------------------------------------------------- */
 const ADMIN_EMAILS = ["iamtaranpanesar@gmail.com", "iampanesar@Gmail.com", "sumaiya.shaikh@wallop.in", "Sheetal.Shukla@wallop.in", "Parijesh.Singh@wallop.in", "trigbit.sahilrattan@gmail.com"];
-const PROJECT_ADMIN_EMAILS = ["iampanesar@gmail.com", "iamtaranpanesar@gmail.com"];
+const PROJECT_ADMIN_EMAILS = ["iampanesar@gmail.com", "iamtaranpanesar@gmail.com","trigbit.sahilrattan@gmail.com"];
 
 /** Items that are hidden for non-admin users */
 const ADMIN_ONLY_TITLES = new Set([
@@ -74,7 +74,6 @@ const ADMIN_ONLY_TITLES = new Set([
   "WarehouseLocation",
   "InventoryItem",
   "Order",
-
   "Report",
   "Organisation",
 ]);
@@ -95,154 +94,56 @@ const data = {
   teams: [{ name: "OOH", logo: GalleryVerticalEnd, plan: "" }],
   user: { name: "User", email: "user@example.com", avatar: "" },
   navMain: [
+  
+   
+ 
     {
-      title: "Operation",
+      title: "Banks",
       url: "#",
-      icon: Bot,
+      icon: Landmark,
       items: [
-        { title: "Tickets", url: "/tickets" },
-        { title: "Ticket Report", url: "/tickets/report" }
+        { title: "Bank List", url: "/banks" },
+        { title: "Set Initial Balance", url: "/banks/initial-balance" },
+        { title: "Bank Transactions", url: "/bank-transactions" },
       ],
     },
+ 
+  
+ 
+   
+  
     {
-      title: "Barcode",
+      title: "Approvals",
       url: "#",
-      icon: Barcode,
+      icon: CheckCircle2,
       items: [
-
-        { title: "Barcode Generator", url: "/barcode/generator" },
+        { title: "Approvals", url: "/approvals" },
       ],
     },
-    {
-      title: "Organisation",
+       {
+      title: "Dashboard",
       url: "#",
-      icon: User,
+      icon: BarChart3,
       items: [
-
-        { title: "Chart", url: "/Chart" },
-        { title: "Teams", url: "/teams" },
+        { title: "Dashboard", url: "/dashboard" },
       ],
-
-    },
-    {
-      title: "Warehouse",
-      url: "#",
-      icon: Warehouse,
-      items: [
-        { title: "Warehouse", url: "/Warehouse" },
-        { title: "Warehouse Users", url: "/Warehouse/Users" },
-      ],
-    },
-    {
-      title: "WarehouseLocation",
-      url: "#",
-      icon: MapPin,
-      items: [{ title: "WarehouseLocation", url: "/WarehouseLocation" }],
-    },
-    {
-      title: "Inventory",
-      url: "#",
-      icon: Package,
-      items: [
-        { title: "Inventory Items", url: "/InventoryItem" },
-        { title: "Inventory Types", url: "/Inventory/Types" },
-        { title: "All Inventory Adjustments", url: "/Inventory/Adjustments" },
-      ],
-    },
-    {
-      title: "Order",
-      url: "#",
-      icon: ShoppingCart,
-      items: [
-        { title: "All Orders", url: "/Order", icon: List },
-        { title: "All Outbound Orders", url: "/Order/alloutbound", icon: ArrowUpRight },
-        { title: "All Inbound Orders", url: "/Order/allinbound", icon: ArrowDownLeft },
-        { title: "Open Outbound Orders", url: "/Order/openoutbound", icon: Clock },
-        { title: "Open Inbound Orders", url: "/Order/openinbound", icon: Clock },
-        { title: "My Open Outbound", url: "/Order/myopenoutbound", icon: User },
-        { title: "My Open Inbound", url: "/Order/myopeninbound", icon: User },
-        { title: "Move Orders", url: "/Order/move", icon: Move },
-        { title: "Transaction History", url: "/Order/transaction-history", icon: Clock },
-        { title: "Items In Transaction", url: "/Order/inventory-items", icon: List },
-      ],
-    },
+    }
     // {
-    //   title: "OrderType",
+    //   title: "Transaction Workflow",
     //   url: "#",
-    //   icon: ShoppingCart,
-    //   items: [{ title: "OrderType", url: "/OrderType", icon: List }],
-    // },
-    {
-      title: "Projects",
-      url: "#",
-      icon: ClipboardList,
-      items: [{ title: "Projects", url: "/Kanban", icon: ClipboardList }],
-    },
-    // {
-    //   title: "Dynamic Form",
-    //   url: "#",
-    //   icon: List,
-    //   items: [{ title: "Dynamic Form", url: "/formbuilder/new", icon: List }],
-    // },
-    {
-      title: "Invoice",
-      url: "#",
-      icon: FileText,
-      items: [
-        { title: "Invoices", url: "/Invoice", icon: User },
-        { title: "Customers", url: "/Customers", icon: User },
-        { title: "Quotes", url: "/Quotes", icon: FileText }
-      ],
-
-    },
-    // {
-    //   title: "Approvals",
-    //   url: "#",
-    //   icon: CheckCircle2,
+    //   icon: Coins,
     //   items: [
-    //     { title: "Approvals", url: "/approvals" },
+    //     { title: "Dashboard", url: "/transactions/dashboard" },
+    //     { title: "Customer Portal", url: "/transactions/customer-portal" },
+    //     { title: "Vendor Portal", url: "/transactions/vendor-portal" }
     //   ],
     // },
-    {
-      title: "Report",
-      url: "#",
-      icon: BarChart3,
-      items: [{ title: "Report", url: "/Reports", icon: List }],
-    },
-    {
-      title: "Billing Items",
-      url: "#",
-      icon: BarChart3,
-      items: [{ title: "Billing Items", url: "/BillingItem", icon: List }],
-    },
-    {
-      title: "Tools",
-      url: "#",
-      icon: Camera,
-      items: [{ title: "Watermark Camera", url: "/watermark-camera", icon: Camera }],
-    },
-    {
-      title: "Survey",
-      url: "#",
-      icon: ClipboardList,
-      items: [
-        { title: "Survey Dashboard", url: "/survey", icon: ClipboardList },
-          { title: "Supervisor Board", url: "/survey/supervisor", icon: BarChart3 },
-        { title: "AI Agent", url: "/agent" }
-      ],
-    },
-    {
-      title: "Income Settings",
-      url: "#",
-      icon: Coins,
-      items: [
-        { title: "Income Settings", url: "/Income", icon: Coins }
-      ],
-    },
+ 
   ],
 };
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
+  const navigate = useNavigate();
   const { logout } = useAuth();
 
   // Desktop secondary-sidebar collapse
@@ -278,41 +179,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   // --- Fetch logged-in user email and Projects from API ---
   const [loggedInEmail, setLoggedInEmail] = React.useState<string | null>(null);
 
-  const fetchFolders = React.useCallback(() => {
-    FolderService.getApiVFolder("1")
-      .then((res) => {
-        if (res.success && res.data) {
-          setFolders(res.data);
-          // Fetch intermediates for each folder
-          res.data.forEach(folder => {
-            if (folder.folderId) {
-              FolderIntermediateService.getFolderIntermediateListByFolder("1", folder.folderId)
-                .then(intRes => {
-                  if (intRes.success && intRes.data) {
-                    setFolderProjectsMap(prev => ({
-                      ...prev,
-                      [folder.folderId!]: intRes.data!
-                    }));
-                  }
-                });
-            }
-          });
-        }
-      })
-      .catch((err) => console.error("Failed to fetch folders:", err));
-  }, []);
 
-  const fetchProjects = React.useCallback(() => {
-    ProjectService.projectGet("1")
-      .then((res) => {
-        if (res.success && res.data) {
-          setApiProjects(res.data);
-        }
-      })
-      .catch((err) => {
-        console.error("Failed to fetch projects:", err);
-      });
-  }, []);
 
   React.useEffect(() => {
     UserService.getLoggedInUser("1")
@@ -322,112 +189,9 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
       .catch(() => {
         setLoggedInEmail(null);
       });
+  }, []);
 
-    fetchProjects();
-    fetchFolders();
-  }, [fetchProjects, fetchFolders]);
-
-  const handleDeleteProject = (id: string) => {
-    // We can use a simple confirmation or just call it if the user wants it 'fast'
-    // But confirmation is safer.
-    ProjectService.deleteProject(id, "1")
-      .then((res) => {
-        if (res.success) {
-          fetchProjects();
-          fetchFolders();
-          toast.success("Project deleted");
-        }
-      })
-      .catch((err) => console.error("Failed to delete project:", err));
-  };
-
-  const handleCreateProject = async (data: CreateProjectCommand) => {
-    if (targetFolderId) {
-      try {
-        // Step 1: Create the project itself first
-        const projectRes = await ProjectService.projectPost("1", data);
-        if (!projectRes.success || !projectRes.data) {
-          toast.error("Failed to create project");
-          return;
-        }
-
-        // Step 2: Link the new project to the folder via FolderIntermediate
-        const newProjectId = projectRes.data?.projectId;
-        if (!newProjectId) {
-          toast.error("Project created but could not get project ID to link to folder");
-          fetchProjects();
-          fetchFolders();
-          return;
-        }
-
-        const linkRes = await FolderIntermediateService.postApiVFolderIntermediate("1", {
-          folderId: targetFolderId,
-          category: "Project",
-          categoryId: newProjectId,
-        } as any);
-
-        if (linkRes.success) {
-          fetchFolders();
-          fetchProjects();
-          setTargetFolderId(null);
-          toast.success("Project created in folder");
-        } else {
-          toast.error("Project created but failed to link to folder");
-          fetchProjects();
-        }
-      } catch (err) {
-        console.error("Failed to create project in folder:", err);
-        toast.error("Failed to create project in folder");
-      }
-    } else {
-      // Standard project creation for root
-      ProjectService.projectPost("1", data)
-        .then((res) => {
-          if (res.success) {
-            fetchProjects();
-            toast.success("Project created");
-          }
-        })
-        .catch((err) => {
-          console.error("Failed to create project:", err);
-        });
-    }
-  };
-
-  const handleCreateFolder = (name: string) => {
-    FolderService.postApiVFolder("1", { name })
-      .then((res) => {
-        if (res.success) {
-          fetchFolders();
-          toast.success("Folder created");
-        }
-      })
-      .catch((err) => console.error("Failed to create folder:", err));
-  };
-
-  const handleRenameFolder = (name: string) => {
-    if (!folderToRename) return;
-    FolderService.putApiVFolder("1", { folderId: folderToRename.id, name, isActive: true })
-      .then((res) => {
-        if (res.success) {
-          fetchFolders();
-          toast.success("Folder renamed");
-        }
-      })
-      .catch((err) => console.error("Failed to rename folder:", err));
-  };
-
-  const handleDeleteFolder = (id: string) => {
-    FolderService.deleteFolder(id, "1")
-      .then((res) => {
-        if (res.success) {
-          fetchFolders();
-          toast.success("Folder deleted");
-        }
-      })
-      .catch((err) => console.error("Failed to delete folder:", err));
-  };
-
+ 
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -516,12 +280,12 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           try {
             await FolderIntermediateService.deleteFolderIntermediate(currentIntermediate.folderIntermediateId, "1");
             toast.success("Project moved to root");
-            // Background sync
-            fetchFolders();
-            fetchProjects();
+
+
+
           } catch (err) {
             toast.error("Failed to move project out of folder");
-            fetchFolders(); // Revert on fail
+
           }
         }
       } else if (targetFolderId) {
@@ -559,14 +323,14 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           }
 
           toast.success("Project moved successfully");
-          // Background sync
-          fetchFolders();
-          fetchProjects();
+     
+
+
         } catch (err) {
           console.error("Move failed:", err);
           toast.error("Failed to move project");
-          fetchFolders(); // Revert on fail
-          fetchProjects();
+
+
         }
       }
     }
@@ -658,10 +422,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                         <span>Rename folder</span>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator className="bg-white/5" />
-                      <DropdownMenuItem onClick={() => handleDeleteFolder(f.folderId!)} className="text-red-400 cursor-pointer hover:bg-white/5 hover:text-red-400">
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        <span>Delete folder</span>
-                      </DropdownMenuItem>
+                      
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ),
@@ -686,13 +447,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                           <span>Dashboard</span>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-white/5" />
-                        <DropdownMenuItem
-                          onClick={() => handleDeleteProject(p.projectId!)}
-                          className="text-red-400 cursor-pointer hover:bg-white/5 hover:text-red-400"
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          <span>Delete project</span>
-                        </DropdownMenuItem>
+                        
                       </DropdownMenuContent>
                     </DropdownMenu>
                   )
@@ -720,13 +475,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                       <span>Dashboard</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="bg-white/5" />
-                    <DropdownMenuItem
-                      onClick={() => handleDeleteProject(p.projectId!)}
-                      className="text-red-400 cursor-pointer hover:bg-white/5 hover:text-red-400"
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      <span>Delete project</span>
-                    </DropdownMenuItem>
+                     
                   </DropdownMenuContent>
                 </DropdownMenu>
               )
@@ -768,28 +517,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
       {/* Secondary sidebar - Only visible for Projects for specific admins */}
       {(isProjectActive && loggedInEmail && PROJECT_ADMIN_EMAILS.includes(loggedInEmail)) && <SecondarySidebar />}
-
-      <CreateProjectDialog
-        isOpen={isProjectDialogOpen}
-        onClose={() => { setIsProjectDialogOpen(false); setTargetFolderId(null); }}
-        onSubmit={handleCreateProject}
-        userEmail={loggedInEmail}
-      />
-
-      <CreateFolderDialog
-        isOpen={isFolderDialogOpen}
-        onClose={() => setIsFolderDialogOpen(false)}
-        onSubmit={handleCreateFolder}
-      />
-
-      <CreateFolderDialog
-        isOpen={isRenameFolderDialogOpen}
-        onClose={() => { setIsRenameFolderDialogOpen(false); setFolderToRename(null); }}
-        onSubmit={handleRenameFolder}
-        initialValue={folderToRename?.name || ""}
-        title="Rename folder"
-        buttonText="Rename folder"
-      />
+ 
     </div>
   );
 }

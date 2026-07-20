@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +9,7 @@ namespace OOH.Application.Contracts.Persistence
     public interface IAsyncRepository<T> where T : class
     {
         Task<T?> GetByIdAsync(string id);
-
+        Task<T?> GetByIdForUpdateAsync(string id);
         Task<T?> GetByIdAsync2(string id);
 
         Task<List<T>> ListAllAsync();

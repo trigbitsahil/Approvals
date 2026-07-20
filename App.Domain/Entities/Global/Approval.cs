@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,6 +18,13 @@ namespace OOH.Domain.Entities.Global
         public string Name { get; set; }
         [Column("description")]
         public string Description { get; set; }
+
+        [Column("reference")]
+        public string? Reference { get; set; }
+
+        [Column("details")]
+        public string? Details { get; set; }
+
         [Required]
         [Column("approval_type")]
         public string ApprovalType { get; set; }
@@ -62,8 +69,17 @@ namespace OOH.Domain.Entities.Global
         [Column("department_id")]
         public string? DepartmentId { get; set; }
 
-        //[Column("is_selected_media")]
-        //public bool IsSelectedMedia { get; set; }
+        [Column("from_bank_id")]
+        public string? FromBankId { get; set; }
+
+        [Column("to_bank_id")]
+        public string? ToBankId { get; set; }
+
+        [Column("vendor_id")]
+        public string? VendorId { get; set; }
+
+        [Column("transaction_amount")]
+        public decimal? TransactionAmount { get; set; }
 
     }
 }

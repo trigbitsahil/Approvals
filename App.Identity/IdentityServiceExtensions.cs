@@ -1,4 +1,4 @@
-﻿
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OOH.Identity.Models;
 using System.Text;
+using OOH.Application.Contracts.Identity;
+using OOH.Identity.Services;
 
 
 namespace OOH.Identity
@@ -115,6 +117,8 @@ namespace OOH.Identity
             //    .AddApiEndpoints();
 
             services.AddEndpointsApiExplorer();
+
+            services.AddScoped<IUserService, UserService>();
 
 
             services.AddIdentityApiEndpoints<ApplicationUser>()

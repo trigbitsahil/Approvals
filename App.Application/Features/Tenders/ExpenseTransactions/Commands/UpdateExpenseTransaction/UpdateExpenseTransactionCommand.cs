@@ -2,7 +2,7 @@ using MediatR;
 
 namespace OOH.Application.Features.Tenders.ExpenseTransactions.Commands.UpdateExpenseTransaction
 {
-    public class UpdateExpenseTransactionCommand : IRequest<UpdateExpenseTransactionCommandResponse>
+    public class UpdateExpenseTransactionCommand : IRequest<UpdateExpenseTransactionCommandResponse>, OOH.Application.Contracts.Infrastructure.ITransactionalCommand
     {
 
         public string ExpenseTransactionID { get; set; }

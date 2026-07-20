@@ -66,20 +66,6 @@ export const UserMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        {/* <DropdownMenuItem>
-          <Link to="/profile">
-            {i18n.t({ id: "ui.Profile", message: "Profile" })}
-          </Link>
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem>
-          <Link to="/account">
-            {i18n.t({ id: "ui.Account", message: "Account" })}
-          </Link>
-        </DropdownMenuItem> */}
-
         <DropdownMenuItem onClick={handleLogout}>
           {i18n.t({ id: "ui.Logout", message: "Logout" })}
         </DropdownMenuItem>

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OOH.Application.Features.Tenders.ExpenseTransactions.Commands.CreateExpenseTransaction
 {
-    public class CreateExpenseTransactionCommand : IRequest<CreateExpenseTransactionCommandResponse>
+    public class CreateExpenseTransactionCommand : IRequest<CreateExpenseTransactionCommandResponse>, OOH.Application.Contracts.Infrastructure.ITransactionalCommand
     {
 
         public string ExpenseId { get; set; }

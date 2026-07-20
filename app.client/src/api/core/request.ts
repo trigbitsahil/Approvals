@@ -193,6 +193,11 @@ export const getHeaders = async (
     headers["Authorization"] = `Bearer ${token}`;
   }
 
+  const viewPassword = sessionStorage.getItem('view_password');
+  if (viewPassword) {
+    headers["X-View-Password"] = viewPassword;
+  }
+
   if (isStringWithValue(username) && isStringWithValue(password)) {
     const credentials = base64(`${username}:${password}`);
     headers["Authorization"] = `Basic ${credentials}`;

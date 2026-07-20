@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using OOH.Application.Contracts.Persistence;
 using OOH.Domain.Entities.Global;
+using OOH.Application.Contracts.Infrastructure;
 
 namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail
 {
@@ -10,12 +11,13 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail
     {
 
         private readonly IApprovalRepository _ApprovalRepository;
-
+        private readonly IEncryptionService _encryptionService;
         private readonly IMapper _mapper;
-        public GetApprovalDetailQueryHandler(IMapper mapper, IApprovalRepository ApprovalRepository)
+        public GetApprovalDetailQueryHandler(IMapper mapper, IApprovalRepository ApprovalRepository, IEncryptionService encryptionService)
         {
             _mapper = mapper;
             _ApprovalRepository = ApprovalRepository;
+            _encryptionService = encryptionService;
         }
 
 
@@ -56,11 +58,14 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail
                 }
                 else
                 {
-                   // getApprovalDetailQueryResponse.Data = _mapper.Map<ApprovalDetailVM>(entity);
+                    entity.Name = !string.IsNullOrEmpty(entity.Name) ? _encryptionService.Decrypt(entity.Name) : entity.Name;
+                    entity.Description = !string.IsNullOrEmpty(entity.Description) ? _encryptionService.Decrypt(entity.Description) : entity.Description;
+                    entity.Reference = !string.IsNullOrEmpty(entity.Reference) ? _encryptionService.Decrypt(entity.Reference) : entity.Reference;
+                    entity.Details = !string.IsNullOrEmpty(entity.Details) ? _encryptionService.Decrypt(entity.Details) : entity.Details;
+                    entity.ApprovalType = !string.IsNullOrEmpty(entity.ApprovalType) ? _encryptionService.Decrypt(entity.ApprovalType) : entity.ApprovalType;
+                    entity.Priority = !string.IsNullOrEmpty(entity.Priority) ? _encryptionService.Decrypt(entity.Priority) : entity.Priority;
 
                     getApprovalDetailQueryResponse.Data = entity;
-
-
                 }
 
             }

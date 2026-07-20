@@ -1,7 +1,7 @@
 /* generated manually */
 
 export type VendorListVM = {
-    vendorId?: string | null;
+    vendorID?: string | null;
     name?: string | null;
     isVoided?: boolean;
     createdBy?: string | null;

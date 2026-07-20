@@ -1,5 +1,6 @@
 using Dapper;
 using MediatR;
+using OOH.Application.Contracts.Infrastructure;
 using OOH.Application.Contracts.Persistence;
 using OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail;
 using OOH.Application.Features.Global.Approvals.Queries.GetApprovalList;
@@ -14,9 +15,49 @@ namespace OOH.Persistence.Repositories
 {
     public class ApprovalRepository : BaseRepository<Approval>, IApprovalRepository
     {
-        public ApprovalRepository(DapperDBContext dbContext) : base(dbContext)
-        {
+        private readonly IEncryptionService _encryptionService;
+        private readonly Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+        private readonly Microsoft.Extensions.Configuration.IConfiguration _configuration;
 
+        public ApprovalRepository(DapperDBContext dbContext, IEncryptionService encryptionService, Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor, Microsoft.Extensions.Configuration.IConfiguration configuration) : base(dbContext)
+        {
+            _encryptionService = encryptionService;
+            _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
+        }
+
+        private bool IsViewUnlocked()
+        {
+            try {
+                if (_httpContextAccessor.HttpContext?.Request?.Headers.TryGetValue("X-View-Password", out var passwordHeader) == true)
+                {
+                    var encryptedExpectedPassword = _configuration["ActualViewPassword"];
+                    
+                    if (string.IsNullOrEmpty(encryptedExpectedPassword))
+                    {
+                        System.IO.File.AppendAllText("/tmp/auth_debug.log", $"[{DateTime.Now}] ActualViewPassword configuration is missing.\n");
+                        return false;
+                    }
+
+                    string expectedPassword;
+                    try 
+                    {
+                        expectedPassword = _encryptionService.Decrypt(encryptedExpectedPassword);
+                    } 
+                    catch 
+                    {
+                        expectedPassword = encryptedExpectedPassword;
+                    }
+                    
+                    bool isUnlocked = passwordHeader.ToString() == expectedPassword;
+                    System.IO.File.AppendAllText("/tmp/auth_debug.log", $"[{DateTime.Now}] Header provided: '{passwordHeader}', Expected: '{expectedPassword}', Unlocked: {isUnlocked}\n");
+                    return isUnlocked;
+                }
+                System.IO.File.AppendAllText("/tmp/auth_debug.log", $"[{DateTime.Now}] X-View-Password header missing. Headers: {string.Join(", ", _httpContextAccessor.HttpContext?.Request?.Headers.Keys ?? new List<string>())}\n");
+            } catch (Exception ex) {
+                System.IO.File.AppendAllText("/tmp/auth_debug.log", $"[{DateTime.Now}] Exception: {ex.Message}\n");
+            }
+            return false;
         }
 
 
@@ -29,14 +70,10 @@ namespace OOH.Persistence.Repositories
             {
 
 
-                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName ,  department.name as DepartmentName   FROM Approval";
+                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName FROM Approval";
 
-                query = query + $" join approval_status on approval_status.approval_status_id = Approval.approval_status_id " +
+                query = query + $" join approval_status on approval_status.approval_status_id = Approval.approval_status_id ";
 
-
-                  $" left join department on " +
-
-                  $" department.department_id = Approval.department_id ";
 
                 query = query + $" where Approval.Tenant_ID = @tenantID ";
 
@@ -52,6 +89,24 @@ namespace OOH.Persistence.Repositories
                 {
                     result = await dbConn.QueryAsync<ApprovalListVM>(query, new { tenantID = _dbContext.currentTenantID, category = category, categoryID = categoryID });
 
+                }
+
+                if (result != null)
+                {
+                    bool isUnlocked = IsViewUnlocked();
+                    foreach (var item in result)
+                    {
+                        if (isUnlocked)
+                        {
+                            if (!string.IsNullOrEmpty(item.Name)) item.Name = _encryptionService.Decrypt(item.Name);
+                            if (!string.IsNullOrEmpty(item.Description)) item.Description = _encryptionService.Decrypt(item.Description);
+                        }
+                        else
+                        {
+                            item.Name = "";
+                            item.Description = "";
+                        }
+                    }
                 }
 
 
@@ -99,15 +154,12 @@ namespace OOH.Persistence.Repositories
                 //query = query + $" and Is_Voided = false ";
 
 
-                string query = $"select subquery.* , approval_status.name as ApprovalStatusName , department.name as DepartmentName from  (select  {GetColumnsAsPropertiesWithTableName()} from approval where department_id =   @departmentId or   created_by =  @userEmail " +
+                string query = $"select subquery.* , approval_status.name as ApprovalStatusName from  (select  {GetColumnsAsPropertiesWithTableName()} from approval where department_id =   @departmentId or   created_by =  @userEmail " +
                     $" union all " +
                     $" select approval.* from approval join approval_approver on approval.approval_id = approval_approver.approval_id " +
                     $" where approval_approver_email = @userEmail ) as subquery " +
                     $" join approval_status on " +
-                    $" approval_status.approval_status_id = subquery.approvalstatusid " +
-
-                    $" left join department on " +
-                    $" department.department_id = subquery.departmentid ";
+                    $" approval_status.approval_status_id = subquery.approvalstatusid ";
 
                 query = query + $" where  subquery.TenantID = @tenantID ";
 
@@ -132,6 +184,23 @@ namespace OOH.Persistence.Repositories
                     }
                 }
 
+                if (result != null)
+                {
+                    bool isUnlocked = IsViewUnlocked();
+                    foreach (var item in result)
+                    {
+                        if (isUnlocked)
+                        {
+                            if (!string.IsNullOrEmpty(item.Name)) item.Name = _encryptionService.Decrypt(item.Name);
+                            if (!string.IsNullOrEmpty(item.Description)) item.Description = _encryptionService.Decrypt(item.Description);
+                        }
+                        else
+                        {
+                            item.Name = "";
+                            item.Description = "";
+                        }
+                    }
+                }
 
 
             }
@@ -155,31 +224,31 @@ namespace OOH.Persistence.Repositories
             {
 
 
-                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName ,department.name as DepartmentName ,";
+                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName, from_bank.name as FromBankName, to_bank.name as ToBankName, vendor.name as VendorName";
 
                 if (category == "Contract")
                 {
-                    query = query + $" contract_media_unit.name as  MediaName , contract.name as ContractName";
+                    query = query + $" , contract_media_unit.name as  MediaName , contract.name as ContractName";
                 }
                 else if (category == "Tender")
                 {
-                    query = query + $" tender_media_unit.name as  MediaName , tender.name as ContractName";
+                    query = query + $" , tender_media_unit.name as  MediaName , tender.name as ContractName";
                 }
                else  if (category == "Proposal")
                 {
-                    query = query + $" proposal_media_unit.name as  MediaName , proposal.name as ContractName";
+                    query = query + $" , proposal_media_unit.name as  MediaName , proposal.name as ContractName";
                 }
                 else if (category == "Project")
                 {
-                    query = query + $"   project.name as ContractName";
-
+                    query = query + $" , project.name as ContractName";
                 }
 
                 query = query + $" FROM Approval";
                  
                 query = query + $" left  join approval_status on approval_status.approval_status_id = Approval.approval_status_id ";
-
-                query = query + $" left  join department on department.department_id = Approval.department_id ";
+                query = query + $" left  join banks as from_bank on from_bank.bank_id = Approval.from_bank_id ";
+                query = query + $" left  join banks as to_bank on to_bank.bank_id = Approval.to_bank_id ";
+                query = query + $" left  join vendor on vendor.vendor_id = Approval.vendor_id ";
 
                 if (category == "Contract")
                 {
@@ -225,13 +294,27 @@ namespace OOH.Persistence.Repositories
                     result = await dbConn.QueryFirstAsync<ApprovalDetailVM>(query, new { tenantID = _dbContext.currentTenantID, id = id });
                 }
 
+                if (result != null)
+                {
+                    if (IsViewUnlocked())
+                    {
+                        if (!string.IsNullOrEmpty(result.Name)) result.Name = _encryptionService.Decrypt(result.Name);
+                        if (!string.IsNullOrEmpty(result.Description)) result.Description = _encryptionService.Decrypt(result.Description);
+                    }
+                    else
+                    {
+                        result.Name = "";
+                        result.Description = "";
+                    }
+                }
+
 
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error fetching records from db: ${ex.Message}");
-                throw new Exception("Unable to fetch data. Please contact the administrator.");
+                throw new Exception($"Unable to fetch data. Please contact the administrator. Inner: {ex.Message}");
             }
 
             return result;
@@ -264,32 +347,30 @@ namespace OOH.Persistence.Repositories
                 //query = query + $" and Approval.Approval_ID = @id ";
 
                  
-                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName ,department.name as DepartmentName ,";
+                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName";
 
                 if (category == "Contract")
                 {
-                    query = query + $" contract_media_unit.name as  MediaName , contract.name as ContractName";
+                    query = query + $" , contract_media_unit.name as  MediaName , contract.name as ContractName";
                 }
                 else if (category == "Tender")
                 {
-                    query = query + $" tender_media_unit.name as  MediaName , tender.name as ContractName";
+                    query = query + $" , tender_media_unit.name as  MediaName , tender.name as ContractName";
                 }
                 else if (category == "Proposal")
                 {
-                    query = query + $" proposal_media_unit.name as  MediaName , proposal.name as ContractName";
+                    query = query + $" , proposal_media_unit.name as  MediaName , proposal.name as ContractName";
                 }
 
                 else if (category == "Project")
                 {
-                    query = query + $"   project.name as ContractName";
+                    query = query + $" , project.name as ContractName";
 
                 }
 
                 query = query + $" FROM Approval";
 
                 query = query + $" left  join approval_status on approval_status.approval_status_id = Approval.approval_status_id ";
-
-                query = query + $" left  join department on department.department_id = Approval.department_id ";
 
                 if (category == "Contract")
                 {
@@ -336,6 +417,16 @@ namespace OOH.Persistence.Repositories
 
                 if (result.ApprovalDetails != null)
                 {
+                    if (IsViewUnlocked())
+                    {
+                        if (!string.IsNullOrEmpty(result.ApprovalDetails.Name)) result.ApprovalDetails.Name = _encryptionService.Decrypt(result.ApprovalDetails.Name);
+                        if (!string.IsNullOrEmpty(result.ApprovalDetails.Description)) result.ApprovalDetails.Description = _encryptionService.Decrypt(result.ApprovalDetails.Description);
+                    }
+                    else
+                    {
+                        result.ApprovalDetails.Name = "";
+                        result.ApprovalDetails.Description = "";
+                    }
 
                     if (result.ApprovalDetails.ApprovalType == "Letter")
                     {
@@ -382,7 +473,7 @@ namespace OOH.Persistence.Repositories
             catch (Exception ex)
             {
                 Console.WriteLine($"Error fetching records from db: ${ex.Message}");
-                throw new Exception("Unable to fetch data. Please contact the administrator.");
+                throw new Exception($"Unable to fetch data. Please contact the administrator. Inner: {ex.Message}");
             }
 
             return result;

@@ -1,1 +1,0 @@
-System.register(["./resetPassword-legacy-Ddoie0IY.js"],function(e,t){var r;return{setters:[function(e){r=e.t}],execute:function(){e("default",r)}}});

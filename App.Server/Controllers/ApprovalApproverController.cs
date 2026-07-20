@@ -294,7 +294,7 @@ namespace OOH.API.Controllers
                 else
                 {
                     response.Message = "Record was created Error Send Email";
-                    return BadRequest(response);
+                    return Ok(response);
                 }
 
             }

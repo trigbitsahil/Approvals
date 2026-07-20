@@ -1,25 +1,23 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OOH.Application.Behaviors;
+using MediatR;
+using System.Reflection;
 
 namespace OOH.Application
 {
     public static class ApplicationServiceRegistration
     {
-
-
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(cfg => cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies()));
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies
             (AppDomain.CurrentDomain.GetAssemblies()));
 
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
 
-            //services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddSingleton<OOH.Application.Contracts.Infrastructure.IEncryptionService, OOH.Application.Contracts.Infrastructure.EncryptionService>();
 
             return services;
         }

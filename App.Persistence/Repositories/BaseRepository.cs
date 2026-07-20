@@ -51,7 +51,30 @@ namespace OOH.Persistence.Repositories
             catch (Exception ex)
             {
                 Console.WriteLine($"Error fetching a record from db: ${ex.Message}");
-                throw new Exception("Unable to fetch data. Please contact the administrator.");
+                throw new Exception($"Unable to fetch data. Please contact the administrator. Inner: {ex.Message}");
+            }
+
+            return result;
+        }
+
+        public async Task<T?> GetByIdForUpdateAsync(string id)
+        {
+            T result;
+            try
+            {
+                string tableName = GetTableName();
+                string keyColumn = GetKeyColumnName();
+                string query = $"SELECT {GetColumnsAsProperties()} FROM {tableName} WHERE {keyColumn} = @Id AND Tenant_ID = @TenantId AND Is_Voided = false FOR UPDATE";
+
+                using (var dbConn = _dbContext.CreateConnection())
+                {
+                    result = await dbConn.QueryFirstOrDefaultAsync<T>(query, new { Id = id, TenantId = _dbContext.currentTenantID });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching a record FOR UPDATE from db: ${ex.Message}");
+                throw new Exception($"Unable to fetch data for update. Please contact the administrator. Inner: {ex.Message}");
             }
 
             return result;
