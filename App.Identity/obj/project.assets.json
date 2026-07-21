@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
     "net8.0": {
       "AutoMapper/16.2.0": {
@@ -5097,33 +5097,40 @@
     ]
   },
   "packageFolders": {
-    "/Users/sahilrattan/.nuget/packages/": {}
+    "C:\\Users\\iamta\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/sahilrattan/Desktop/approvals/App.Identity/App.Identity.csproj",
+      "projectUniqueName": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Identity\\App.Identity.csproj",
       "projectName": "App.Identity",
-      "projectPath": "/Users/sahilrattan/Desktop/approvals/App.Identity/App.Identity.csproj",
-      "packagesPath": "/Users/sahilrattan/.nuget/packages/",
-      "outputPath": "/Users/sahilrattan/Desktop/approvals/App.Identity/obj/",
+      "projectPath": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Identity\\App.Identity.csproj",
+      "packagesPath": "C:\\Users\\iamta\\.nuget\\packages\\",
+      "outputPath": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Identity\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/sahilrattan/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\iamta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
-          "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/sahilrattan/Desktop/approvals/App.Application/App.Application.csproj": {
-              "projectPath": "/Users/sahilrattan/Desktop/approvals/App.Application/App.Application.csproj"
+            "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\App.Application.csproj": {
+              "projectPath": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Application\\App.Application.csproj"
             }
           }
         }
@@ -5138,11 +5145,10 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
-        "framework": "net8.0",
         "targetAlias": "net8.0",
         "dependencies": {
           "Azure.Identity": {
@@ -5214,7 +5220,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -3,7 +3,7 @@
 "ServerUrl": "https://localhost:5173",
 "RedirectUrl": "",
 "LaunchCommand": "npm run dev",
-"WorkingDirectory": "/Users/sahilrattan/Desktop/approvals/App.Server/../app.client",
+"WorkingDirectory": "D:\\Work\\Dev\\Projects\\OOH\\Code\\Approvals\\App.Server\\..\\app.client",
 "MaxTimeoutInSeconds": "120",
 "KeepRunning": "false"
 }
