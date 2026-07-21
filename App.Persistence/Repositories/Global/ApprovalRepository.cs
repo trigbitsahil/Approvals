@@ -27,7 +27,7 @@ namespace OOH.Persistence.Repositories
         }
 
         private bool IsViewUnlocked()
-        {
+        {     
             try {
                 if (_httpContextAccessor.HttpContext?.Request?.Headers.TryGetValue("X-View-Password", out var passwordHeader) == true)
                 {
