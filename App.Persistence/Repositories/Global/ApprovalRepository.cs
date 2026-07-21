@@ -55,7 +55,7 @@ namespace OOH.Persistence.Repositories
                     }
                     
                     bool isUnlocked = passwordHeader.ToString() == expectedPassword;
-                    _logger.LogInformation("Header provided: '{PasswordHeader}', Expected: '{ExpectedPassword}', Unlocked: {IsUnlocked}", passwordHeader, expectedPassword, isUnlocked);
+                    _logger.LogInformation("Header provided.: '{PasswordHeader}', Expected: '{ExpectedPassword}', Unlocked: {IsUnlocked}", passwordHeader, expectedPassword, isUnlocked);
                     return isUnlocked;
                 }
                 _logger.LogInformation("X-View-Password header missing. Headers: {Headers}", string.Join(", ", _httpContextAccessor.HttpContext?.Request?.Headers.Keys ?? new List<string>()));
