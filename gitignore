@@ -1,0 +1,29 @@
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/App/FileContentIndex/87904e02-0273-4e2b-8787-d951dda76f66.vsidx
+/.vs/App/FileContentIndex/faca9533-40e7-40fd-96ae-9dff08777909.vsidx
+/.vs/App/FileContentIndex
+
+# Visual Studio / .NET
+.vs/
+[Dd]ebug/
+[Rr]elease/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+build/
+.env*.local
+
+# OS files
+.DS_Store
+Thumbs.db
