@@ -2,23 +2,29 @@
 # Visual Studio / .NET Build Artifacts & Project Folders
 ################################################################################
 **/bin/
+**/bin/**
 **/obj/
+**/obj/**
+**/[Dd]ebug/
+**/[Dd]ebug/**
+**/[Rr]elease/
+**/[Rr]elease/**
 [Bb]in/
 [Oo]bj/
 .vs/
-[Dd]ebug/
-[Rr]elease/
+/.vs/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
-/.vs/
 
 ################################################################################
 # Node / Next.js
 ################################################################################
 **/node_modules/
+**/node_modules/**
 **/.next/
+**/.next/**
 out/
 build/
 .env*.local
