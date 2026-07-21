@@ -1,4 +1,5 @@
 using MediatR;
+using OOH.Application.Contracts.Infrastructure;
 using OOH.Application.Contracts.Persistence;
 using OOH.Domain.Entities.Global;
 using System;
@@ -11,11 +12,13 @@ namespace OOH.Application.Features.Global.Banks.Commands.UpdateBank
     {
         private readonly IBankRepository _bankRepository;
         private readonly IAsyncRepository<BankTransaction> _bankTransactionRepository;
+        private readonly IEncryptionService _encryptionService;
 
-        public UpdateBankCommandHandler(IBankRepository bankRepository, IAsyncRepository<BankTransaction> bankTransactionRepository)
+        public UpdateBankCommandHandler(IBankRepository bankRepository, IAsyncRepository<BankTransaction> bankTransactionRepository, IEncryptionService encryptionService)
         {
             _bankRepository = bankRepository;
             _bankTransactionRepository = bankTransactionRepository;
+            _encryptionService = encryptionService;
         }
 
         public async Task<bool> Handle(UpdateBankCommand request, CancellationToken cancellationToken)
@@ -48,10 +51,10 @@ namespace OOH.Application.Features.Global.Banks.Commands.UpdateBank
             }
             else
             {
-                bank.Name = request.Name ?? bank.Name;
-                bank.Type = request.Type ?? bank.Type;
-                bank.Description = request.Description ?? bank.Description;
-                if (request.Address != null) bank.Address = request.Address;
+                if (request.Name != null) bank.Name = _encryptionService.Encrypt(request.Name);
+                if (request.Type != null) bank.Type = _encryptionService.Encrypt(request.Type);
+                if (request.Description != null) bank.Description = _encryptionService.Encrypt(request.Description);
+                if (request.Address != null) bank.Address = _encryptionService.Encrypt(request.Address);
                 if (request.UserId != null) bank.UserId = request.UserId;
                 if (request.Status != null) bank.Status = request.Status;
                 bank.IsActive = request.IsActive ?? bank.IsActive;

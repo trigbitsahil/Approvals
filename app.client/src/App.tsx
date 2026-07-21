@@ -35,6 +35,7 @@ import  LedgerPage  from "@/components/ledger/LedgerPage";
 import SignUpForm from "./modules/auth/signUp";
 import SignInForm from "./modules/auth/signIn";
 import { BankList } from "@/components/banks/BankList";
+import { VendorList } from "@/components/vendors/VendorList";
 import { BankTransactionList } from "@/components/banks/BankTransactionList";
 import { InitialBalance } from "@/components/banks/InitialBalance";
 import { Toaster } from "./components/ui/sonner";
@@ -344,6 +345,14 @@ function AppContent() {
                   element={
                     <ProtectedRoute>
                       <BankList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/vendors"
+                  element={
+                    <ProtectedRoute>
+                      <VendorList />
                     </ProtectedRoute>
                   }
                 />

@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using OOH.Application.Contracts.Infrastructure;
 using OOH.Application.Contracts.Persistence;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,28 @@ namespace OOH.Application.Features.Global.Banks.Queries.GetBankList
     public class GetBankListQueryHandler : IRequestHandler<GetBankListQuery, List<BankListVM>>
     {
         private readonly IBankRepository _bankRepository;
-        private readonly OOH.Application.Contracts.Infrastructure.ILoggedInUserService _loggedInUserService;
+        private readonly ILoggedInUserService _loggedInUserService;
+        private readonly IEncryptionService _encryptionService;
 
-        public GetBankListQueryHandler(IBankRepository bankRepository, OOH.Application.Contracts.Infrastructure.ILoggedInUserService loggedInUserService)
+        public GetBankListQueryHandler(IBankRepository bankRepository, ILoggedInUserService loggedInUserService, IEncryptionService encryptionService)
         {
             _bankRepository = bankRepository;
             _loggedInUserService = loggedInUserService;
+            _encryptionService = encryptionService;
+        }
+
+        private string SafeDecrypt(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            try
+            {
+                return _encryptionService.Decrypt(value);
+            }
+            catch
+            {
+                // Fallback for older, unencrypted data
+                return value;
+            }
         }
 
         public async Task<List<BankListVM>> Handle(GetBankListQuery request, CancellationToken cancellationToken)
@@ -36,10 +53,10 @@ namespace OOH.Application.Features.Global.Banks.Queries.GetBankList
             var vm = activeBanks.Select(b => new BankListVM
             {
                 BankId = b.BankId,
-                Name = b.Name,
-                Type = b.Type,
-                Description = b.Description,
-                Address = b.Address,
+                Name = SafeDecrypt(b.Name),
+                Type = SafeDecrypt(b.Type),
+                Description = SafeDecrypt(b.Description),
+                Address = SafeDecrypt(b.Address),
                 UserId = b.UserId,
                 Status = b.Status,
                 IsActive = b.IsActive,

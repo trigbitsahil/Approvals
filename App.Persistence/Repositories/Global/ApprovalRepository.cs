@@ -10,6 +10,9 @@ using OOH.Application.Features.Tenders.ExpenseTransactions.Queries.GetExpenseTra
  
 using OOH.Application.StaticResources;
 using OOH.Domain.Entities.Global;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace OOH.Persistence.Repositories
 {
@@ -18,12 +21,14 @@ namespace OOH.Persistence.Repositories
         private readonly IEncryptionService _encryptionService;
         private readonly Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
         private readonly Microsoft.Extensions.Configuration.IConfiguration _configuration;
+        private readonly Microsoft.Extensions.Logging.ILogger<ApprovalRepository> _logger;
 
-        public ApprovalRepository(DapperDBContext dbContext, IEncryptionService encryptionService, Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor, Microsoft.Extensions.Configuration.IConfiguration configuration) : base(dbContext)
+        public ApprovalRepository(DapperDBContext dbContext, IEncryptionService encryptionService, Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor, Microsoft.Extensions.Configuration.IConfiguration configuration, Microsoft.Extensions.Logging.ILogger<ApprovalRepository> logger) : base(dbContext)
         {
             _encryptionService = encryptionService;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
+            _logger = logger;
         }
 
         private bool IsViewUnlocked()
@@ -35,7 +40,7 @@ namespace OOH.Persistence.Repositories
                     
                     if (string.IsNullOrEmpty(encryptedExpectedPassword))
                     {
-                        System.IO.File.AppendAllText("/tmp/auth_debug.log", $"[{DateTime.Now}] ActualViewPassword configuration is missing.\n");
+                        _logger.LogWarning("ActualViewPassword configuration is missing.");
                         return false;
                     }
 
@@ -50,12 +55,12 @@ namespace OOH.Persistence.Repositories
                     }
                     
                     bool isUnlocked = passwordHeader.ToString() == expectedPassword;
-                    System.IO.File.AppendAllText("/tmp/auth_debug.log", $"[{DateTime.Now}] Header provided: '{passwordHeader}', Expected: '{expectedPassword}', Unlocked: {isUnlocked}\n");
+                    _logger.LogInformation("Header provided: '{PasswordHeader}', Expected: '{ExpectedPassword}', Unlocked: {IsUnlocked}", passwordHeader, expectedPassword, isUnlocked);
                     return isUnlocked;
                 }
-                System.IO.File.AppendAllText("/tmp/auth_debug.log", $"[{DateTime.Now}] X-View-Password header missing. Headers: {string.Join(", ", _httpContextAccessor.HttpContext?.Request?.Headers.Keys ?? new List<string>())}\n");
+                _logger.LogInformation("X-View-Password header missing. Headers: {Headers}", string.Join(", ", _httpContextAccessor.HttpContext?.Request?.Headers.Keys ?? new List<string>()));
             } catch (Exception ex) {
-                System.IO.File.AppendAllText("/tmp/auth_debug.log", $"[{DateTime.Now}] Exception: {ex.Message}\n");
+                _logger.LogError(ex, "Exception in IsViewUnlocked: {Message}", ex.Message);
             }
             return false;
         }
