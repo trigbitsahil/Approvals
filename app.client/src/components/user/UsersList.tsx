@@ -81,7 +81,7 @@ const UserAvatar = ({ userId, firstName, lastName, className = "" }: { userId?: 
   const hash = (firstName + lastName).length % colors.length;
 
   return (
-    <div className={`h-8 w-8 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm ring-1 ring-white/10 ${colors[hash]} ${className} overflow-hidden`}>
+    <div className={`h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm ring-1 ring-white/10 ${colors[hash]} ${className} overflow-hidden`}>
       {imageUrl ? (
         <img 
           src={imageUrl} 
@@ -142,36 +142,36 @@ export const UserManagementPage = () => {
   };
 
   return (
-    <div className="space-y-6 p-6 max-w-7xl mx-auto">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6 max-w-7xl mx-auto">
       {/* Premium Header Card */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-muted/60">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 sm:pb-6 border-b border-muted/60">
         <div className="space-y-1.5">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-primary/10 rounded-xl text-primary shadow-sm ring-1 ring-primary/20">
-              <Users className="h-6 w-6" />
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="p-2 sm:p-2.5 bg-primary/10 rounded-xl text-primary shadow-sm ring-1 ring-primary/20 shrink-0">
+              <Users className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
               User Management
             </h1>
           </div>
-          <p className="text-sm text-muted-foreground font-medium pl-[52px]">
+          <p className="text-xs sm:text-sm text-muted-foreground font-medium pl-0 sm:pl-[52px]">
             Manage, organize, and monitor system users and access levels.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="relative group hidden sm:block">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+          <div className="relative group w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
             <Input
               placeholder="Search users..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 w-[240px] h-10 rounded-xl border-muted-foreground/20 bg-muted/30 focus-visible:ring-primary focus-visible:bg-background transition-all"
+              className="pl-9 w-full sm:w-[240px] h-10 rounded-xl border-muted-foreground/20 bg-muted/30 focus-visible:ring-primary focus-visible:bg-background transition-all"
             />
           </div>
           <Button
             onClick={() => handleOpenDialog()}
-            className="h-10 px-5 gap-2 rounded-xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="h-10 px-5 gap-2 rounded-xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] justify-center"
           >
             <UserPlus className="h-4 w-4" />
             Add New User
@@ -181,13 +181,13 @@ export const UserManagementPage = () => {
 
       <Card className="border-muted shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[650px] text-sm">
             <thead className="bg-muted/40 text-muted-foreground text-[11px] uppercase tracking-wider font-bold">
               <tr>
-                <th className="px-6 py-4 text-left font-bold">User Information</th>
-                <th className="px-6 py-4 text-left font-bold">Registration Data</th>
-                <th className="px-6 py-4 text-left font-bold">Status</th>
-                <th className="px-6 py-4 text-right font-bold">Actions</th>
+                <th className="px-4 sm:px-6 py-4 text-left font-bold">User Information</th>
+                <th className="px-4 sm:px-6 py-4 text-left font-bold">Registration Data</th>
+                <th className="px-4 sm:px-6 py-4 text-left font-bold">Status</th>
+                <th className="px-4 sm:px-6 py-4 text-right font-bold">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-muted/60">
@@ -198,23 +198,23 @@ export const UserManagementPage = () => {
                     onClick={() => handleOpenDialog(user)}
                     className="group hover:bg-muted/30 transition-all duration-200 cursor-pointer"
                   >
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4">
                       <div className="flex items-center gap-3">
                         <UserAvatar userId={user.id} firstName={user.firstName} lastName={user.lastName} />
-                        <div className="flex flex-col">
-                          <span className="font-bold text-foreground group-hover:text-primary transition-colors">
+                        <div className="flex flex-col min-w-0">
+                          <span className="font-bold text-foreground group-hover:text-primary transition-colors break-words">
                             {user.firstName} {user.lastName}
                           </span>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                            <Mail className="h-3 w-3 opacity-60" /> {user.email}
+                          <span className="text-xs text-muted-foreground flex items-center gap-1.5 break-all">
+                            <Mail className="h-3 w-3 shrink-0 opacity-60" /> <span className="truncate">{user.email}</span>
                           </span>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4">
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-1.5 text-xs text-foreground/80">
-                          <Phone className="h-3 w-3 text-muted-foreground" />
+                          <Phone className="h-3 w-3 text-muted-foreground shrink-0" />
                           {user.phoneNumber || <span className="text-muted-foreground/40 italic">No phone</span>}
                         </div>
                         <span className="text-[10px] text-muted-foreground/60 font-mono">
@@ -222,7 +222,7 @@ export const UserManagementPage = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4">
                       <Badge
                         variant={user.isActive !== false ? "default" : "secondary"}
                         className={`text-[10px] uppercase font-bold py-0.5 rounded-md ${user.isActive !== false
@@ -233,7 +233,7 @@ export const UserManagementPage = () => {
                         {user.isActive !== false ? "Active" : "Inactive"}
                       </Badge>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-4 sm:px-6 py-4 text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button 
@@ -247,8 +247,11 @@ export const UserManagementPage = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-52 p-1.5 rounded-xl shadow-xl border-muted">
                           <DropdownMenuLabel className="text-[10px] uppercase font-bold text-muted-foreground px-2 pb-1.5">Management Actions</DropdownMenuLabel>
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); navigate(`/roles?userId=${user.id}`); }} className="rounded-lg gap-2 cursor-pointer">
+                            <ShieldCheck className="h-4 w-4 text-primary" /> Manage Roles
+                          </DropdownMenuItem>
                           <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleOpenDialog(user); }} className="rounded-lg gap-2 cursor-pointer">
-                            Edit User
+                            <Edit3 className="h-4 w-4" /> Edit User
                           </DropdownMenuItem>
                           {/* <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setActivityUserId(user.id); }} className="rounded-lg gap-2 cursor-pointer">
                             Activity
@@ -258,7 +261,7 @@ export const UserManagementPage = () => {
                             onClick={(e) => { e.stopPropagation(); handleDelete(user.id); }}
                             className="rounded-lg gap-2 cursor-pointer text-red-500 focus:text-white focus:bg-red-500 transition-colors"
                           >
-                            Delete User
+                            <Trash2 className="h-4 w-4" /> Delete User
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

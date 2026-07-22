@@ -543,7 +543,7 @@ export default function ApprovalDetailPage() {
           </div>
 
           {/* FOLLOW-UP BUTTON */}
-          <div className="flex items-center gap-3 w-full md:w-auto">
+          {/* <div className="flex items-center gap-3 w-full md:w-auto">
             <Button
               id="btn-send-follow-up"
               onClick={handleFollowUp}
@@ -557,7 +557,7 @@ export default function ApprovalDetailPage() {
               )}
               {isSendingFollowUp ? "Follow-Up" : "Follow-Up"}
             </Button>
-          </div>
+          </div> */}
         </div>
 
         <Separator className="opacity-10" />

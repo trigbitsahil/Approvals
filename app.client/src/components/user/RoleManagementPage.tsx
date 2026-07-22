@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import {
   ShieldCheck,
   Search,
@@ -9,7 +10,8 @@ import {
   CheckCircle2,
   XCircle,
   Save,
-  Users
+  Users,
+  ArrowLeft
 } from "lucide-react";
 import { toast } from "sonner";
 import { UserService } from "@/api/services/UserService";
@@ -37,6 +39,8 @@ interface SystemUser {
 const API_VERSION = "1";
 
 export const RoleManagementPage = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [users, setUsers] = useState<SystemUser[]>([]);
   const [allRoles, setAllRoles] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -45,32 +49,53 @@ export const RoleManagementPage = () => {
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoadingRoles, setIsLoadingRoles] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [isCreateRoleOpen, setIsCreateRoleOpen] = useState(false);
   const [newRoleName, setNewRoleName] = useState("");
   const [isCreatingRole, setIsCreatingRole] = useState(false);
 
+  const [loggedInUserRoles, setLoggedInUserRoles] = useState<string[]>([]);
+
   // Fetch all users and system roles on mount
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [usersRes, rolesRes] = await Promise.all([
+        const [usersRes, rolesRes, loggedInRes] = await Promise.all([
           UserService.getApiVUser(API_VERSION),
-          UserService.getAllRoles(API_VERSION)
+          UserService.getAllRoles(API_VERSION),
+          UserService.getLoggedInUser(API_VERSION).catch(() => null)
         ]);
         
-        setUsers(Array.isArray(usersRes.data) ? (usersRes.data as SystemUser[]) : []);
+        const loadedUsers = Array.isArray(usersRes.data) ? (usersRes.data as SystemUser[]) : [];
+        setUsers(loadedUsers);
         
         if (rolesRes?.data) {
            setAllRoles(rolesRes.data);
         }
+        
+        if (loggedInRes?.data?.userID) {
+           const loggedInRolesRes = await UserService.getUserRoles(API_VERSION, loggedInRes.data.userID).catch(() => null);
+           setLoggedInUserRoles(loggedInRolesRes?.data || []);
+        }
+        
+        const initialUserId = searchParams.get("userId");
+        if (initialUserId && loadedUsers.some(u => u.id === initialUserId)) {
+          handleSelectUser(initialUserId);
+        } else if (loadedUsers.length > 0) {
+          handleSelectUser(loadedUsers[0].id);
+        }
       } catch (err) {
         console.error(err);
         toast.error("Failed to load users or roles");
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchInitialData();
   }, []);
+
+  const isSuperAdmin = loggedInUserRoles.includes("SuperAdmin");
 
 
   const filteredUsers = users.filter(user =>
@@ -151,147 +176,119 @@ export const RoleManagementPage = () => {
 
   const selectedUser = users.find(u => u.id === selectedUserId);
 
+  if (isLoading) {
+    return (
+      <div className="flex h-full w-full min-h-[400px] items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent shadow-md"></div>
+          <p className="text-sm font-medium text-muted-foreground animate-pulse">Loading roles configuration...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6 p-6 max-w-[1400px] mx-auto min-h-screen">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6 max-w-[1400px] mx-auto min-h-screen">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-muted/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 sm:pb-6 border-b border-muted/60">
         <div className="space-y-1.5">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-primary/10 rounded-xl text-primary shadow-sm ring-1 ring-primary/20">
-              <ShieldCheck className="h-6 w-6" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => navigate("/users")}
+              className="h-9 w-9 shrink-0 rounded-xl border-muted-foreground/20 hover:bg-muted"
+              title="Back to Users"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <div className="p-2 sm:p-2.5 bg-primary/10 rounded-xl text-primary shadow-sm ring-1 ring-primary/20 shrink-0">
+              <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
               Role Management
             </h1>
           </div>
-          <p className="text-sm text-muted-foreground font-medium pl-[52px]">
+          <p className="text-xs sm:text-sm text-muted-foreground font-medium pl-0 sm:pl-[92px]">
             Assign and revoke system-wide access permissions for your team.
           </p>
         </div>
-
-        <Button onClick={() => setIsCreateRoleOpen(true)} className="rounded-xl">
-          + Create Role
-        </Button>
+        {isSuperAdmin && (
+          <Button 
+            onClick={() => setIsCreateRoleOpen(true)}
+            className="h-10 px-4 sm:px-5 gap-2 rounded-xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto justify-center"
+          >
+            + Create Role
+          </Button>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Left Column: User Selection */}
-        <div className="lg:col-span-5 space-y-4">
-          <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-            <Input
-              placeholder="Search users to manage roles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-12 rounded-xl border-muted-foreground/20 bg-card focus-visible:ring-primary shadow-sm transition-all"
-            />
-          </div>
-          
-          <Card className="border-muted shadow-sm overflow-hidden flex flex-col h-[600px]">
-            <div className="p-4 bg-muted/40 border-b border-muted/60">
-              <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                <Users className="h-4 w-4" /> Select User
-              </h3>
-            </div>
-            <div className="flex-1 overflow-y-auto p-2 space-y-1">
-              {filteredUsers.length === 0 && (
-                <div className="p-8 text-center text-muted-foreground">No users found.</div>
-              )}
-              {filteredUsers.map(user => (
-                <div 
-                  key={user.id}
-                  onClick={() => handleSelectUser(user.id)}
-                  className={`p-3 rounded-lg cursor-pointer transition-all border ${
-                    selectedUserId === user.id 
-                      ? "bg-primary/10 border-primary/30 shadow-sm" 
-                      : "border-transparent hover:bg-muted/50"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 w-full">
-                      <div className={`shrink-0 h-10 w-10 rounded-full flex items-center justify-center text-sm font-bold shadow-sm ${selectedUserId === user.id ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'}`}>
-                        {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <h4 className={`font-semibold truncate ${selectedUserId === user.id ? 'text-primary' : ''}`}>
-                          {user.firstName} {user.lastName}
-                        </h4>
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-0.5 min-w-0">
-                          <Mail className="h-3 w-3 shrink-0" /> <span className="truncate">{user.email}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
-
-        {/* Right Column: Role Assignment */}
-        <div className="lg:col-span-7">
-          <Card className="border-muted shadow-sm h-full min-h-[600px] flex flex-col relative overflow-hidden">
+      <div className="w-full">
+        {/* Role Assignment */}
+        <div>
+          <Card className="border-muted shadow-sm h-full min-h-[500px] sm:min-h-[600px] flex flex-col relative overflow-hidden">
             {!selectedUserId ? (
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground bg-muted/10 backdrop-blur-sm z-10 p-8 text-center">
-                <ShieldCheck className="h-16 w-16 mb-4 opacity-20" />
-                <h3 className="text-xl font-bold text-foreground/70 mb-2">No User Selected</h3>
-                <p className="max-w-xs">Select a user from the list on the left to view and modify their system roles.</p>
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground bg-muted/10 backdrop-blur-sm z-10 p-6 text-center">
+                <ShieldCheck className="h-12 w-12 sm:h-16 sm:w-16 mb-4 opacity-20" />
+                <h3 className="text-lg sm:text-xl font-bold text-foreground/70 mb-2">No User Selected</h3>
+                <p className="max-w-xs text-xs sm:text-sm">Please select a user to view and modify their system roles.</p>
               </div>
             ) : null}
 
             {selectedUser && (
               <>
-                <div className="p-6 border-b border-muted/60 bg-muted/10">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h2 className="text-2xl font-bold">{selectedUser.firstName} {selectedUser.lastName}</h2>
-                      <p className="text-muted-foreground flex items-center gap-2 mt-1">
-                        <Mail className="h-4 w-4" /> {selectedUser.email}
+                <div className="p-4 sm:p-6 border-b border-muted/60 bg-muted/10">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <h2 className="text-lg sm:text-xl md:text-2xl font-bold break-words">{selectedUser.firstName} {selectedUser.lastName}</h2>
+                      <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-2 mt-1 break-all">
+                        <Mail className="h-4 w-4 shrink-0" /> <span className="truncate">{selectedUser.email}</span>
                       </p>
                     </div>
-                    <Badge variant={selectedUser.isActive !== false ? "default" : "secondary"}>
+                    <Badge variant={selectedUser.isActive !== false ? "default" : "secondary"} className="self-start shrink-0">
                       {selectedUser.isActive !== false ? "Active Account" : "Inactive Account"}
                     </Badge>
                   </div>
                 </div>
                 
-                <div className="flex-1 p-6 overflow-y-auto">
-                  <div className="mb-6">
-                    <h3 className="text-lg font-bold">Assigned Roles</h3>
-                    <p className="text-sm text-muted-foreground">Toggle the switches below to grant or revoke system permissions.</p>
+                <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
+                  <div className="mb-4 sm:mb-6">
+                    <h3 className="text-base sm:text-lg font-bold">Assigned Roles</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Toggle the switches below to grant or revoke system permissions.</p>
                   </div>
 
                   {isLoadingRoles ? (
-                    <div className="py-12 text-center text-muted-foreground">Loading roles...</div>
+                    <div className="py-12 text-center text-muted-foreground text-sm">Loading roles...</div>
                   ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {allRoles.map(role => {
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                      {allRoles
+                        .filter(role => isSuperAdmin || role.toLowerCase() !== "superadmin")
+                        .map(role => {
                         const hasRole = userRoles.includes(role);
                         return (
                           <div 
                             key={role}
                             onClick={() => toggleRole(role)}
-                            className="p-4 rounded-xl border-2 transition-all cursor-pointer flex items-center justify-between border-muted hover:border-muted-foreground/30 bg-card"
+                            className="p-3.5 sm:p-4 rounded-xl border-2 transition-all cursor-pointer flex items-center justify-between border-muted hover:border-muted-foreground/30 bg-card"
                           >
-                            <div className="flex items-center gap-3 min-w-0 flex-1">
-                              <div className="p-2 rounded-lg bg-muted text-muted-foreground shrink-0">
-                                {hasRole ? <CheckCircle2 className="h-5 w-5 text-primary" /> : <XCircle className="h-5 w-5" />}
+                            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+                              <div className="p-1.5 sm:p-2 rounded-lg bg-muted text-muted-foreground shrink-0">
+                                {hasRole ? <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" /> : <XCircle className="h-4 w-4 sm:h-5 sm:w-5" />}
                               </div>
-                              <span className={`font-semibold truncate ${hasRole ? 'text-foreground' : 'text-muted-foreground'}`} title={role}>
+                              <span className={`text-sm sm:text-base font-semibold truncate ${hasRole ? 'text-foreground' : 'text-muted-foreground'}`} title={role}>
                                 {role}
                               </span>
                             </div>
                             
                             {/* Visual toggle switch */}
-                            <div className={`shrink-0 w-10 h-6 rounded-full transition-colors relative ml-3 ${hasRole ? 'bg-primary' : 'bg-muted-foreground/30'}`}>
-                              <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all duration-300 shadow-sm ${hasRole ? 'left-5' : 'left-1'}`} />
+                            <div className={`shrink-0 w-9 sm:w-10 h-5 sm:h-6 rounded-full transition-colors relative ml-2 sm:ml-3 ${hasRole ? 'bg-primary' : 'bg-muted-foreground/30'}`}>
+                              <div className={`absolute top-0.5 sm:top-1 w-4 h-4 rounded-full bg-white transition-all duration-300 shadow-sm ${hasRole ? 'left-4 sm:left-5' : 'left-0.5 sm:left-1'}`} />
                             </div>
                           </div>
                         );
                       })}
                       {allRoles.length === 0 && (
-                        <div className="col-span-full py-8 text-center text-muted-foreground italic border-2 border-dashed border-muted rounded-xl">
+                        <div className="col-span-full py-8 text-center text-xs sm:text-sm text-muted-foreground italic border-2 border-dashed border-muted rounded-xl">
                           No roles found in the system.
                         </div>
                       )}
@@ -299,11 +296,11 @@ export const RoleManagementPage = () => {
                   )}
                 </div>
 
-                <div className="p-6 border-t border-muted/60 bg-muted/10 flex justify-end">
+                <div className="p-4 sm:p-6 border-t border-muted/60 bg-muted/10 flex justify-end">
                   <Button 
                     onClick={handleSaveRoles} 
                     disabled={isSaving || isLoadingRoles}
-                    className="h-11 px-8 rounded-xl shadow-lg shadow-primary/20"
+                    className="h-10 sm:h-11 w-full sm:w-auto px-6 sm:px-8 rounded-xl shadow-lg shadow-primary/20"
                   >
                     {isSaving ? "Saving..." : (
                       <>

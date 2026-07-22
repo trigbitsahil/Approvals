@@ -152,8 +152,8 @@ const RootTokenHandler = () => {
           login(accessToken, refreshToken);
           toast.success("Login successful!");
 
-          // Redirect to Tickets
-          navigate("/tickets", { replace: true });
+          // Redirect to Approvals
+          navigate("/approvals", { replace: true });
         } catch (error) {
           console.error("Token verification failed:", error);
           toast.error("Login failed. Please try again.");
@@ -427,7 +427,8 @@ function AppContent() {
                   }
                 />
 
-                {/* Fallback */}
+                {/* Fallback & Root */}
+                <Route path="/" element={<Navigate to="/approvals" replace />} />
                 <Route path="*" element={<Navigate to="/signin" replace />} />
               </Routes>
             </Suspense>

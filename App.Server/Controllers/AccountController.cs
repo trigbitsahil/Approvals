@@ -163,5 +163,29 @@ namespace OOH.API.Controllers
 
 
 
+        public class ValidateViewPasswordRequest
+        {
+            public string Password { get; set; }
+        }
+
+        [HttpPost("ValidateViewPassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<bool> ValidateViewPassword([FromBody] ValidateViewPasswordRequest request, [FromServices] IEncryptionService encryptionService)
+        {
+            var encryptedExpectedPassword = _configuration["ActualViewPassword"];
+            if (string.IsNullOrEmpty(encryptedExpectedPassword)) return Ok(false);
+            
+            string expectedPassword;
+            try 
+            {
+                expectedPassword = encryptionService.Decrypt(encryptedExpectedPassword);
+            } 
+            catch 
+            {
+                expectedPassword = encryptedExpectedPassword;
+            }
+            
+            return Ok(request.Password == expectedPassword);
+        }
     }
 }

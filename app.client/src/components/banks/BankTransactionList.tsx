@@ -21,6 +21,9 @@ import {
 import { DatePickerInput } from "@/components/ui/date-picker-input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Filter, X, TrendingUp, TrendingDown, Calendar, Building2, ChevronRight, ChevronLeft, ArrowUpDown, ArrowUp, ArrowDown, ArrowRightLeft } from "lucide-react";
+import { toast } from "sonner";
+import { OpenAPI } from "@/api/core/OpenAPI";
+import { getAccessToken } from "@/utils/authToken";
 
 type SortColumn = 'bankName' | 'transactionType' | 'deposit' | 'withdrawal' | 'runningBalance' | 'createdDate';
 type SortDirection = 'asc' | 'desc';
@@ -628,13 +631,20 @@ export const BankTransactionList = () => {
                             placeholder="Enter secure password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    if (password) {
-                                        sessionStorage.setItem('view_password', password);
-                                        setIsUnlockOpen(false);
-                                        window.location.reload();
-                                    }
+                            onKeyDown={async (e) => {
+                                if (e.key === 'Enter' && password) {
+                                    try {
+                                        const res = await fetch(`${OpenAPI.BASE}/api/v1/Account/ValidateViewPassword`, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getAccessToken()}` },
+                                            body: JSON.stringify({ password })
+                                        });
+                                        if (await res.json()) {
+                                            sessionStorage.setItem('view_password', btoa(password));
+                                            setIsUnlockOpen(false);
+                                            window.location.reload();
+                                        } else toast.error("Invalid password!");
+                                    } catch { toast.error("Validation failed"); }
                                 }
                             }}
                         />
@@ -643,11 +653,20 @@ export const BankTransactionList = () => {
                         <Button variant="outline" onClick={() => setIsUnlockOpen(false)}>
                             Cancel
                         </Button>
-                        <Button onClick={() => {
+                        <Button onClick={async () => {
                             if (password) {
-                                sessionStorage.setItem('view_password', password);
-                                setIsUnlockOpen(false);
-                                window.location.reload();
+                                try {
+                                    const res = await fetch(`${OpenAPI.BASE}/api/v1/Account/ValidateViewPassword`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getAccessToken()}` },
+                                        body: JSON.stringify({ password })
+                                    });
+                                    if (await res.json()) {
+                                        sessionStorage.setItem('view_password', btoa(password));
+                                        setIsUnlockOpen(false);
+                                        window.location.reload();
+                                    } else toast.error("Invalid password!");
+                                } catch { toast.error("Validation failed"); }
                             }
                         }}>Unlock</Button>
                     </DialogFooter>

@@ -72,8 +72,11 @@ const SignInForm = () => {
           // Update auth context
           login(accessToken, refreshToken);
 
+          toast.success("Login successful!");
+          navigate("/approvals");
+
           try {
-            // Fetch User Email
+            // Fetch User Email (Run asynchronously in background)
             const userRes = await UserService.getLoggedInUser("1");
             const userEmail = userRes.data?.email;
 
@@ -92,11 +95,6 @@ const SignInForm = () => {
           } catch (e) {
             console.error("Failed to fetch/set selectedWarehouseId on token login:", e);
           }
-
-          toast.success("Login successful!");
-
-          // Redirect to tickets route
-          navigate("/tickets", { replace: true });
 
         } catch (error) {
           console.error("Token verification failed:", error);
@@ -131,9 +129,13 @@ const SignInForm = () => {
 
           // Update auth state (sets isLoggedIn to true and authReady)
           login("", ""); 
+          
+          setIsLoading(false);
+          toast.success("Login successful!");
+          navigate("/");
 
           try {
-            // Fetch User Email
+            // Fetch User Email (Run asynchronously in background)
             const userRes = await UserService.getLoggedInUser("1");
             const userEmail = userRes.data?.email;
 
@@ -152,11 +154,6 @@ const SignInForm = () => {
           } catch (e) {
             console.error("Failed to fetch/set selectedWarehouseId on login:", e);
           }
-
-          // Reset loading state and navigate to tickets page
-          setIsLoading(false);
-          toast.success("Login successful!");
-          navigate("/");
         })
         .catch((error) => {
           setIsLoading(false);

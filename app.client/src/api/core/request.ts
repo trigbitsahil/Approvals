@@ -195,7 +195,7 @@ export const getHeaders = async (
 
   const viewPassword = sessionStorage.getItem('view_password');
   if (viewPassword) {
-    headers["X-View-Password"] = viewPassword;
+    headers["X-View-Password"] = atob(viewPassword);
   }
 
   if (isStringWithValue(username) && isStringWithValue(password)) {

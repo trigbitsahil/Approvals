@@ -134,7 +134,7 @@ const data = {
       icon: User,
       items: [
         { title: "User Management", url: "/users" },
-        { title: "Roles", url: "/roles" },
+        // { title: "Roles", url: "/roles" },
       ],
     },
        {

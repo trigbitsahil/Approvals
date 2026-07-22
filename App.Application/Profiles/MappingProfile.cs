@@ -314,7 +314,6 @@ namespace OOH.Application.Profiles
             CreateMap<ApprovalApprover, ApprovalApproverListVM>().ReverseMap();
             CreateMap<ApprovalApprover, ApprovalApproverDetailVM>().ReverseMap();
 
-
             CreateMap<ApprovalApprover, CreateApprovalApproverCommand>().ReverseMap();
             CreateMap<ApprovalApprover, CreateApprovalApproverDto>().ReverseMap();
 
@@ -322,6 +321,13 @@ namespace OOH.Application.Profiles
             CreateMap<ApprovalApprover, UpdateApprovalApproverDto>().ReverseMap();
 
             CreateMap<ApprovalApprover, DeleteApprovalApproverCommand>().ReverseMap();
+
+            #endregion
+
+            #region ApprovalComment
+            
+            CreateMap<OOH.Domain.Entities.Global.ApprovalComment, OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprovalComment.CreateApprovalCommentCommand>().ReverseMap();
+            CreateMap<OOH.Domain.Entities.Global.ApprovalComment, OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprovalComment.CreateApprovalCommentDto>().ReverseMap();
 
             #endregion
 

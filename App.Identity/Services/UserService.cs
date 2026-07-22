@@ -22,7 +22,7 @@ namespace OOH.Identity.Services
 
         public async Task<List<UserListVM>> GetUsersAsync()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.Where(u => !u.IsVoided).ToListAsync();
             return users.Select(u => new UserListVM
             {
                 UserID = u.Id,

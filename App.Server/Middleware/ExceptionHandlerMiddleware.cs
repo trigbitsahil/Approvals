@@ -57,7 +57,6 @@ namespace OOH.API.Middleware
             {
                 result = JsonSerializer.Serialize(new { error = exception.Message });
             }
-            try { System.IO.File.WriteAllText("error_log.txt", exception.ToString()); } catch { }
 
             return context.Response.WriteAsync(result);
         }

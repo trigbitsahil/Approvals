@@ -188,6 +188,9 @@ export default function ApprovalsPage() {
   const [isCreatingFinance, setIsCreatingFinance] = useState(false);
   const [targetExpenseTransactionId, setTargetExpenseTransactionId] = useState<string | null>(null);
 
+  const [loggedInUserRoles, setLoggedInUserRoles] = useState<string[]>([]);
+  const [loggedInUserEmail, setLoggedInUserEmail] = useState<string | null>(null);
+
   // --- UI State ---
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
@@ -257,7 +260,7 @@ export default function ApprovalsPage() {
   const [description, setDescription] = useState("");
   const [publicDescription, setPublicDescription] = useState(getRandomDesc());
   const [priority, setPriority] = useState<Priority>("Medium");
-  const [approvalType, setApprovalType] = useState("type 1");
+  const [approvalType, setApprovalType] = useState("Transfer");
   const [isInitialBalance, setIsInitialBalance] = useState(false);
   const [selectedStatusId, setSelectedStatusId] = useState<string>("");
   const [allApproverApprove, setAllApproverApprove] = useState(true);
@@ -357,6 +360,11 @@ export default function ApprovalsPage() {
         if ((bankRes as any).data) setBanks((bankRes as any).data.filter((b: any) => b.isActive !== false));
         if (loggedInRes.success && loggedInRes.data?.departmentId) {
           setLoggedInDepartmentId(loggedInRes.data.departmentId);
+        }
+        if (loggedInRes.success && loggedInRes.data?.userID) {
+          setLoggedInUserEmail(loggedInRes.data.email || null);
+          const loggedInRolesRes = await UserService.getUserRoles("1", loggedInRes.data.userID).catch(() => null);
+          setLoggedInUserRoles(loggedInRolesRes?.data || []);
         }
       } catch (err) {
         console.error("Reference data fetch error:", err);
@@ -472,7 +480,7 @@ export default function ApprovalsPage() {
     setDescription("");
     setPublicDescription(getRandomDesc());
     setPriority("Medium");
-    setApprovalType("type 1");
+    setApprovalType("Transfer");
     setAllApproverApprove(true);
     setSelectedStatusId("");
     setFromBankId("");
@@ -505,10 +513,10 @@ export default function ApprovalsPage() {
     
     if (approval.approvalType === "Initial Balance") {
       setIsInitialBalance(true);
-      setApprovalType("type 1"); // Default fallback
+      setApprovalType("Transfer"); // Default fallback
     } else {
       setIsInitialBalance(false);
-      setApprovalType(approval.approvalType || "type 1");
+      setApprovalType(approval.approvalType || "Transfer");
     }
 
     setAllApproverApprove(approval.allApproverApprove || false);
@@ -842,25 +850,25 @@ export default function ApprovalsPage() {
             </div>
 
             {/* --- Filter Actions & Button --- */}
-            <div className="flex flex-col items-end gap-3 w-full sm:w-auto">
-              <div className="flex flex-row items-center gap-3 w-full sm:w-auto">
-                {!!sessionStorage.getItem('view_password') && (
-                  <Button 
-                    variant="destructive"
-                    onClick={() => setIsSosDialogOpen(true)}
-                    className="gap-2 rounded-2xl h-11 px-5 text-sm font-medium shadow-lg transition-all hover:translate-y-[-1px] w-full sm:w-auto"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    Clear Data
-                  </Button>
-                )}
+            <div className="flex flex-col items-end sm:items-end gap-2.5 sm:gap-3 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <Button 
                   onClick={() => { setIsAdding(true); resetForm(); }} 
-                  className="gap-2 rounded-2xl h-11 px-5 text-sm font-medium bg-primary shadow-lg shadow-primary/20 transition-all hover:translate-y-[-1px] w-full sm:w-auto"
+                  className="gap-2 rounded-2xl h-11 px-5 text-sm font-medium bg-primary shadow-lg shadow-primary/20 transition-all hover:translate-y-[-1px] w-full sm:w-auto justify-center shrink-0 order-1 sm:order-2"
                 >
                   <Plus className="h-4 w-4" />
                   New Approval
                 </Button>
+                {!!sessionStorage.getItem('view_password') && loggedInUserRoles.includes("SuperAdmin") && (
+                  <Button 
+                    variant="destructive"
+                    onClick={() => setIsSosDialogOpen(true)}
+                    className="gap-1.5 rounded-xl h-8 sm:h-11 px-3.5 sm:px-5 text-xs sm:text-sm font-medium shadow-md transition-all hover:translate-y-[-1px] w-auto shrink-0 order-2 sm:order-1 self-end sm:self-auto"
+                  >
+                    <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                    Clear Data
+                  </Button>
+                )}
               </div>
               
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
@@ -903,7 +911,7 @@ export default function ApprovalsPage() {
 
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
-                <Button
+                {/* <Button
                   variant="outline"
                   className={`flex-1 sm:flex-none gap-2 rounded-2xl h-11 px-4 text-sm font-semibold transition-all border-border/50 ${showAll ? "bg-primary/10 border-primary/30 text-primary" : "bg-muted/20 hover:bg-muted/30"}`}
                   onClick={() => setShowAll(!showAll)}
@@ -919,7 +927,7 @@ export default function ApprovalsPage() {
                       SHOWING ACTIVE
                     </>
                   )}
-                </Button>
+                </Button> */}
 
                 <div className="flex items-center bg-muted/40 border border-border/50 rounded-2xl p-0.5 gap-0.5">
                   <button onClick={() => setViewMode("grid")} className={`p-2 rounded-xl transition-all ${viewMode === "grid" ? "bg-card shadow-sm scale-105" : "text-muted-foreground"}`}>
@@ -1076,17 +1084,19 @@ export default function ApprovalsPage() {
                               <Undo2 className="h-3.5 w-3.5" /> Reverse Transaction
                             </DropdownMenuItem>
                           )}
-                          {approval.approvalStatusName !== 'Approved' && (approval.approvalStatusName !== 'Pending' || !!sessionStorage.getItem('view_password')) && (
+                          {approval.approvalStatusName === 'Pending' && !!sessionStorage.getItem('view_password') && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
                             <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); handleEdit(approval); }}>
                               <Edit2 className="h-3.5 w-3.5" /> Edit Request
                             </DropdownMenuItem>
                           )}
-                          <DropdownMenuItem
-                            className="gap-2 rounded-xl text-rose-500 focus:bg-rose-500/10 focus:text-rose-500"
-                            onClick={(e) => { e.stopPropagation(); approval.approvalID && handleDelete(approval.approvalID); }}
-                          >
-                            <Trash2 className="h-3.5 w-3.5" /> Delete Request
-                          </DropdownMenuItem>
+                          {approval.approvalStatusName === 'Pending' && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
+                            <DropdownMenuItem
+                              className="gap-2 rounded-xl text-rose-500 focus:bg-rose-500/10 focus:text-rose-500"
+                              onClick={(e) => { e.stopPropagation(); approval.approvalID && handleDelete(approval.approvalID); }}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" /> Delete Request
+                            </DropdownMenuItem>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
@@ -1152,17 +1162,19 @@ export default function ApprovalsPage() {
                                 <Undo2 className="h-3.5 w-3.5" /> Reverse Transaction
                               </DropdownMenuItem>
                             )} */}
-                            {approval.approvalStatusName !== 'Approved' && (approval.approvalStatusName !== 'Pending' || !!sessionStorage.getItem('view_password')) && (
+                            {/* {approval.approvalStatusName === 'Pending' && !!sessionStorage.getItem('view_password') && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
                               <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); handleEdit(approval); }}>
                                 <Edit2 className="h-3.5 w-3.5" /> Edit
                               </DropdownMenuItem>
+                            )} */}
+                            {approval.approvalStatusName === 'Pending' && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
+                              <DropdownMenuItem
+                                className="gap-2 rounded-xl text-red-500 focus:bg-destructive/10"
+                                onClick={(e) => { e.stopPropagation(); approval.approvalID && handleDelete(approval.approvalID); }}
+                              >
+                                <Trash2 className="h-3.5 w-3.5" /> Delete
+                              </DropdownMenuItem>
                             )}
-                            <DropdownMenuItem
-                              className="gap-2 rounded-xl text-red-500 focus:bg-destructive/10"
-                              onClick={(e) => { e.stopPropagation(); approval.approvalID && handleDelete(approval.approvalID); }}
-                            >
-                              <Trash2 className="h-3.5 w-3.5" /> Delete
-                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </td>
@@ -1425,9 +1437,9 @@ export default function ApprovalsPage() {
                       <SelectValue placeholder="Select Type" />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-border/50">
-                      <SelectItem value="type 1">type 1</SelectItem>
-                      <SelectItem value="type 2">type 2</SelectItem>
-                      <SelectItem value="type 3">type 3</SelectItem>
+                      <SelectItem value="Transfer">Transfer</SelectItem>
+                      <SelectItem value="Convert">Convert</SelectItem>
+                      <SelectItem value="Finalize">Finalize</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -1876,13 +1888,20 @@ export default function ApprovalsPage() {
               placeholder="Enter secure password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  if (password) {
-                    sessionStorage.setItem('view_password', password);
-                    setIsUnlockOpen(false);
-                    window.location.reload();
-                  }
+              onKeyDown={async (e) => {
+                if (e.key === 'Enter' && password) {
+                  try {
+                    const res = await fetch(`${OpenAPI.BASE}/api/v1/Account/ValidateViewPassword`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getAccessToken()}` },
+                      body: JSON.stringify({ password })
+                    });
+                    if (await res.json()) {
+                      sessionStorage.setItem('view_password', btoa(password));
+                      setIsUnlockOpen(false);
+                      window.location.reload();
+                    } else toast.error("Invalid password!");
+                  } catch { toast.error("Validation failed"); }
                 }
               }}
             />
@@ -1891,11 +1910,20 @@ export default function ApprovalsPage() {
             <Button variant="outline" onClick={() => setIsUnlockOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={() => {
+            <Button onClick={async () => {
               if (password) {
-                sessionStorage.setItem('view_password', password);
-                setIsUnlockOpen(false);
-                window.location.reload();
+                try {
+                  const res = await fetch(`${OpenAPI.BASE}/api/v1/Account/ValidateViewPassword`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getAccessToken()}` },
+                    body: JSON.stringify({ password })
+                  });
+                  if (await res.json()) {
+                    sessionStorage.setItem('view_password', btoa(password));
+                    setIsUnlockOpen(false);
+                    window.location.reload();
+                  } else toast.error("Invalid password!");
+                } catch { toast.error("Validation failed"); }
               }
             }}>Unlock</Button>
           </DialogFooter>

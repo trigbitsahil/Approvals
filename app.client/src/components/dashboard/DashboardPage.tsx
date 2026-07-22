@@ -17,6 +17,9 @@ import { BalanceTrendChart } from "./BalanceTrendChart";
 import { DistributionCharts } from "./DistributionCharts";
 import { RecentTransactionsTable } from "./RecentTransactionsTable";
 import { DashboardApprovalsTable } from "./DashboardApprovalsTable";
+import { toast } from "sonner";
+import { OpenAPI } from "@/api/core/OpenAPI";
+import { getAccessToken } from "@/utils/authToken";
 
 export const DashboardPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
@@ -214,13 +217,20 @@ export const DashboardPage: React.FC = () => {
                             placeholder="Enter secure password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    if (password) {
-                                        sessionStorage.setItem('view_password', password);
-                                        setIsUnlockOpen(false);
-                                        window.location.reload();
-                                    }
+                            onKeyDown={async (e) => {
+                                if (e.key === 'Enter' && password) {
+                                    try {
+                                        const res = await fetch(`${OpenAPI.BASE}/api/v1/Account/ValidateViewPassword`, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getAccessToken()}` },
+                                            body: JSON.stringify({ password })
+                                        });
+                                        if (await res.json()) {
+                                            sessionStorage.setItem('view_password', btoa(password));
+                                            setIsUnlockOpen(false);
+                                            window.location.reload();
+                                        } else toast.error("Invalid password!");
+                                    } catch { toast.error("Validation failed"); }
                                 }
                             }}
                         />
@@ -229,11 +239,20 @@ export const DashboardPage: React.FC = () => {
                         <Button variant="outline" onClick={() => setIsUnlockOpen(false)}>
                             Cancel
                         </Button>
-                        <Button onClick={() => {
+                        <Button onClick={async () => {
                             if (password) {
-                                sessionStorage.setItem('view_password', password);
-                                setIsUnlockOpen(false);
-                                window.location.reload();
+                                try {
+                                    const res = await fetch(`${OpenAPI.BASE}/api/v1/Account/ValidateViewPassword`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getAccessToken()}` },
+                                        body: JSON.stringify({ password })
+                                    });
+                                    if (await res.json()) {
+                                        sessionStorage.setItem('view_password', btoa(password));
+                                        setIsUnlockOpen(false);
+                                        window.location.reload();
+                                    } else toast.error("Invalid password!");
+                                } catch { toast.error("Validation failed"); }
                             }
                         }}>Unlock</Button>
                     </DialogFooter>

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getAccessToken, clearTokens } from "@/utils/authToken";
+import { OpenAPI } from "@/api/core/OpenAPI";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -47,7 +48,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     try {
-      await fetch("http://localhost:5298/Logout", {
+      const baseUrl = OpenAPI.BASE || "";
+      await fetch(`${baseUrl}/Logout`, {
         method: "POST",
         credentials: "include"
       });
@@ -55,11 +57,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Logout request failed", e);
     }
     clearTokens();
+    sessionStorage.removeItem('view_password');
     setIsAuthenticated(false);
   };
 
   const clearAuthState = () => {
     clearTokens();
+    sessionStorage.removeItem('view_password');
     setIsAuthenticated(false);
   };
 
