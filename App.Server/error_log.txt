@@ -1,9 +1,8 @@
-System.Exception: Unable to fetch data. Please contact the administrator.
-   at OOH.Persistence.Repositories.ApprovalRepository.ListAllApprovalsAsync(String category, String categoryID) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Persistence\Repositories\Global\ApprovalRepository.cs:line 118
-   at OOH.Application.Features.Global.Approvals.Queries.GetApprovalList.GetApprovalListQueryHandler.Handle(GetApprovalListQuery request, CancellationToken cancellationToken) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Application\Features\Global\Approvals\Queries\GetApprovalList\GetApprovalListQueryHandler.cs:line 38
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail.GetApprovalDetailQueryHandler.Handle(GetApprovalDetailQuery request, CancellationToken cancellationToken) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Application\Features\Global\Approvals\Queries\GetApprovalDetail\GetApprovalDetailQueryHandler.cs:line 50
    at OOH.Application.Behaviors.TransactionBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Application\Behaviors\TransactionBehavior.cs:line 25
-   at OOH.API.Controllers.ApprovalController.GetApprovalList(String category, String categoryId) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Server\Controllers\ApprovalController.cs:line 53
-   at lambda_method928(Closure, Object)
+   at OOH.API.Controllers.ApprovalController.GetApprovalByID(String id) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Server\Controllers\ApprovalController.cs:line 97
+   at lambda_method311(Closure, Object)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
