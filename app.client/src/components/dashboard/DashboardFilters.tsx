@@ -133,7 +133,7 @@ export const DashboardFilters: React.FC<DashboardFiltersProps> = ({
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-white/10 backdrop-blur-2xl">
                         <SelectItem value="all" className="rounded-xl font-bold text-xs">All Types</SelectItem>
-                        <SelectItem value="Transfer" className="rounded-xl font-bold text-xs">Transfer</SelectItem>
+                        <SelectItem value="Bank Transfer" className="rounded-xl font-bold text-xs">Bank Transfer</SelectItem>
                         <SelectItem value="Convert" className="rounded-xl font-bold text-xs">Convert</SelectItem>
                         <SelectItem value="Finalize" className="rounded-xl font-bold text-xs">Finalize</SelectItem>
                     </SelectContent>

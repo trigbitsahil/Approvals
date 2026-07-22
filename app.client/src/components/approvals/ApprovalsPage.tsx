@@ -260,7 +260,7 @@ export default function ApprovalsPage() {
   const [description, setDescription] = useState("");
   const [publicDescription, setPublicDescription] = useState(getRandomDesc());
   const [priority, setPriority] = useState<Priority>("Medium");
-  const [approvalType, setApprovalType] = useState("Transfer");
+  const [approvalType, setApprovalType] = useState("Bank Transfer");
   const [isInitialBalance, setIsInitialBalance] = useState(false);
   const [selectedStatusId, setSelectedStatusId] = useState<string>("");
   const [allApproverApprove, setAllApproverApprove] = useState(true);
@@ -480,7 +480,7 @@ export default function ApprovalsPage() {
     setDescription("");
     setPublicDescription(getRandomDesc());
     setPriority("Medium");
-    setApprovalType("Transfer");
+    setApprovalType("Bank Transfer");
     setAllApproverApprove(true);
     setSelectedStatusId("");
     setFromBankId("");
@@ -513,10 +513,10 @@ export default function ApprovalsPage() {
     
     if (approval.approvalType === "Initial Balance") {
       setIsInitialBalance(true);
-      setApprovalType("Transfer"); // Default fallback
+      setApprovalType("Bank Transfer"); // Default fallback
     } else {
       setIsInitialBalance(false);
-      setApprovalType(approval.approvalType || "Transfer");
+      setApprovalType(approval.approvalType || "Bank Transfer");
     }
 
     setAllApproverApprove(approval.allApproverApprove || false);
@@ -1437,7 +1437,7 @@ export default function ApprovalsPage() {
                       <SelectValue placeholder="Select Type" />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-border/50">
-                      <SelectItem value="Transfer">Transfer</SelectItem>
+                      <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
                       <SelectItem value="Convert">Convert</SelectItem>
                       <SelectItem value="Finalize">Finalize</SelectItem>
                     </SelectContent>

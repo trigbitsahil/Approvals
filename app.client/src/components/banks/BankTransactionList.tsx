@@ -584,7 +584,7 @@ export const BankTransactionList = () => {
                                                 <TableCell>
                                                     {(() => {
                                                         const txType = (tx.fromBankName && tx.fromBankName !== '-') && (tx.toBankName && tx.toBankName !== '-')
-                                                            ? 'Transfer' 
+                                                            ? 'Bank Transfer' 
                                                             : ((tx.toBankName && tx.toBankName !== '-') ? 'Deposit' : 'Withdrawal');
                                                         
                                                         return (
@@ -597,7 +597,7 @@ export const BankTransactionList = () => {
                                                             }`}>
                                                                 {txType === 'Deposit' && <TrendingUp className="h-3 w-3" />}
                                                                 {txType === 'Withdrawal' && <TrendingDown className="h-3 w-3" />}
-                                                                {txType === 'Transfer' && <ArrowRightLeft className="h-3 w-3" />}
+                                                                {txType === 'Bank Transfer' && <ArrowRightLeft className="h-3 w-3" />}
                                                                 {txType}
                                                             </span>
                                                         );
