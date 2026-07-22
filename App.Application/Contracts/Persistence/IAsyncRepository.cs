@@ -20,6 +20,7 @@ namespace OOH.Application.Contracts.Persistence
         Task<int> UpdateAsync(T entity);
         Task<int> DeleteAsync(T entity);
         Task<int> VoidAsync(T entity);
+        Task ClearTableAsync();
         Task<int> CountAllAsync();
 
         Task<int> UpdateRelatedDocumentDate(string documentType, string documentTypeId, DateTime DocumentDate);

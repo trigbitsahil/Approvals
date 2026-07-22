@@ -3,6 +3,7 @@ export type BankTransactionListVM = {
     bankId?: string;
     bankName?: string;
     approvalId?: string;
+    approvalName?: string;
     transactionType?: string;
     amount: number;
     deposit: number;

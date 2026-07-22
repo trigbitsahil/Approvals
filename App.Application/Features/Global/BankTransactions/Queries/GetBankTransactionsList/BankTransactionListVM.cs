@@ -9,6 +9,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
         public string? VendorId { get; set; }
         public string? BankName { get; set; }
         public string? ApprovalId { get; set; }
+        public string? ApprovalName { get; set; }
         public string? TransactionType { get; set; }
         public decimal Amount { get; set; }
         public decimal Deposit { get; set; }

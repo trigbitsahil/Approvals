@@ -20,6 +20,8 @@ const ResetPasswordPage19 = lazy(() => import("@/modules/auth/resetPassword"));
 const SignInForm36 = lazy(() => import("@/modules/auth/signIn"));
 const SignUpForm37 = lazy(() => import("@/modules/auth/signUp"));
 const RootTokenHandler44 = lazy(() => import("@/components/RootTokenHandler"));
+const UsersList = lazy(() => import("@/components/user/UsersList"));
+import { RoleManagementPage } from "@/components/user/RoleManagementPage";
 import { i18n } from "@lingui/core";
 import { useEffect, useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -27,7 +29,7 @@ import { AppSidebar } from "@/components/sidebar/Sidebar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { NavigationMenuBar } from "./components/NavigationMenu";
 
-// Eagerly import these instead of lazy loading to prevent 5-6s Vite dev server compilation delay on first click
+
 import DocumentsPage from "@/components/documents/DocumentsPage";
 import  ApprovalsPage  from "@/components/approvals/ApprovalsPage";
 import ApprovalDetailPage from "@/components/approvals/ApprovalDetailPage";
@@ -37,7 +39,6 @@ import SignInForm from "./modules/auth/signIn";
 import { BankList } from "@/components/banks/BankList";
 import { VendorList } from "@/components/vendors/VendorList";
 import { BankTransactionList } from "@/components/banks/BankTransactionList";
-import { InitialBalance } from "@/components/banks/InitialBalance";
 import { Toaster } from "./components/ui/sonner";
 import { DashboardPage } from "./components/dashboard/DashboardPage";
 import ForgotPasswordForm from "./modules/auth/forgotPassword";
@@ -357,14 +358,6 @@ function AppContent() {
                   }
                 />
                 <Route
-                  path="/banks/initial-balance"
-                  element={
-                    <ProtectedRoute>
-                      <InitialBalance />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
                   path="/bank-transactions"
                   element={
                     <ProtectedRoute>
@@ -378,6 +371,24 @@ function AppContent() {
                   element={
                     <ProtectedRoute>
                       <DocumentsPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/users"
+                  element={
+                    <ProtectedRoute>
+                      <UsersList />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/roles"
+                  element={
+                    <ProtectedRoute>
+                      <RoleManagementPage />
                     </ProtectedRoute>
                   }
                 />

@@ -4,7 +4,9 @@ import { BankTransactionService } from "@/api/services/BankTransactionService";
 import { BankService } from "@/api/services/BankService";
 import type { BankTransactionListVM } from "@/api/models/BankTransactionListVM";
 import type { BankListVM } from "@/api/models/BankListVM";
+import type { CombinedBankTransactionVM } from "@/api/models/CombinedBankTransactionVM";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
@@ -18,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { DatePickerInput } from "@/components/ui/date-picker-input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Filter, X, TrendingUp, TrendingDown, Calendar, Building2, ChevronRight, ChevronLeft, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import { Filter, X, TrendingUp, TrendingDown, Calendar, Building2, ChevronRight, ChevronLeft, ArrowUpDown, ArrowUp, ArrowDown, ArrowRightLeft } from "lucide-react";
 
 type SortColumn = 'bankName' | 'transactionType' | 'deposit' | 'withdrawal' | 'runningBalance' | 'createdDate';
 type SortDirection = 'asc' | 'desc';
@@ -26,14 +28,20 @@ type SortDirection = 'asc' | 'desc';
 export const BankTransactionList = () => {
     const navigate = useNavigate();
     const [transactions, setTransactions] = useState<BankTransactionListVM[]>([]);
+    const [combinedTransactions, setCombinedTransactions] = useState<CombinedBankTransactionVM[]>([]);
     const [banksList, setBanksList] = useState<BankListVM[]>([]);
     const [loading, setLoading] = useState(true);
+    const [loadingCombined, setLoadingCombined] = useState(true);
 
-    // Filters state
+    // Filters State - Bank Tab
     const [filterBankId, setFilterBankId] = useState<string>("all");
-    const [filterStartDate, setFilterStartDate] = useState<string>("");
-    const [filterEndDate, setFilterEndDate] = useState<string>("");
+    const [bankFilterStartDate, setBankFilterStartDate] = useState<string>("");
+    const [bankFilterEndDate, setBankFilterEndDate] = useState<string>("");
     const [activeTypeFilter, setActiveTypeFilter] = useState<"all" | "deposit" | "withdrawal">("all");
+
+    // Filters State - All Tab
+    const [allFilterStartDate, setAllFilterStartDate] = useState<string>("");
+    const [allFilterEndDate, setAllFilterEndDate] = useState<string>("");
 
     // Pagination & Sorting State
     const [sortConfig, setSortConfig] = useState<{ key: SortColumn; direction: SortDirection } | null>({ key: 'createdDate', direction: 'desc' });
@@ -44,6 +52,7 @@ export const BankTransactionList = () => {
     const searchClickTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
     const [isUnlockOpen, setIsUnlockOpen] = useState(false);
     const [password, setPassword] = useState("");
+    const [activeTab, setActiveTab] = useState("bank");
     const isUnlocked = !!sessionStorage.getItem('view_password');
     const formatAmount = (amt: number) => isUnlocked ? amt : amt / 1000;
 
@@ -71,6 +80,10 @@ export const BankTransactionList = () => {
                 const resAny = response as any;
                 if (resAny.success) {
                     setBanksList(resAny.data);
+                    if (resAny.data.length > 0) {
+                        setFilterBankId(resAny.data[0].bankId);
+                        fetchTransactions(resAny.data[0].bankId);
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching banks:", error);
@@ -78,8 +91,25 @@ export const BankTransactionList = () => {
         };
 
         fetchBanks();
-        fetchTransactions(filterBankId);
     }, [fetchTransactions]);
+
+    const fetchCombinedTransactions = useCallback(async () => {
+        setLoadingCombined(true);
+        try {
+            const response = await BankTransactionService.getCombinedBankTransactions();
+            if (response.success) {
+                setCombinedTransactions(response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching combined bank transactions:", error);
+        } finally {
+            setLoadingCombined(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchCombinedTransactions();
+    }, [fetchCombinedTransactions]);
 
     const handleBankFilterChange = (val: string) => {
         setFilterBankId(val);
@@ -95,13 +125,13 @@ export const BankTransactionList = () => {
             if (tx.createdDate) {
                 const txDate = new Date(tx.createdDate).getTime();
                 
-                if (filterStartDate) {
-                    const start = new Date(filterStartDate).getTime();
+                if (bankFilterStartDate) {
+                    const start = new Date(bankFilterStartDate).getTime();
                     if (txDate < start) return false;
                 }
 
-                if (filterEndDate) {
-                    const end = new Date(filterEndDate);
+                if (bankFilterEndDate) {
+                    const end = new Date(bankFilterEndDate);
                     end.setHours(23, 59, 59, 999);
                     if (txDate > end.getTime()) return false;
                 }
@@ -109,7 +139,28 @@ export const BankTransactionList = () => {
 
             return true;
         });
-    }, [transactions, filterStartDate, filterEndDate, activeTypeFilter]);
+    }, [transactions, bankFilterStartDate, bankFilterEndDate, activeTypeFilter]);
+
+    const filteredCombinedTransactions = useMemo(() => {
+        return combinedTransactions.filter((tx) => {
+            if (tx.completedOn) {
+                const txDate = new Date(tx.completedOn).getTime();
+                
+                if (allFilterStartDate) {
+                    const start = new Date(allFilterStartDate).getTime();
+                    if (txDate < start) return false;
+                }
+
+                if (allFilterEndDate) {
+                    const end = new Date(allFilterEndDate);
+                    end.setHours(23, 59, 59, 999);
+                    if (txDate > end.getTime()) return false;
+                }
+            }
+
+            return true;
+        });
+    }, [combinedTransactions, allFilterStartDate, allFilterEndDate]);
 
     const sortedTransactions = useMemo(() => {
         let sortableItems = [...filteredTransactions];
@@ -162,16 +213,19 @@ export const BankTransactionList = () => {
     };
 
     const clearFilters = () => {
-        setFilterStartDate("");
-        setFilterEndDate("");
-        if (filterBankId !== "all") {
-            setFilterBankId("all");
-            fetchTransactions("all");
+        if (activeTab === "bank") {
+            setBankFilterStartDate("");
+            setBankFilterEndDate("");
+        } else {
+            setAllFilterStartDate("");
+            setAllFilterEndDate("");
         }
         setCurrentPage(1);
     };
 
-    const hasActiveFilters = filterBankId !== "all" || filterStartDate || filterEndDate;
+    const hasActiveFilters = activeTab === "bank" 
+        ? bankFilterStartDate || bankFilterEndDate 
+        : allFilterStartDate || allFilterEndDate;
     const totalDeposits = filteredTransactions.reduce((sum, tx) => sum + tx.deposit, 0);
     const totalWithdrawals = filteredTransactions.reduce((sum, tx) => sum + tx.withdrawal, 0);
 
@@ -190,23 +244,40 @@ export const BankTransactionList = () => {
                 </div>
             </div>
 
-            <Card className="shadow-lg border-border">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="mb-4 bg-transparent p-0 space-x-2 border-b-0 h-auto">
+                    <TabsTrigger 
+                        value="bank" 
+                        className="data-[state=active]:bg-muted data-[state=active]:border-border border border-transparent rounded-full px-4 py-2"
+                    >
+                        By Bank Account
+                    </TabsTrigger>
+                    <TabsTrigger 
+                        value="all" 
+                        className="data-[state=active]:bg-muted data-[state=active]:border-border border border-transparent rounded-full px-4 py-2"
+                    >
+                        All Transactions
+                    </TabsTrigger>
+                </TabsList>
+                
+                <Card className="shadow-lg border-border">
                 {/* Filters Section */}
                 <div className="border-b border-border bg-card p-6">
                     <div className="flex items-center gap-2 mb-4">
                         <Filter 
                             className="h-4 w-4 text-muted-foreground  transition-colors " 
                             onClick={() => {
-                                const currentlyUnlocked = !!sessionStorage.getItem('view_password');
-                                if (currentlyUnlocked) {
-                                    sessionStorage.removeItem('view_password');
-                                    window.location.reload();
-                                } else {
                                     setSearchClickCount(prev => {
                                         const newCount = prev + 1;
                                         if (newCount >= 4) {
-                                            setPassword("");
-                                            setIsUnlockOpen(true);
+                                            const currentlyUnlocked = !!sessionStorage.getItem('view_password');
+                                            if (currentlyUnlocked) {
+                                                sessionStorage.removeItem('view_password');
+                                                window.location.reload();
+                                            } else {
+                                                setPassword("");
+                                                setIsUnlockOpen(true);
+                                            }
                                             return 0;
                                         }
                                         return newCount;
@@ -217,7 +288,6 @@ export const BankTransactionList = () => {
                                     searchClickTimeoutRef.current = setTimeout(() => {
                                         setSearchClickCount(0);
                                     }, 2000);
-                                }
                             }}
                         />
                         <h3 className="text-sm font-semibold text-foreground">Filters</h3>
@@ -229,28 +299,33 @@ export const BankTransactionList = () => {
                     </div>
                     
                     <div className="flex flex-wrap items-end gap-3 md:gap-4">
-                        <div className="flex flex-col gap-2 flex-1 min-w-[130px]">
-                            <label className="text-xs font-semibold text-foreground">Bank Account</label>
-                            <Select value={filterBankId} onValueChange={handleBankFilterChange}>
-                                <SelectTrigger className="h-9 bg-muted border-border text-foreground">
-                                    <SelectValue placeholder="All Banks" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">All Banks</SelectItem>
-                                    {banksList.map(bank => (
-                                        <SelectItem key={bank.bankId} value={bank.bankId!}>{bank.name}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
+                        {activeTab === "bank" && (
+                            <div className="flex flex-col gap-2 flex-1 min-w-[130px]">
+                                <label className="text-xs font-semibold text-foreground">Bank Account</label>
+                                <Select value={filterBankId} onValueChange={handleBankFilterChange}>
+                                    <SelectTrigger className="h-9 bg-muted border-border text-foreground">
+                                        <SelectValue placeholder="Select a Bank" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {banksList.map(bank => (
+                                            <SelectItem key={bank.bankId} value={bank.bankId!}>{bank.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        )}
 
                         <div className="flex flex-col gap-2 flex-1 min-w-[130px]">
                             <label className="text-xs font-semibold text-foreground flex items-center gap-2">
                                 Start Date
                             </label>
                             <DatePickerInput 
-                                value={filterStartDate} 
-                                onChange={(val) => { setFilterStartDate(val); setCurrentPage(1); }}
+                                value={activeTab === "bank" ? bankFilterStartDate : allFilterStartDate} 
+                                onChange={(val) => { 
+                                    if (activeTab === "bank") setBankFilterStartDate(val); 
+                                    else setAllFilterStartDate(val); 
+                                    setCurrentPage(1); 
+                                }}
                                 className="h-9 bg-muted border-border text-foreground"
                             />
                         </div>
@@ -260,8 +335,12 @@ export const BankTransactionList = () => {
                                 End Date
                             </label>
                             <DatePickerInput 
-                                value={filterEndDate} 
-                                onChange={(val) => { setFilterEndDate(val); setCurrentPage(1); }}
+                                value={activeTab === "bank" ? bankFilterEndDate : allFilterEndDate} 
+                                onChange={(val) => { 
+                                    if (activeTab === "bank") setBankFilterEndDate(val); 
+                                    else setAllFilterEndDate(val); 
+                                    setCurrentPage(1); 
+                                }}
                                 className="h-9 bg-muted border-border text-foreground"
                             />
                         </div>
@@ -279,8 +358,8 @@ export const BankTransactionList = () => {
                     </div>
                 </div>
 
-                {filteredTransactions.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 md:p-6 border-b border-border bg-muted/20">
+                {activeTab === "bank" && filteredTransactions.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 md:p-6 border-b border-border bg-muted/20">
                         <div 
                             className={`flex items-center gap-4 p-4 rounded-xl border shadow-sm hover:shadow-md transition-all cursor-pointer ${activeTypeFilter === "deposit" ? "bg-green-50/50 dark:bg-green-900/20 border-green-200 dark:border-green-800" : "bg-card border-border"}`}
                             onClick={() => setActiveTypeFilter(prev => prev === "deposit" ? "all" : "deposit")}
@@ -305,22 +384,11 @@ export const BankTransactionList = () => {
                                 <p className="text-xl font-bold text-red-600 dark:text-red-400 mt-0.5">₹{formatAmount(totalWithdrawals).toFixed(2)}</p>
                             </div>
                         </div>
-                        <div 
-                            className={`flex items-center gap-4 p-4 rounded-xl border shadow-sm hover:shadow-md transition-all cursor-pointer ${activeTypeFilter === "all" ? "bg-blue-50/50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800" : "bg-card border-border"}`}
-                            onClick={() => setActiveTypeFilter("all")}
-                        >
-                            <div className="p-3 bg-blue-100/50 dark:bg-blue-500/10 rounded-xl">
-                                <Building2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Total Records</p>
-                                <p className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-0.5">{filteredTransactions.length}</p>
-                            </div>
-                        </div>
                     </div>
                 )}
 
                 {/* Table Section */}
+                <TabsContent value="bank" className="mt-0 border-none outline-none">
                 <CardContent className="p-0 flex flex-col">
                     <div className="overflow-x-auto flex-1">
                         <Table className="min-w-[800px]">
@@ -380,18 +448,25 @@ export const BankTransactionList = () => {
                                         >
                                             <TableCell className="font-medium text-foreground">{tx.bankName || "Unknown Bank"}</TableCell>
                                             <TableCell>
-                                                <span className={`px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 ${
-                                                    tx.transactionType === 'Credit' 
-                                                        ? 'bg-green-100/80 text-green-700 dark:bg-green-900/40 dark:text-green-300' 
-                                                        : 'bg-red-100/80 text-red-700 dark:bg-red-900/40 dark:text-red-300'
-                                                }`}>
-                                                    {tx.transactionType === 'Credit' ? (
-                                                        <TrendingUp className="h-3 w-3" />
-                                                    ) : (
-                                                        <TrendingDown className="h-3 w-3" />
+                                                <div className="flex flex-row items-center gap-2">
+                                                    <span className={`w-fit px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 shrink-0 ${
+                                                        tx.transactionType === 'Credit' 
+                                                            ? 'bg-green-100/80 text-green-700 dark:bg-green-900/40 dark:text-green-300' 
+                                                            : 'bg-red-100/80 text-red-700 dark:bg-red-900/40 dark:text-red-300'
+                                                    }`}>
+                                                        {tx.transactionType === 'Credit' ? (
+                                                            <TrendingUp className="h-3 w-3" />
+                                                        ) : (
+                                                            <TrendingDown className="h-3 w-3" />
+                                                        )}
+                                                        {tx.transactionType}
+                                                    </span>
+                                                    {tx.approvalName && (
+                                                        <span className="text-xs text-muted-foreground  max-w-[200px]" title={tx.approvalName}>
+                                                            {tx.approvalName}
+                                                        </span>
                                                     )}
-                                                    {tx.transactionType}
-                                                </span>
+                                                </div>
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <span className="font-semibold text-green-600 dark:text-green-400">
@@ -417,9 +492,7 @@ export const BankTransactionList = () => {
                                 )}
                             </TableBody>
                         </Table>
-                    </div>
-
-                    {/* Pagination Controls */}
+                        </div>
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-border bg-card/50">
                         <div className="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
                             <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">Rows per page:</span>
@@ -470,7 +543,79 @@ export const BankTransactionList = () => {
                         </div>
                     </div>
                 </CardContent>
+                </TabsContent>
+
+            <TabsContent value="all" className="mt-0 border-none outline-none">
+                    <CardContent className="p-0 flex flex-col">
+                        <div className="overflow-x-auto">
+                            <Table className="min-w-[800px]">
+                                <TableHeader className="bg-muted/30 border-b border-border">
+                                    <TableRow className="hover:bg-transparent border-border">
+                                        <TableHead className="font-semibold text-foreground">Approval Name</TableHead>
+                                        <TableHead className="font-semibold text-foreground">Type</TableHead>
+                                        <TableHead className="font-semibold text-foreground text-right">Amount</TableHead>
+                                        <TableHead className="font-semibold text-foreground">From Bank</TableHead>
+                                        <TableHead className="font-semibold text-foreground">To Bank</TableHead>
+                                        <TableHead className="font-semibold text-foreground text-right">Running Bal (From)</TableHead>
+                                        <TableHead className="font-semibold text-foreground text-right">Running Bal (To)</TableHead>
+                                        <TableHead className="font-semibold text-foreground">Completed On</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {loadingCombined ? (
+                                        <TableRow>
+                                            <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                                                Loading all transactions...
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : filteredCombinedTransactions.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                                                No transactions found.
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        filteredCombinedTransactions.map((tx, idx) => (
+                                            <TableRow key={idx} className="hover:bg-muted/50">
+                                                <TableCell className="font-medium">{tx.approvalName || "-"}</TableCell>
+                                                <TableCell>
+                                                    {(() => {
+                                                        const txType = (tx.fromBankName && tx.fromBankName !== '-') && (tx.toBankName && tx.toBankName !== '-')
+                                                            ? 'Transfer' 
+                                                            : ((tx.toBankName && tx.toBankName !== '-') ? 'Deposit' : 'Withdrawal');
+                                                        
+                                                        return (
+                                                            <span className={`w-fit px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 shrink-0 ${
+                                                                txType === 'Deposit' 
+                                                                    ? 'bg-green-100/80 text-green-700 dark:bg-green-900/40 dark:text-green-300' 
+                                                                    : txType === 'Withdrawal'
+                                                                    ? 'bg-red-100/80 text-red-700 dark:bg-red-900/40 dark:text-red-300'
+                                                                    : 'bg-blue-100/80 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
+                                                            }`}>
+                                                                {txType === 'Deposit' && <TrendingUp className="h-3 w-3" />}
+                                                                {txType === 'Withdrawal' && <TrendingDown className="h-3 w-3" />}
+                                                                {txType === 'Transfer' && <ArrowRightLeft className="h-3 w-3" />}
+                                                                {txType}
+                                                            </span>
+                                                        );
+                                                    })()}
+                                                </TableCell>
+                                                <TableCell className="text-right font-medium">₹{formatAmount(tx.amount).toFixed(2)}</TableCell>
+                                                <TableCell>{tx.fromBankName || "-"}</TableCell>
+                                                <TableCell>{tx.toBankName || "-"}</TableCell>
+                                                <TableCell className="text-right">{tx.runningBalanceBank1 != null ? `₹${formatAmount(tx.runningBalanceBank1).toFixed(2)}` : "-"}</TableCell>
+                                                <TableCell className="text-right">{tx.runningBalanceBank2 != null ? `₹${formatAmount(tx.runningBalanceBank2).toFixed(2)}` : "-"}</TableCell>
+                                                <TableCell className="whitespace-nowrap">{tx.completedOn ? format(new Date(tx.completedOn), "MMM dd, yyyy") : "-"}</TableCell>
+                                            </TableRow>
+                                        ))
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </CardContent>
+            </TabsContent>
             </Card>
+            </Tabs>
 
             <Dialog open={isUnlockOpen} onOpenChange={setIsUnlockOpen}>
                 <DialogContent className="sm:max-w-md">

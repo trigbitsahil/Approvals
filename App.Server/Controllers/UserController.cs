@@ -7,6 +7,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OOH.Application.Features.Global.Users.Queries.GetUserList;
 using OOH.Application.Features.Global.Users.Queries.GetUserDetail;
+using OOH.Application.Features.Global.Users.Commands.CreateUser;
+using OOH.Application.Features.Global.Users.Commands.UpdateUser;
+using OOH.Application.Features.Global.Users.Commands.DeleteUser;
+using OOH.Application.Features.Global.Users.Commands.UpdateUserRoles;
+using OOH.Application.Features.Global.Users.Commands.CreateRole;
+using OOH.Application.Features.Global.Users.Queries.GetUserRoles;
+using OOH.Application.Features.Global.Users.Queries.GetAllRoles;
 using OOH.Application.Contracts.Infrastructure;
 
 namespace OOH.API.Controllers
@@ -51,6 +58,102 @@ namespace OOH.API.Controllers
             {
                 return NotFound(dtos);
             }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CreateUserCommandResponse>> PostUser([FromBody] CreateUserCommand createEntityCommand)
+        {
+            var response = await _mediator.Send(createEntityCommand);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UpdateUserCommandResponse>> PutUser([FromBody] UpdateUserCommand updateEntityCommand)
+        {
+            var response = await _mediator.Send(updateEntityCommand);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpDelete("{id}", Name = "DeleteUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<DeleteUserCommandResponse>> Delete(string id)
+        {
+            var deleteEntityCommand = new DeleteUserCommand() { UserID = id };
+            var response = await _mediator.Send(deleteEntityCommand);
+
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPost("AddUserToRoles", Name = "AddUserToRoles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UpdateUserRolesCommandResponse>> AddUserToRoles([FromBody] UpdateUserRolesCommand command)
+        {
+            var response = await _mediator.Send(command);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpGet("GetUserRoles", Name = "GetUserRoles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<GetUserRolesCommandResponse>> GetUserRoles(string id)
+        {
+            var response = await _mediator.Send(new GetUserRolesQuery { UserId = id });
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return NotFound(response);
+        }
+
+        [HttpGet("GetAllRoles", Name = "GetAllRoles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<GetAllRolesCommandResponse>> GetAllRoles()
+        {
+            var response = await _mediator.Send(new GetAllRolesQuery());
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return NotFound(response);
+        }
+
+        [HttpPost("CreateRole", Name = "CreateRole")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CreateRoleCommandResponse>> CreateRole([FromBody] CreateRoleCommand command)
+        {
+            var response = await _mediator.Send(command);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
     }
 }

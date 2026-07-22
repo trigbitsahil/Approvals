@@ -195,7 +195,7 @@ export const UserManagementPage = () => {
                 filteredUsers.map((user) => (
                   <tr
                     key={user.id}
-                    onClick={() => navigate(`/user/${user.id}`)}
+                    onClick={() => handleOpenDialog(user)}
                     className="group hover:bg-muted/30 transition-all duration-200 cursor-pointer"
                   >
                     <td className="px-6 py-4">
@@ -247,15 +247,12 @@ export const UserManagementPage = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-52 p-1.5 rounded-xl shadow-xl border-muted">
                           <DropdownMenuLabel className="text-[10px] uppercase font-bold text-muted-foreground px-2 pb-1.5">Management Actions</DropdownMenuLabel>
-                          <DropdownMenuItem onClick={() => navigate(`/user/${user.id}`)} className="rounded-lg gap-2 cursor-pointer">
-                            Details
-                          </DropdownMenuItem>
                           <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleOpenDialog(user); }} className="rounded-lg gap-2 cursor-pointer">
                             Edit User
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setActivityUserId(user.id); }} className="rounded-lg gap-2 cursor-pointer">
+                          {/* <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setActivityUserId(user.id); }} className="rounded-lg gap-2 cursor-pointer">
                             Activity
-                          </DropdownMenuItem>
+                          </DropdownMenuItem> */}
                           <DropdownMenuSeparator className="my-1.5 mx-1" />
                           <DropdownMenuItem
                             onClick={(e) => { e.stopPropagation(); handleDelete(user.id); }}

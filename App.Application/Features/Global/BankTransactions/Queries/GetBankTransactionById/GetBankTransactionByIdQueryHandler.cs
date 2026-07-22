@@ -11,11 +11,28 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
     {
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IBankRepository _bankRepository;
+        private readonly IApprovalRepository _approvalRepository;
+        private readonly OOH.Application.Contracts.Infrastructure.IEncryptionService _encryptionService;
 
-        public GetBankTransactionByIdQueryHandler(IBankTransactionRepository bankTransactionRepository, IBankRepository bankRepository)
+        public GetBankTransactionByIdQueryHandler(IBankTransactionRepository bankTransactionRepository, IBankRepository bankRepository, IApprovalRepository approvalRepository, OOH.Application.Contracts.Infrastructure.IEncryptionService encryptionService)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
+            _approvalRepository = approvalRepository;
+            _encryptionService = encryptionService;
+        }
+
+        private string SafeDecrypt(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            try
+            {
+                return _encryptionService.Decrypt(value);
+            }
+            catch
+            {
+                return value;
+            }
         }
 
         public async Task<GetBankTransactionsListQueryResponse> Handle(GetBankTransactionByIdQuery request, CancellationToken cancellationToken)
@@ -28,6 +45,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
 
             var transactions = await _bankTransactionRepository.ListAllAsync();
             var banks = await _bankRepository.ListAllAsync();
+            var approvals = await _approvalRepository.ListAllAsync();
             var requestedBank = banks.FirstOrDefault(b => b.BankId == request.BankId);
             
             // Filter by BankId
@@ -49,18 +67,36 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
 
                 runningBalance = runningBalance + currentDeposit - currentWithdrawal;
 
+                string approvalName = null;
+                if (!string.IsNullOrEmpty(t.ApprovalId) && t.ApprovalId != "-")
+                {
+                    var approval = approvals.FirstOrDefault(a => a.ApprovalId == t.ApprovalId);
+                    if (approval != null && !string.IsNullOrEmpty(approval.Name))
+                    {
+                        try
+                        {
+                            approvalName = _encryptionService.Decrypt(approval.Name);
+                        }
+                        catch
+                        {
+                            approvalName = approval.Name;
+                        }
+                    }
+                }
+
                 dtos.Add(new BankTransactionListVM
                 {
                     TransactionId = t.TransactionId,
                     BankId = request.BankId,
                     VendorId = t.VendorId,
-                    BankName = requestedBank?.Name,
+                    BankName = SafeDecrypt(requestedBank?.Name),
                     ApprovalId = t.ApprovalId,
+                    ApprovalName = approvalName,
                     TransactionType = isWithdrawal ? "Debit" : (isDeposit ? "Credit" : t.TransactionType),
                     Amount = t.Amount,
                     Deposit = currentDeposit,
                     Withdrawal = currentWithdrawal,
-                    RunningBalance = runningBalance,
+                    RunningBalance = t.RunningBalance != 0 ? t.RunningBalance : runningBalance,
                     CreatedDate = t.CreatedDate.ToString("o"),
                     CreatedBy = t.CreatedBy
                 });

@@ -294,6 +294,24 @@ namespace OOH.Persistence.Repositories
         }
 
 
+        public async Task ClearTableAsync()
+        {
+            try
+            {
+                string? tableName = GetTableName();
+                string query = $"TRUNCATE TABLE {tableName} CASCADE;";
+
+                using (var dbConn = _dbContext.CreateConnection())
+                {
+                    await dbConn.ExecuteAsync(query);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error clearing table in db: {ex.Message}");
+            }
+        }
+
         public async Task<int> VoidAsync(T entity)
         {
             int rowsEffected = 0;

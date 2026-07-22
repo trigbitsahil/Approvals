@@ -21,37 +21,35 @@ namespace OOH.Application.Features.Global.BankTransactions.Commands.ReverseBankT
         {
             // Find the original transaction
             var allTransactions = await _bankTransactionRepository.ListAllAsync();
-            var originalTxn = allTransactions.FirstOrDefault(t => t.ApprovalId == request.ApprovalId && !t.IsVoided && !t.IsReversed);
+            var originalTxns = allTransactions.Where(t => t.ApprovalId == request.ApprovalId && !t.IsVoided && !t.IsReversed).ToList();
 
-            if (originalTxn == null) return false;
+            if (!originalTxns.Any()) return false;
 
-            // Option 1: Just mark it as voided
-            // originalTxn.IsVoided = true;
-            // await _bankTransactionRepository.UpdateAsync(originalTxn);
-
-            // Option 2: Create a negative offsetting entry (as mentioned in UI)
-            var reverseTxn = new BankTransaction
+            foreach (var originalTxn in originalTxns)
             {
-                TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
-                FromBankId = originalTxn.ToBankId, // Swap to and from
-                ToBankId = originalTxn.FromBankId,
-                ApprovalId = originalTxn.ApprovalId,
-                TransactionType = "Reversal",
-                Amount = originalTxn.Amount,       // Keep amount positive because we swapped the banks
-                Withdrawal = originalTxn.Amount,
-                Deposit = originalTxn.Amount,
-                RunningBalance = 0,
-                IsVoided = false,
-                IsReversed = true,
-                CreatedBy = "System",
-                CreatedDate = DateTime.UtcNow,
-                TenantId = originalTxn.TenantId
-            };
+                var reverseTxn = new BankTransaction
+                {
+                    TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                    FromBankId = originalTxn.ToBankId, // Swap to and from
+                    ToBankId = originalTxn.FromBankId,
+                    ApprovalId = originalTxn.ApprovalId,
+                    TransactionType = "Reversal",
+                    Amount = originalTxn.Amount,
+                    Withdrawal = originalTxn.Deposit,  // Deposit becomes Withdrawal
+                    Deposit = originalTxn.Withdrawal,  // Withdrawal becomes Deposit
+                    RunningBalance = 0, // 0 triggers dynamic calculation in query handler
+                    IsVoided = false,
+                    IsReversed = true,
+                    CreatedBy = "System",
+                    CreatedDate = DateTime.UtcNow,
+                    TenantId = originalTxn.TenantId
+                };
 
-            await _bankTransactionRepository.AddAsync(reverseTxn);
+                await _bankTransactionRepository.AddAsync(reverseTxn);
 
-            originalTxn.IsReversed = true;
-            await _bankTransactionRepository.UpdateAsync(originalTxn);
+                originalTxn.IsReversed = true;
+                await _bankTransactionRepository.UpdateAsync(originalTxn);
+            }
 
             return true;
         }

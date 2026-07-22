@@ -18,6 +18,13 @@ export class BankTransactionService {
         });
     }
 
+    public static getCombinedBankTransactions(): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/BankTransaction/AllBankTransactions',
+        });
+    }
+
     public static reverseBankTransaction(id: string): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',

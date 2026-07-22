@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using System.Linq;
 using OOH.Application.Contracts.Infrastructure;
 using OOH.Application.Contracts.Persistence;
 using OOH.Application.Contracts.Persistence.Tenders;
@@ -30,6 +31,7 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
         private readonly IApprovalRepository _approvalRepository;
         private readonly IBankRepository _bankRepository;
         private readonly IBankTransactionRepository _bankTransactionRepository;
+        private readonly IEncryptionService _encryptionService;
 
         //private readonly IDocumentUrlRepository _documentUrlRepository;
 
@@ -50,7 +52,8 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
             IApprovalRepository approvalRepository, 
              IEmailService emailService,
              IBankRepository bankRepository,
-             IBankTransactionRepository bankTransactionRepository
+             IBankTransactionRepository bankTransactionRepository,
+             IEncryptionService encryptionService
             // IDocumentUrlRepository documentUrlRepository,
             //IExpenseTransactionRepository expenseTransactionRepository 
  
@@ -61,6 +64,7 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
             _approvalRepository = approvalRepository;
             _bankRepository = bankRepository;
             _bankTransactionRepository = bankTransactionRepository;
+            _encryptionService = encryptionService;
         
             _emailService = emailService;
          
@@ -243,21 +247,75 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
 
                             if (fromBank != null && toBank != null)
                             {
-                                var transaction = new BankTransaction
+                                var allTxs = await _bankTransactionRepository.ListAllAsync();
+
+                                decimal fromBankBal = allTxs.Where(t => t.FromBankId == fromBank.BankId || t.ToBankId == fromBank.BankId)
+                                    .Sum(t => (t.ToBankId == fromBank.BankId ? t.Deposit : 0) - (t.FromBankId == fromBank.BankId ? t.Withdrawal : 0));
+                                
+                                decimal toBankBal = allTxs.Where(t => t.FromBankId == toBank.BankId || t.ToBankId == toBank.BankId)
+                                    .Sum(t => (t.ToBankId == toBank.BankId ? t.Deposit : 0) - (t.FromBankId == toBank.BankId ? t.Withdrawal : 0));
+
+                                var debitTx = new BankTransaction
                                 {
                                     TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
                                     FromBankId = fromBank.BankId,
-                                    ToBankId = toBank.BankId,
+                                    ToBankId = null,
                                     ApprovalId = objApproval.ApprovalId,
-                                    TransactionType = "Transfer",
+                                    TransactionType = "Debit",
                                     Amount = objApproval.TransactionAmount.Value,
                                     Withdrawal = objApproval.TransactionAmount.Value,
-                                    Deposit = objApproval.TransactionAmount.Value,
-                                    RunningBalance = 0, // Calculated dynamically on read
+                                    Deposit = 0,
+                                    RunningBalance = fromBankBal - objApproval.TransactionAmount.Value,
                                     CreatedBy = "System",
                                     CreatedDate = DateTime.UtcNow,
                                     TenantId = objApproval.TenantId,
                                     VendorId = objApproval.VendorId
+                                };
+                                await _bankTransactionRepository.AddAsync(debitTx);
+
+                                var creditTx = new BankTransaction
+                                {
+                                    TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                                    FromBankId = null,
+                                    ToBankId = toBank.BankId,
+                                    ApprovalId = objApproval.ApprovalId,
+                                    TransactionType = "Credit",
+                                    Amount = objApproval.TransactionAmount.Value,
+                                    Withdrawal = 0,
+                                    Deposit = objApproval.TransactionAmount.Value,
+                                    RunningBalance = toBankBal + objApproval.TransactionAmount.Value,
+                                    CreatedBy = "System",
+                                    CreatedDate = DateTime.UtcNow.AddSeconds(1), // Slight offset to ensure order
+                                    TenantId = objApproval.TenantId,
+                                    VendorId = objApproval.VendorId
+                                };
+                                await _bankTransactionRepository.AddAsync(creditTx);
+                            }
+                        }
+                        else if (string.IsNullOrEmpty(objApproval.FromBankId) && !string.IsNullOrEmpty(objApproval.ToBankId) && objApproval.TransactionAmount.HasValue && objApproval.TransactionAmount > 0 && (!string.IsNullOrEmpty(objApproval.ApprovalType) && _encryptionService.Decrypt(objApproval.ApprovalType) == "Initial Balance"))
+                        {
+                            var toBank = await _bankRepository.GetByIdAsync(objApproval.ToBankId);
+                            if (toBank != null)
+                            {
+                                var allTxs = await _bankTransactionRepository.ListAllAsync();
+                                decimal toBankBal = allTxs.Where(t => t.FromBankId == toBank.BankId || t.ToBankId == toBank.BankId)
+                                    .Sum(t => (t.ToBankId == toBank.BankId ? t.Deposit : 0) - (t.FromBankId == toBank.BankId ? t.Withdrawal : 0));
+
+                                var transaction = new BankTransaction
+                                {
+                                    TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                                    FromBankId = null,
+                                    ToBankId = toBank.BankId,
+                                    ApprovalId = objApproval.ApprovalId,
+                                    TransactionType = "Deposit", // Treat initial balance as a deposit
+                                    Amount = objApproval.TransactionAmount.Value,
+                                    Withdrawal = 0,
+                                    Deposit = objApproval.TransactionAmount.Value,
+                                    RunningBalance = toBankBal + objApproval.TransactionAmount.Value,
+                                    CreatedBy = "System",
+                                    CreatedDate = DateTime.UtcNow,
+                                    TenantId = objApproval.TenantId,
+                                    VendorId = null
                                 };
                                 await _bankTransactionRepository.AddAsync(transaction);
                             }

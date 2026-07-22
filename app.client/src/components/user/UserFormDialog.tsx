@@ -122,6 +122,7 @@ export const UserFormDialog = ({ open, onOpenChange, user, onSuccess }: UserForm
           FirstName: formData.firstName,
           LastName: formData.lastName,
           phoneNumber: formData.phoneNumber,
+          isActive: formData.isActive ?? true,
           ...(formData.password ? { password: formData.password } : {}),
         };
         await UserService.putApiVUser(API_VERSION, updatePayload);
@@ -190,6 +191,7 @@ export const UserFormDialog = ({ open, onOpenChange, user, onSuccess }: UserForm
         FirstName: formData.firstName,
         LastName: formData.lastName,
         phoneNumber: formData.phoneNumber?.toString() || "",
+        isActive: formData.isActive ?? true,
         ...(formData.password ? { password: formData.password } : {}),
       };
       await UserService.putApiVUser(API_VERSION, updatePayload as any);

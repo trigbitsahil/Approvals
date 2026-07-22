@@ -82,7 +82,7 @@ const ADMIN_ONLY_TITLES = new Set([
 const PROJECT_ONLY_TITLES = new Set([
   "Projects",
   "Invoice",
-  "Approvals",
+
   "Customers",
   "Quotes",
   "Tools",
@@ -104,7 +104,6 @@ const data = {
       icon: Landmark,
       items: [
         { title: "Bank List", url: "/banks" },
-        { title: "Set Initial Balance", url: "/banks/initial-balance" },
         { title: "Bank Transactions", url: "/bank-transactions" },
       ],
     },
@@ -127,6 +126,15 @@ const data = {
       icon: CheckCircle2,
       items: [
         { title: "Approvals", url: "/approvals" },
+      ],
+    },
+    {
+      title: "Users",
+      url: "#",
+      icon: User,
+      items: [
+        { title: "User Management", url: "/users" },
+        { title: "Roles", url: "/roles" },
       ],
     },
        {

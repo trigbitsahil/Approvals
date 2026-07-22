@@ -28,7 +28,7 @@ namespace App.Server.Controllers
         {
             // Example logic: Check if user has "Admin" or "FinanceManager" role
             // This satisfies the requirement: "Normal View (restricted) vs Actual View (complete data)"
-            return User.Claims.Any(c => c.Type == ClaimTypes.Role && (c.Value == "Admin" || c.Value == "FinanceManager"));
+            return User.Claims.Any(c => c.Type == ClaimTypes.Role && (c.Value == "SuperAdmin" || c.Value == "Admin" || c.Value == "FinanceManager"));
         }
 
         [HttpPost]

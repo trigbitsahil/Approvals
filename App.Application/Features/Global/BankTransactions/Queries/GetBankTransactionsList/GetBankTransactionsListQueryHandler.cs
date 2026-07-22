@@ -10,21 +10,40 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
     {
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IBankRepository _bankRepository;
+        private readonly IApprovalRepository _approvalRepository;
         private readonly OOH.Application.Contracts.Infrastructure.ILoggedInUserService _loggedInUserService;
+        private readonly OOH.Application.Contracts.Infrastructure.IEncryptionService _encryptionService;
 
-        public GetBankTransactionsListQueryHandler(IBankTransactionRepository bankTransactionRepository, IBankRepository bankRepository, OOH.Application.Contracts.Infrastructure.ILoggedInUserService loggedInUserService)
+        private string SafeDecrypt(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            try
+            {
+                return _encryptionService.Decrypt(value);
+            }
+            catch
+            {
+                return value;
+            }
+        }
+
+        public GetBankTransactionsListQueryHandler(IBankTransactionRepository bankTransactionRepository, IBankRepository bankRepository, IApprovalRepository approvalRepository, OOH.Application.Contracts.Infrastructure.ILoggedInUserService loggedInUserService, OOH.Application.Contracts.Infrastructure.IEncryptionService encryptionService)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
+            _approvalRepository = approvalRepository;
             _loggedInUserService = loggedInUserService;
+            _encryptionService = encryptionService;
         }
 
         public async Task<GetBankTransactionsListQueryResponse> Handle(GetBankTransactionsListQuery request, CancellationToken cancellationToken)
         {
             var transactions = await _bankTransactionRepository.ListAllAsync();
             var banks = await _bankRepository.ListAllAsync();
+            var approvals = await _approvalRepository.ListAllAsync();
             
-            if (!string.Equals(_loggedInUserService.UserRole, "superadmin", System.StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(_loggedInUserService.UserRole, "superadmin", System.StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(_loggedInUserService.UserRole, "admin", System.StringComparison.OrdinalIgnoreCase))
             {
                 var userBanks = banks.Where(b => b.UserId == _loggedInUserService.UserId).ToList();
                 if (userBanks.Any())
@@ -54,18 +73,36 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
 
                     runningBalance = runningBalance + currentDeposit - currentWithdrawal;
 
+                    string approvalName = null;
+                    if (!string.IsNullOrEmpty(t.ApprovalId) && t.ApprovalId != "-")
+                    {
+                        var approval = approvals.FirstOrDefault(a => a.ApprovalId == t.ApprovalId);
+                        if (approval != null && !string.IsNullOrEmpty(approval.Name))
+                        {
+                            try
+                            {
+                                approvalName = _encryptionService.Decrypt(approval.Name);
+                            }
+                            catch
+                            {
+                                approvalName = approval.Name;
+                            }
+                        }
+                    }
+
                     dtos.Add(new BankTransactionListVM
                     {
                         TransactionId = t.TransactionId,
                         BankId = bank.BankId,
                         VendorId = t.VendorId,
-                        BankName = bank.Name,
+                        BankName = SafeDecrypt(bank.Name),
                         ApprovalId = t.ApprovalId,
+                        ApprovalName = approvalName,
                         TransactionType = isWithdrawal ? "Debit" : (isDeposit ? "Credit" : t.TransactionType),
                         Amount = t.Amount,
                         Deposit = currentDeposit,
                         Withdrawal = currentWithdrawal,
-                        RunningBalance = runningBalance,
+                        RunningBalance = t.RunningBalance != 0 ? t.RunningBalance : runningBalance,
                         CreatedDate = t.CreatedDate.ToString("o"),
                         CreatedBy = t.CreatedBy
                     });

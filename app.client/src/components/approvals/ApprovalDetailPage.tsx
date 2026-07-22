@@ -533,7 +533,7 @@ export default function ApprovalDetailPage() {
               </h1>
               
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-4 sm:mt-6 text-muted-foreground">
-                <span className="bg-muted/50 px-2 py-0.5 rounded-md whitespace-nowrap">ID: {approval.approvalID?.slice(-8).toUpperCase()}</span>
+
                 <span className="text-border">•</span>
                 <span className="flex items-center gap-1.5 whitespace-nowrap text-sm"><Calendar className="h-3.5 w-3.5" /> {approval.requestedDate ? new Date(approval.requestedDate).toLocaleDateString() : "No Date"}</span>
                 <span className="text-border hidden sm:inline">•</span>
@@ -781,11 +781,11 @@ export default function ApprovalDetailPage() {
                                 loggedInUserEmail === approver.approvalApproverEmail &&
                                 isCurrent &&
                                 (approval.allApproverApprove || !anyoneHasResponded) && (
-                                  <div className="mt-4 flex flex-col flex-col sm:flex-row items-stretch sm:items-center gap-1">
+                                  <div className="mt-4 flex flex-wrap gap-2">
                                     <button
                                       type="button"
                                       onClick={() => openApproveDialog(approver, false)}
-                                      className="flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-black uppercase tracking-widest hover:bg-emerald-500/20 transition-all active:scale-95 shadow-sm"
+                                      className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-black uppercase tracking-widest hover:bg-emerald-500/20 transition-all active:scale-95 shadow-sm"
                                     >
                                       <ThumbsUp className="h-3.5 w-3.5" />
                                       Approve
@@ -793,7 +793,7 @@ export default function ApprovalDetailPage() {
                                     <button
                                       type="button"
                                       onClick={() => openApproveDialog(approver, true)}
-                                      className="flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-black uppercase tracking-widest hover:bg-rose-500/20 transition-all active:scale-95 shadow-sm"
+                                      className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-black uppercase tracking-widest hover:bg-rose-500/20 transition-all active:scale-95 shadow-sm"
                                     >
                                       <ThumbsDown className="h-3.5 w-3.5" />
                                       Reject

@@ -125,27 +125,27 @@ export const DashboardPage: React.FC = () => {
                         <LayoutDashboard 
                             className="h-4 w-4 text-muted-foreground transition-colors"
                             onClick={() => {
-                                const currentlyUnlocked = !!sessionStorage.getItem('view_password');
-                                if (currentlyUnlocked) {
-                                    sessionStorage.removeItem('view_password');
-                                    window.location.reload();
-                                } else {
-                                    setSearchClickCount(prev => {
-                                        const newCount = prev + 1;
-                                        if (newCount >= 4) {
-                                            setPassword("");
-                                            setIsUnlockOpen(true);
-                                            return 0;
-                                        }
-                                        return newCount;
-                                    });
-                                    if (searchClickTimeoutRef.current) {
-                                        clearTimeout(searchClickTimeoutRef.current);
+                            setSearchClickCount(prev => {
+                                const newCount = prev + 1;
+                                if (newCount >= 4) {
+                                    const currentlyUnlocked = !!sessionStorage.getItem('view_password');
+                                    if (currentlyUnlocked) {
+                                        sessionStorage.removeItem('view_password');
+                                        window.location.reload();
+                                    } else {
+                                        setPassword("");
+                                        setIsUnlockOpen(true);
                                     }
-                                    searchClickTimeoutRef.current = setTimeout(() => {
-                                        setSearchClickCount(0);
-                                    }, 2000);
+                                    return 0;
                                 }
+                                return newCount;
+                            });
+                            if (searchClickTimeoutRef.current) {
+                                clearTimeout(searchClickTimeoutRef.current);
+                            }
+                            searchClickTimeoutRef.current = setTimeout(() => {
+                                setSearchClickCount(0);
+                            }, 2000);
                             }}
                         />
                         <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest opacity-70">

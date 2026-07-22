@@ -44,7 +44,8 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalList
                 else
                 {
                     var allBanks = await _bankRepository.ListAllAsync();
-                    if (!string.Equals(_loggedInUserService.UserRole, "superadmin", System.StringComparison.OrdinalIgnoreCase))
+                    if (!string.Equals(_loggedInUserService.UserRole, "superadmin", System.StringComparison.OrdinalIgnoreCase) &&
+                        !string.Equals(_loggedInUserService.UserRole, "admin", System.StringComparison.OrdinalIgnoreCase))
                     {
                         var userBanks = allBanks.Where(b => b.UserId == _loggedInUserService.UserId).Select(b => b.BankId).ToList();
                         if (userBanks.Any())

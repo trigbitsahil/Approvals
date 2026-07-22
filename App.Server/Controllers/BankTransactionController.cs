@@ -26,6 +26,13 @@ namespace OOH.API.Controllers
             return Ok(new { success = true, data = response.Data, message = "Bank Transactions fetched successfully." });
         }
 
+        [HttpGet("AllBankTransactions")]
+        public async Task<ActionResult<OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombinedBankTransactions.GetAllCombinedBankTransactionsQueryResponse>> GetAllCombinedBankTransactions()
+        {
+            var response = await _mediator.Send(new OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombinedBankTransactions.GetAllCombinedBankTransactionsQuery());
+            return Ok(new { success = true, data = response.Data, message = "Combined Bank Transactions fetched successfully." });
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<GetBankTransactionsListQueryResponse>> GetBankTransactionsByBankId(string id)
         {

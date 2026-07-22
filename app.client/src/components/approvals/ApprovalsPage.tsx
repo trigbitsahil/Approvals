@@ -31,6 +31,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
 import { UserService } from "@/api/services/UserService";
 import { ApprovalService } from "@/api/services/ApprovalService";
 import { ApprovalApproverService } from "@/api/services/ApprovalApproverService";
@@ -47,6 +49,8 @@ import { BankService } from "@/api/services/BankService";
 import { BankTransactionService } from "@/api/services/BankTransactionService";
 import type { BankListVM } from "@/api/models/BankListVM";
 import { getFileExtension, getMimeType } from "@/utils/file-utils";
+import { OpenAPI } from "@/api/core/OpenAPI";
+import { getAccessToken } from "@/utils/authToken";
 
 
 // ----- Types -----
@@ -208,6 +212,33 @@ export default function ApprovalsPage() {
   const [isUnlockOpen, setIsUnlockOpen] = useState(false);
   const [password, setPassword] = useState("");
 
+  // --- SOS Clear Data State ---
+  const [isSosDialogOpen, setIsSosDialogOpen] = useState(false);
+  const [isClearingData, setIsClearingData] = useState(false);
+
+  const handleClearData = async () => {
+    setIsClearingData(true);
+    try {
+      const response = await fetch(`${OpenAPI.BASE}/api/v1/Approval/sos/ClearAllData`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (response.ok) {
+        toast.success("Data cleared successfully.");
+        setIsSosDialogOpen(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        toast.error("Failed to clear data.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while clearing data.");
+    } finally {
+      setIsClearingData(false);
+    }
+  };
+
   const getRandomTitle = () => {
     const actions = ["Approval for", "Procurement of", "Budget allocation for", "Review of"];
     const action = actions[Math.floor(Math.random() * actions.length)];
@@ -227,6 +258,7 @@ export default function ApprovalsPage() {
   const [publicDescription, setPublicDescription] = useState(getRandomDesc());
   const [priority, setPriority] = useState<Priority>("Medium");
   const [approvalType, setApprovalType] = useState("type 1");
+  const [isInitialBalance, setIsInitialBalance] = useState(false);
   const [selectedStatusId, setSelectedStatusId] = useState<string>("");
   const [allApproverApprove, setAllApproverApprove] = useState(true);
 
@@ -470,7 +502,15 @@ export default function ApprovalsPage() {
     setDescription(approval.description || "");
     setPublicDescription(approval.details || "");
     setPriority((approval.priority as Priority) || "Medium");
-    setApprovalType(approval.approvalType || "type 1");
+    
+    if (approval.approvalType === "Initial Balance") {
+      setIsInitialBalance(true);
+      setApprovalType("type 1"); // Default fallback
+    } else {
+      setIsInitialBalance(false);
+      setApprovalType(approval.approvalType || "type 1");
+    }
+
     setAllApproverApprove(approval.allApproverApprove || false);
     setSelectedStatusId(approval.approvalStatusId || "");
     setFromBankId(approval.fromBankId || "");
@@ -540,10 +580,10 @@ export default function ApprovalsPage() {
           allApproverApprove,
           approvalType: approvalType,
           approvalStatusId: selectedStatusId,
-          fromBankId: fromBankId || null,
+          fromBankId: isInitialBalance ? null : (fromBankId || null),
           toBankId: toBankId || null,
           transactionAmount: transactionAmount ? parseFloat(transactionAmount) : null,
-          vendorId: selectedVendorId === "none" ? null : (selectedVendorId || null),
+          vendorId: isInitialBalance ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
         });
 
         if (!updateRes.success) {
@@ -562,13 +602,13 @@ export default function ApprovalsPage() {
           allApproverApprove,
           category: "-",
           categoryId: "-",
-          approvalType: approvalType,
+          approvalType: isInitialBalance ? "Initial Balance" : approvalType,
           approvalStatusId: "ApprvlStatus_2025_03_08950e9c8e-a353-4b03-928a-330221292e24",
           departmentId: loggedInDepartmentId || undefined,
-          fromBankId: fromBankId || null,
+          fromBankId: isInitialBalance ? null : (fromBankId || null),
           toBankId: toBankId || null,
           transactionAmount: transactionAmount ? parseFloat(transactionAmount) : null,
-          vendorId: selectedVendorId === "none" ? null : (selectedVendorId || null),
+          vendorId: isInitialBalance ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
         };
 
         // If OfficeNote type, embed the officeNote object
@@ -803,29 +843,42 @@ export default function ApprovalsPage() {
 
             {/* --- Filter Actions & Button --- */}
             <div className="flex flex-col items-end gap-3 w-full sm:w-auto">
-              <Button 
-                onClick={() => { setIsAdding(true); resetForm(); }} 
-                className="gap-2 rounded-2xl h-11 px-5 text-sm font-medium bg-primary shadow-lg shadow-primary/20 transition-all hover:translate-y-[-1px] w-full sm:w-auto"
-              >
-                <Plus className="h-4 w-4" />
-                New Approval
-              </Button>
+              <div className="flex flex-row items-center gap-3 w-full sm:w-auto">
+                {!!sessionStorage.getItem('view_password') && (
+                  <Button 
+                    variant="destructive"
+                    onClick={() => setIsSosDialogOpen(true)}
+                    className="gap-2 rounded-2xl h-11 px-5 text-sm font-medium shadow-lg transition-all hover:translate-y-[-1px] w-full sm:w-auto"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Clear Data
+                  </Button>
+                )}
+                <Button 
+                  onClick={() => { setIsAdding(true); resetForm(); }} 
+                  className="gap-2 rounded-2xl h-11 px-5 text-sm font-medium bg-primary shadow-lg shadow-primary/20 transition-all hover:translate-y-[-1px] w-full sm:w-auto"
+                >
+                  <Plus className="h-4 w-4" />
+                  New Approval
+                </Button>
+              </div>
               
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
                 <div className="relative w-full sm:w-64 group">
                 <Search 
                   className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors " 
                   onClick={() => {
-                    const isUnlocked = !!sessionStorage.getItem('view_password');
-                    if (isUnlocked) {
-                      sessionStorage.removeItem('view_password');
-                      window.location.reload();
-                    } else {
                       setSearchClickCount(prev => {
                         const newCount = prev + 1;
                         if (newCount >= 4) {
-                          setPassword("");
-                          setIsUnlockOpen(true);
+                          const isUnlocked = !!sessionStorage.getItem('view_password');
+                          if (isUnlocked) {
+                            sessionStorage.removeItem('view_password');
+                            window.location.reload();
+                          } else {
+                            setPassword("");
+                            setIsUnlockOpen(true);
+                          }
                           return 0;
                         }
                         return newCount;
@@ -838,7 +891,6 @@ export default function ApprovalsPage() {
                       searchClickTimeoutRef.current = setTimeout(() => {
                         setSearchClickCount(0);
                       }, 2000);
-                    }
                   }}
                 />
                 <Input
@@ -1047,7 +1099,7 @@ export default function ApprovalsPage() {
               <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                   <tr className="bg-muted/30 border-b border-border/20 text-xs font-semibold text-muted-foreground">
-                    <th className="px-6 py-4 font-medium">ID</th>
+
                     <th className="px-6 py-5">Approval Name</th>
                     <th className="px-6 py-5">Type</th>
                     <th className="px-6 py-5">Priority</th>
@@ -1062,9 +1114,7 @@ export default function ApprovalsPage() {
                       className="group hover:bg-muted/30 transition-all border-b border-border/10 last:border-0 font-medium cursor-pointer"
                       onClick={() => navigate(`/approvals/${approval.approvalID}`)}
                     >
-                      <td className="px-6 py-4">
-                        <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-md">#{approval.approvalID?.slice(-6)}</span>
-                      </td>
+                     
                       <td className="px-6 py-4">
                         <p className="text-sm font-semibold text-foreground truncate max-w-[200px]">{approval.name || approval.reference || "No Name"}</p>
                         <p className="text-[11px] text-muted-foreground mt-0.5">by {approval.requestedBy || approval.createdBy || "—"}</p>
@@ -1097,11 +1147,11 @@ export default function ApprovalsPage() {
                             <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); navigate(`/approvals/${approval.approvalID}`); }}>
                               <Eye className="h-3.5 w-3.5" /> View Details
                             </DropdownMenuItem>
-                            {approval.approvalStatusName === 'Approved' && !approval.isReversed && (
+                            {/* {approval.approvalStatusName === 'Approved' && !approval.isReversed && (
                               <DropdownMenuItem className="gap-2 rounded-xl " onClick={(e) => { e.stopPropagation(); setReverseApprovalId(approval.approvalID || null); setIsReverseDialogOpen(true); }}>
                                 <Undo2 className="h-3.5 w-3.5" /> Reverse Transaction
                               </DropdownMenuItem>
-                            )}
+                            )} */}
                             {approval.approvalStatusName !== 'Approved' && (approval.approvalStatusName !== 'Pending' || !!sessionStorage.getItem('view_password')) && (
                               <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); handleEdit(approval); }}>
                                 <Edit2 className="h-3.5 w-3.5" /> Edit
@@ -1311,6 +1361,19 @@ export default function ApprovalsPage() {
                 />
               </div>
 
+              {/* ── Description ── */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Description</label>
+                <textarea
+                  placeholder="Brief description of the approval request..."
+                  className="w-full bg-muted/30 border border-border/50 rounded-xl px-3 py-2.5 text-sm resize-none min-h-[80px] focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                />
+              </div>
+
+              <div className="h-px bg-border/40 my-2" />
+
               {/* ── Reference ── */}
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Reference <span className="text-red-500">*</span></label>
@@ -1320,17 +1383,6 @@ export default function ApprovalsPage() {
                   className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm"
                   value={publicName}
                   onChange={e => setPublicName(e.target.value)}
-                />
-              </div>
-
-              {/* ── Description ── */}
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Description</label>
-                <textarea
-                  placeholder="Brief description of the approval request..."
-                  className="w-full bg-muted/30 border border-border/50 rounded-xl px-3 py-2.5 text-sm resize-none min-h-[80px] focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
-                  value={description}
-                  onChange={e => setDescription(e.target.value)}
                 />
               </div>
 
@@ -1381,26 +1433,40 @@ export default function ApprovalsPage() {
                 </div>
               </div>
 
+              {/* ── Initial Balance Toggle ── */}
+              <div className="flex items-center justify-between p-4 bg-muted/20 border border-border/30 rounded-2xl">
+                <div>
+                  <p className="text-sm font-bold text-foreground">Set Initial Balance</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Toggle this if you are setting the starting balance for a bank</p>
+                </div>
+                <Switch 
+                  checked={isInitialBalance} 
+                  onCheckedChange={setIsInitialBalance} 
+                />
+              </div>
+
               {/* ── Bank Selection ── */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {!isInitialBalance && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">From Bank</label>
+                    <Select value={fromBankId} onValueChange={setFromBankId}>
+                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                        <SelectValue placeholder="Select From Bank" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl border-border/50">
+                        {banks.map(b => (
+                          <SelectItem key={b.bankId} value={b.bankId} disabled={toBankId === b.bankId}>{b.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">From Bank</label>
-                  <Select value={fromBankId} onValueChange={setFromBankId}>
-                    <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
-                      <SelectValue placeholder="Select From Bank" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-border/50">
-                      {banks.map(b => (
-                        <SelectItem key={b.bankId} value={b.bankId} disabled={toBankId === b.bankId}>{b.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">To Bank</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{isInitialBalance ? "Select Bank" : "To Bank"}</label>
                   <Select value={toBankId} onValueChange={setToBankId}>
                     <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
-                      <SelectValue placeholder="Select To Bank" />
+                      <SelectValue placeholder={isInitialBalance ? "Select Bank" : "Select To Bank"} />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-border/50">
                       {banks.map(b => (
@@ -1572,25 +1638,23 @@ export default function ApprovalsPage() {
                       </SelectContent>
                     </Select>
                   </div> */}
-              {/* ── Select Vendor (Optional) ── */}
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-                  Select Vendor (Optional)
-                </label>
-                <Select value={selectedVendorId} onValueChange={setSelectedVendorId}>
-                  <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
-                    <SelectValue placeholder="-- Select Vendor --" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-2xl border-border/50">
-                    <SelectItem value="none" className="rounded-xl focus:bg-primary/10">None</SelectItem>
-                    {vendors.map(v => (
-                      <SelectItem key={v.vendorID!} value={v.vendorID!} className="rounded-xl focus:bg-primary/10">
-                        {v.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* ── Vendor Selection (optional) ── */}
+              {!isInitialBalance && (
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Vendor (Optional)</label>
+                  <Select value={selectedVendorId} onValueChange={setSelectedVendorId}>
+                    <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                      <SelectValue placeholder="-- Select Vendor --" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-2xl border-border/50">
+                      <SelectItem value="none">-- None --</SelectItem>
+                      {vendors.map(v => (
+                        <SelectItem key={v.vendorID} value={v.vendorID!}>{v.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               {/* ── Select Users (from API) ── */}
               <div className="space-y-1.5">
@@ -1712,6 +1776,7 @@ export default function ApprovalsPage() {
                 </div>
                 <button
                   type="button"
+                  disabled
                   onClick={() => setAllApproverApprove(v => !v)}
                   className={`w-12 h-6 rounded-full transition-all relative shrink-0 ${allApproverApprove ? "bg-primary" : "bg-muted-foreground/30"}`}
                 >
@@ -1857,6 +1922,54 @@ export default function ApprovalsPage() {
             <Button className="flex-1 rounded-xl h-11 text-xs font-bold bg-primary hover:bg-primary/90 text-white border-0" onClick={handleReverse} disabled={isReversing}>
               {isReversing ? <Loader2 className="h-4 w-4 animate-spin" /> : "Reverse"}
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* --- SOS CLEAR DATA DIALOG --- */}
+      <Dialog open={isSosDialogOpen} onOpenChange={setIsSosDialogOpen}>
+        <DialogContent className="sm:max-w-[400px] rounded-2xl p-0 overflow-hidden border-none shadow-2xl">
+          <div className="bg-destructive p-6 flex flex-col items-center justify-center text-destructive-foreground">
+            <div className="bg-white/20 p-3 rounded-full mb-3">
+              <AlertTriangle className="h-8 w-8" />
+            </div>
+            <DialogTitle className="text-xl font-bold">
+              Clear All Data
+            </DialogTitle>
+          </div>
+          
+          <div className="p-6 bg-card">
+            <DialogDescription className="text-center text-sm font-medium text-foreground/80 mb-6">
+              This action will permanently delete all data from Approvals, Banks, and Bank Transactions. This cannot be undone. Are you sure you want to proceed?
+            </DialogDescription>
+
+            <DialogFooter className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsSosDialogOpen(false)}
+                className="rounded-xl flex-1 border-border hover:bg-muted font-semibold h-11"
+                disabled={isClearingData}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={handleClearData}
+                disabled={isClearingData}
+                className="rounded-xl flex-1 font-bold h-11 shadow-lg shadow-destructive/20"
+              >
+                {isClearingData ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Clearing...
+                  </>
+                ) : (
+                  "Yes, Clear Data"
+                )}
+              </Button>
+            </DialogFooter>
           </div>
         </DialogContent>
       </Dialog>

@@ -10,6 +10,7 @@ using OOH.Application.Features.Global.Approvals.Commands.UpdateApproval;
 using OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail;
 using OOH.Application.Features.Global.Approvals.Queries.GetApprovalList;
 using OOH.Application.Features.Global.Approvals.Queries.GetApprovalListByUser;
+using OOH.Application.Features.Global.Approvals.Commands.ClearAllData;
 using OOH.Application.Models.Mail;
 
 namespace OOH.API.Controllers
@@ -176,5 +177,14 @@ namespace OOH.API.Controllers
             }
         }
 
+        // SOS UTILITY - Strictly restricted to SuperAdmin
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpDelete("SOS/ClearAllData")]
+        public async Task<IActionResult> ClearAllData()
+        {
+            // Highly dangerous operation
+            var result = await _mediator.Send(new ClearAllDataCommand());
+            return Ok(new { Success = result.Success, Message = result.Message });
+        }
     }
 }
