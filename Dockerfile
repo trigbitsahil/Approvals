@@ -1,5 +1,12 @@
 # Use the official .NET 8 SDK image for building the app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+# Install Node.js for building the SPA project
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
+
 WORKDIR /src
 
 # Copy the solution and project files first to cache layers
