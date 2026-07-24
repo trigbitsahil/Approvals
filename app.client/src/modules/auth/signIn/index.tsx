@@ -124,7 +124,6 @@ const SignInForm = () => {
 
       AppServerService.postApiVIdentityLogin(true, false, requestBody)
         .then(async () => {
-          // No need to store actual tokens anymore!
           storeTokens("", ""); 
 
           // Update auth state (sets isLoggedIn to true and authReady)

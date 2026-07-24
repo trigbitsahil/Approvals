@@ -5,8 +5,8 @@ import { storeTokens } from "@/utils/authToken";
 /* --------------------------------------------------------------------- */
 /* Configuration constants — adjust BASE / VERSION if needed             */
 /* --------------------------------------------------------------------- */
-const BASE = "https://approvals-21kc.onrender.com";
-//const BASE = "https://oohapi-b7eud8e8hzg0c8bp.centralindia-01.azurewebsites.net";
+const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+const BASE = isLocal ? "https://approvals-21kc.onrender.com" : "";
 const VERSION = "1";
 
 /* Shared single‑flight promise so we don’t spam the refresh endpoint */

@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage, deleteToken } from "firebase/messaging";
 import { OpenAPI } from "@/api/core/OpenAPI";
+import { getAccessToken } from "./authToken";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
