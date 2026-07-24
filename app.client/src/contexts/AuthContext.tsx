@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getAccessToken, clearTokens } from "@/utils/authToken";
 import { OpenAPI } from "@/api/core/OpenAPI";
+import { unregisterFirebaseToken } from "@/utils/firebase";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -53,6 +54,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         method: "POST",
         credentials: "include"
       });
+      // Delete Firebase token to stop receiving notifications for this user
+      await unregisterFirebaseToken();
     } catch (e) {
       console.error("Logout request failed", e);
     }

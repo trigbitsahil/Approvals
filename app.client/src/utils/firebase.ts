@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken, onMessage, deleteToken } from "firebase/messaging";
 import { OpenAPI } from "@/api/core/OpenAPI";
 
 // Your web app's Firebase configuration
@@ -65,3 +65,14 @@ export const onMessageListener = (callback: (payload: any) => void) => {
 };
 
 export { messaging };
+
+export const unregisterFirebaseToken = async () => {
+  if (messaging) {
+    try {
+      await deleteToken(messaging);
+      console.log("Firebase token deleted on logout.");
+    } catch (err) {
+      console.error("Unable to delete Firebase token.", err);
+    }
+  }
+};
