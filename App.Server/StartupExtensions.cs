@@ -26,10 +26,16 @@ namespace OOH.API
         {
             builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = long.MaxValue);
 
+            string firebaseKeyPath = "/etc/secrets/firebase-service-account.json";
+            if (!File.Exists(firebaseKeyPath))
+            {
+                firebaseKeyPath = Path.Combine(builder.Environment.ContentRootPath, "firebase-service-account.json");
+            }
+            
             // Initialize Firebase
             FirebaseAdmin.FirebaseApp.Create(new FirebaseAdmin.AppOptions()
             {
-                Credential = Google.Apis.Auth.OAuth2.GoogleCredential.FromFile(Path.Combine(builder.Environment.ContentRootPath, "firebase-service-account.json")),
+                Credential = Google.Apis.Auth.OAuth2.GoogleCredential.FromFile(firebaseKeyPath),
             });
 
             builder.Services.AddApplicationServices();
