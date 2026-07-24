@@ -5,7 +5,7 @@ import { storeTokens } from "@/utils/authToken";
 /* --------------------------------------------------------------------- */
 /* Configuration constants — adjust BASE / VERSION if needed             */
 /* --------------------------------------------------------------------- */
-const BASE = "http://localhost:5298";
+const BASE = "https://approvals-21kc.onrender.com/";
 //const BASE = "https://oohapi-b7eud8e8hzg0c8bp.centralindia-01.azurewebsites.net";
 const VERSION = "1";
 
