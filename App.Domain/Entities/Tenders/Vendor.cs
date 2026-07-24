@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -45,5 +45,8 @@ namespace OOH.Domain.Entities.Tenders
         [Required]
         [Column("tenant_id")]
         public string TenantId { get; set; }
+
+        [Column("vendor_category_id")]
+        public string? VendorCategoryId { get; set; }
     }
 }

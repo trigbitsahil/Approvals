@@ -23,6 +23,7 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalList
         public bool AllApproverApprove { get; set; }
 
         public string? VendorId { get; set; }
+        public string? ContractId { get; set; }
 
         public string RequestedBy { get; set; }
 

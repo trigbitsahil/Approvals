@@ -35,5 +35,7 @@ namespace OOH.Identity.Models
         public DateTime? LastModifiedDate { get; set; }
 
         public string? TenantID { get; set; }
+
+        public virtual ICollection<UserFCMToken> FCMTokens { get; set; } = new List<UserFCMToken>();
     }
 }

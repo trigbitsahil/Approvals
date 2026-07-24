@@ -29,9 +29,6 @@ namespace OOH.Application.Features.Tenders.Vendors.Commands.CreateVendor
 
         public string Note { get; set; }
 
-
-       
-
-
+        public string VendorCategoryId { get; set; }
     }
 }

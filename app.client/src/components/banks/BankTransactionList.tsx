@@ -25,7 +25,7 @@ import { toast } from "sonner";
 import { OpenAPI } from "@/api/core/OpenAPI";
 import { getAccessToken } from "@/utils/authToken";
 
-type SortColumn = 'bankName' | 'transactionType' | 'deposit' | 'withdrawal' | 'runningBalance' | 'createdDate';
+type SortColumn = 'approvalName' | 'bankName' | 'transactionType' | 'deposit' | 'withdrawal' | 'runningBalance' | 'createdDate';
 type SortDirection = 'asc' | 'desc';
 
 export const BankTransactionList = () => {
@@ -120,11 +120,8 @@ export const BankTransactionList = () => {
         setCurrentPage(1); // Reset page on filter change
     };
 
-    const filteredTransactions = useMemo(() => {
+    const dateFilteredTransactions = useMemo(() => {
         return transactions.filter((tx) => {
-            if (activeTypeFilter === "deposit" && (!tx.deposit || tx.deposit <= 0)) return false;
-            if (activeTypeFilter === "withdrawal" && (!tx.withdrawal || tx.withdrawal <= 0)) return false;
-
             if (tx.createdDate) {
                 const txDate = new Date(tx.createdDate).getTime();
                 
@@ -142,7 +139,15 @@ export const BankTransactionList = () => {
 
             return true;
         });
-    }, [transactions, bankFilterStartDate, bankFilterEndDate, activeTypeFilter]);
+    }, [transactions, bankFilterStartDate, bankFilterEndDate]);
+
+    const filteredTransactions = useMemo(() => {
+        return dateFilteredTransactions.filter((tx) => {
+            if (activeTypeFilter === "deposit" && (!tx.deposit || tx.deposit <= 0)) return false;
+            if (activeTypeFilter === "withdrawal" && (!tx.withdrawal || tx.withdrawal <= 0)) return false;
+            return true;
+        });
+    }, [dateFilteredTransactions, activeTypeFilter]);
 
     const filteredCombinedTransactions = useMemo(() => {
         return combinedTransactions.filter((tx) => {
@@ -229,8 +234,8 @@ export const BankTransactionList = () => {
     const hasActiveFilters = activeTab === "bank" 
         ? bankFilterStartDate || bankFilterEndDate 
         : allFilterStartDate || allFilterEndDate;
-    const totalDeposits = filteredTransactions.reduce((sum, tx) => sum + tx.deposit, 0);
-    const totalWithdrawals = filteredTransactions.reduce((sum, tx) => sum + tx.withdrawal, 0);
+    const totalDeposits = dateFilteredTransactions.reduce((sum, tx) => sum + (tx.deposit || 0), 0);
+    const totalWithdrawals = dateFilteredTransactions.reduce((sum, tx) => sum + (tx.withdrawal || 0), 0);
 
     return (
         <div className="w-full space-y-6">
@@ -361,7 +366,7 @@ export const BankTransactionList = () => {
                     </div>
                 </div>
 
-                {activeTab === "bank" && filteredTransactions.length > 0 && (
+                {activeTab === "bank" && dateFilteredTransactions.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 md:p-6 border-b border-border bg-muted/20">
                         <div 
                             className={`flex items-center gap-4 p-4 rounded-xl border shadow-sm hover:shadow-md transition-all cursor-pointer ${activeTypeFilter === "deposit" ? "bg-green-50/50 dark:bg-green-900/20 border-green-200 dark:border-green-800" : "bg-card border-border"}`}
@@ -397,6 +402,9 @@ export const BankTransactionList = () => {
                         <Table className="min-w-[800px]">
                             <TableHeader className="bg-muted/30 border-b border-border">
                                 <TableRow className="hover:bg-transparent border-border">
+                                    <TableHead className="font-semibold text-foreground cursor-pointer hover:bg-muted/50" onClick={() => requestSort('approvalName')}>
+                                        <div className="flex items-center gap-1">Name {getSortIcon('approvalName')}</div>
+                                    </TableHead>
                                     <TableHead className="font-semibold text-foreground cursor-pointer hover:bg-muted/50" onClick={() => requestSort('bankName')}>
                                         <div className="flex items-center gap-1">Bank Name {getSortIcon('bankName')}</div>
                                     </TableHead>
@@ -421,7 +429,7 @@ export const BankTransactionList = () => {
                             <TableBody>
                                 {loading ? (
                                     <TableRow className="hover:bg-transparent">
-                                        <TableCell colSpan={7} className="text-center py-12">
+                                        <TableCell colSpan={8} className="text-center py-12">
                                             <div className="flex flex-col items-center gap-2">
                                                 <div className="h-8 w-8 bg-muted rounded-full animate-pulse"></div>
                                                 <p className="text-sm text-muted-foreground">Loading transactions...</p>
@@ -430,7 +438,7 @@ export const BankTransactionList = () => {
                                     </TableRow>
                                 ) : paginatedTransactions.length === 0 ? (
                                     <TableRow className="hover:bg-transparent">
-                                        <TableCell colSpan={7} className="text-center py-12">
+                                        <TableCell colSpan={8} className="text-center py-12">
                                             <div className="flex flex-col items-center gap-2">
                                                 <Building2 className="h-8 w-8 text-muted-foreground/50" />
                                                 <p className="text-sm font-medium text-foreground">No transactions found</p>
@@ -449,27 +457,23 @@ export const BankTransactionList = () => {
                                                 }
                                             }}
                                         >
+                                            <TableCell className="font-medium text-foreground">
+                                                {tx.approvalName || "-"}
+                                            </TableCell>
                                             <TableCell className="font-medium text-foreground">{tx.bankName || "Unknown Bank"}</TableCell>
                                             <TableCell>
-                                                <div className="flex flex-row items-center gap-2">
-                                                    <span className={`w-fit px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 shrink-0 ${
-                                                        tx.transactionType === 'Credit' 
-                                                            ? 'bg-green-100/80 text-green-700 dark:bg-green-900/40 dark:text-green-300' 
-                                                            : 'bg-red-100/80 text-red-700 dark:bg-red-900/40 dark:text-red-300'
-                                                    }`}>
-                                                        {tx.transactionType === 'Credit' ? (
-                                                            <TrendingUp className="h-3 w-3" />
-                                                        ) : (
-                                                            <TrendingDown className="h-3 w-3" />
-                                                        )}
-                                                        {tx.transactionType}
-                                                    </span>
-                                                    {tx.approvalName && (
-                                                        <span className="text-xs text-muted-foreground  max-w-[200px]" title={tx.approvalName}>
-                                                            {tx.approvalName}
-                                                        </span>
+                                                <span className={`w-fit px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 shrink-0 ${
+                                                    tx.transactionType === 'Credit' 
+                                                        ? 'bg-green-100/80 text-green-700 dark:bg-green-900/40 dark:text-green-300' 
+                                                        : 'bg-red-100/80 text-red-700 dark:bg-red-900/40 dark:text-red-300'
+                                                }`}>
+                                                    {tx.transactionType === 'Credit' ? (
+                                                        <TrendingUp className="h-3 w-3" />
+                                                    ) : (
+                                                        <TrendingDown className="h-3 w-3" />
                                                     )}
-                                                </div>
+                                                    {tx.transactionType}
+                                                </span>
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <span className="font-semibold text-green-600 dark:text-green-400">

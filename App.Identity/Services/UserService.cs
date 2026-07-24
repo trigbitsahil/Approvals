@@ -13,11 +13,13 @@ namespace OOH.Identity.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly OOHIdentityDBContext _dbContext;
 
-        public UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, OOHIdentityDBContext dbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _dbContext = dbContext;
         }
 
         public async Task<List<UserListVM>> GetUsersAsync()
@@ -152,7 +154,7 @@ namespace OOH.Identity.Services
 
         public async Task<List<string>> GetAllRolesAsync()
         {
-            return await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+            return await _roleManager.Roles.Select(r => r.Name!).ToListAsync();
         }
 
         public async Task<bool> CreateRoleAsync(string roleName)
@@ -162,6 +164,54 @@ namespace OOH.Identity.Services
 
             var result = await _roleManager.CreateAsync(new IdentityRole(roleName));
             return result.Succeeded;
+        }
+        public async Task<bool> RegisterFCMTokenAsync(string userId, string token, string? deviceDetails = null)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Remove this token from any other users to prevent cross-user notifications on shared browsers
+            var otherUsersTokens = await _dbContext.UserFCMTokens
+                .Where(t => t.Token == token && t.UserId != userId)
+                .ToListAsync();
+            
+            if (otherUsersTokens.Any())
+            {
+                _dbContext.UserFCMTokens.RemoveRange(otherUsersTokens);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            var existingTokens = await _dbContext.UserFCMTokens
+                .Where(t => t.UserId == userId && t.Token == token)
+                .ToListAsync();
+
+            if (existingTokens.Count > 1)
+            {
+                // Clean up duplicates if a race condition caused multiple identical inserts
+                _dbContext.UserFCMTokens.RemoveRange(existingTokens.Skip(1));
+                await _dbContext.SaveChangesAsync();
+            }
+            else if (existingTokens.Count == 0)
+            {
+                _dbContext.UserFCMTokens.Add(new UserFCMToken
+                {
+                    UserId = userId,
+                    Token = token,
+                    DeviceDetails = deviceDetails
+                });
+                await _dbContext.SaveChangesAsync();
+            }
+            else if (existingTokens.Count == 1 && existingTokens[0].DeviceDetails != deviceDetails)
+            {
+                // Update device details if they changed
+                existingTokens[0].DeviceDetails = deviceDetails;
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return true;
         }
     }
 }

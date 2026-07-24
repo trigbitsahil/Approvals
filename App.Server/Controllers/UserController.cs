@@ -14,6 +14,7 @@ using OOH.Application.Features.Global.Users.Commands.UpdateUserRoles;
 using OOH.Application.Features.Global.Users.Commands.CreateRole;
 using OOH.Application.Features.Global.Users.Queries.GetUserRoles;
 using OOH.Application.Features.Global.Users.Queries.GetAllRoles;
+using OOH.Application.Features.Global.Users.Commands.RegisterFCMToken;
 using OOH.Application.Contracts.Infrastructure;
 
 namespace OOH.API.Controllers
@@ -39,6 +40,16 @@ namespace OOH.API.Controllers
         {
             var dtos = await _mediator.Send(new GetUserListQuery());
             return Ok(dtos);
+        }
+
+        [HttpPost("FCMToken")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RegisterFCMToken([FromBody] RegisterFCMTokenRequest request)
+        {
+            var success = await _mediator.Send(new RegisterFCMTokenCommand { Token = request.Token, DeviceDetails = request.DeviceDetails });
+            if (success)
+                return Ok();
+            return BadRequest();
         }
 
         [HttpGet("GetLoggedInUser", Name = "GetLoggedInUser")]

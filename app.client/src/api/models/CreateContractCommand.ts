@@ -8,5 +8,6 @@ export type CreateContractCommand = {
     startDate?: string | null;
     endDate?: string | null;
     companyID?: string | null;
+    number?: string | null;
 };
 

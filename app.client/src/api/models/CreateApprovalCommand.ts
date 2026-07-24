@@ -18,5 +18,7 @@ export type CreateApprovalCommand = {
     fromBankId?: string | null;
     toBankId?: string | null;
     transactionAmount?: number | null;
+    vendorId?: string | null;
+    contractId?: string | null;
 };
 

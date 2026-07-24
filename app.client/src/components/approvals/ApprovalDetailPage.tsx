@@ -593,7 +593,12 @@ export default function ApprovalDetailPage() {
                 { label: "Type", value: approval.approvalType || "Other", icon: BadgeCheck },
                 { label: "Amount", value: approval.transactionAmount != null ? (sessionStorage.getItem('view_password') ? approval.transactionAmount : approval.transactionAmount / 1000) : "General", icon: BadgeIndianRupee},
                 { label: "Requirement", value: approval.allApproverApprove ? "All must approve" : "Any one can approve", icon: Info },
-                ...(approval.vendorName ? [{ label: "Vendor", value: approval.vendorName, icon: User }] : [])
+                ...(approval.vendorName ? [{ 
+                  label: "Vendor", 
+                  value: approval.vendorCategoryName ? `${approval.vendorName} (${approval.vendorCategoryName})` : approval.vendorName, 
+                  icon: User 
+                }] : []),
+                ...(approval.linkedContractName ? [{ label: "Contract", value: approval.linkedContractName, icon: FileText }] : [])
               ].map((item, idx) => (
                 <motion.div
                   key={item.label}

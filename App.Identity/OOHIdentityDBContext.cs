@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +13,8 @@ namespace OOH.Identity
 {
     public class OOHIdentityDBContext : IdentityDbContext<ApplicationUser, IdentityRole,string>
     {
+        public DbSet<UserFCMToken> UserFCMTokens { get; set; }
+
         public OOHIdentityDBContext()
         {
 

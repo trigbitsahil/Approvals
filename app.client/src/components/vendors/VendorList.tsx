@@ -2,13 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import { VendorService } from "@/api/services/VendorService";
+import { VendorCategoryService } from "@/api/services/VendorCategoryService";
 import type { VendorListVM } from "@/api/models/VendorListVM";
+import type { VendorCategoryListVM } from "@/api/models/VendorCategoryListVM";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Plus, MoreVertical, Edit2, Trash2, Truck } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -43,6 +46,8 @@ export function VendorList() {
   const [panNumber, setPanNumber] = useState("");
   const [address, setAddress] = useState("");
   const [note, setNote] = useState("");
+  const [categories, setCategories] = useState<VendorCategoryListVM[]>([]);
+  const [vendorCategoryId, setVendorCategoryId] = useState("");
   const [isVoided, setIsVoided] = useState(false);
 
   const { confirm } = useConfirmation();
@@ -61,14 +66,28 @@ export function VendorList() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const res = await VendorCategoryService.getAllVendorCategories();
+      setCategories(res);
+    } catch (e) {
+      console.error("Failed to fetch vendor categories", e);
+    }
+  };
+
   useEffect(() => {
     fetchVendors();
+    fetchCategories();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name) {
       toast.error("Name is required.");
+      return;
+    }
+    if (!vendorCategoryId) {
+      toast.error("Vendor Category is required.");
       return;
     }
 
@@ -82,6 +101,7 @@ export function VendorList() {
         panNumber: panNumber || null,
         address: address || null,
         note: note || null,
+        vendorCategoryId,
         isVoided,
       };
 
@@ -110,6 +130,7 @@ export function VendorList() {
     setPanNumber("");
     setAddress("");
     setNote("");
+    setVendorCategoryId("");
     setIsVoided(false);
     setIsEditing(false);
   };
@@ -124,6 +145,7 @@ export function VendorList() {
     setPanNumber(vendor.panNumber || "");
     setAddress(vendor.address || "");
     setNote(vendor.note || "");
+    setVendorCategoryId(vendor.vendorCategoryId || "");
     setIsVoided(vendor.isVoided || false);
     setIsEditing(true);
     setIsModalOpen(true);
@@ -174,9 +196,26 @@ export function VendorList() {
               <DialogTitle>{isEditing ? "Edit Vendor" : "Create Vendor"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Name <span className="text-destructive">*</span></label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Vendor Name" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Name <span className="text-destructive">*</span></label>
+                  <Input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Vendor Name" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Vendor Category <span className="text-destructive">*</span></label>
+                  <Select value={vendorCategoryId} onValueChange={setVendorCategoryId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map(c => (
+                        <SelectItem key={c.vendorCategoryId} value={c.vendorCategoryId || ""}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -230,6 +269,7 @@ export function VendorList() {
           <TableHeader className="bg-muted/50">
             <TableRow>
               <TableHead className="w-[200px]">Vendor</TableHead>
+              <TableHead>Category</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead>Tax Details</TableHead>
               <TableHead>Status</TableHead>
@@ -239,7 +279,7 @@ export function VendorList() {
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center h-24">
+                <TableCell colSpan={6} className="text-center h-24">
                   <div className="flex items-center justify-center space-x-2">
                     <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                     <span className="text-muted-foreground">Loading vendors...</span>
@@ -248,7 +288,7 @@ export function VendorList() {
               </TableRow>
             ) : vendors.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center h-24 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center h-24 text-muted-foreground">
                   No vendors found.
                 </TableCell>
               </TableRow>
@@ -260,6 +300,11 @@ export function VendorList() {
                       <span className="text-foreground">{vendor.name}</span>
                       {vendor.address && <span className="text-xs text-muted-foreground truncate max-w-[200px]">{vendor.address}</span>}
                     </div>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm text-muted-foreground">
+                      {categories.find(c => c.vendorCategoryId === vendor.vendorCategoryId)?.name || "None"}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-col text-sm">

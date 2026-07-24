@@ -27,7 +27,7 @@ namespace OOH.Application.Features.Tenders.Vendors.Queries.GetVendorList
 
         public string Note { get; set; }
 
-
+        public string VendorCategoryId { get; set; }
         public bool IsVoided { get; set; }
 
 

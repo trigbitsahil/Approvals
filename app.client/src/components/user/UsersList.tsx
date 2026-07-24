@@ -179,10 +179,10 @@ export const UserManagementPage = () => {
         </div>
       </div>
 
-      <Card className="border-muted shadow-sm overflow-hidden">
+      <Card className="border-slate-300/80 dark:border-muted shadow-sm overflow-hidden bg-white dark:bg-card">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[650px] text-sm">
-            <thead className="bg-muted/40 text-muted-foreground text-[11px] uppercase tracking-wider font-bold">
+            <thead className="bg-slate-50 dark:bg-muted/40 border-b border-slate-300 dark:border-white/10 text-muted-foreground text-[11px] uppercase tracking-wider font-bold">
               <tr>
                 <th className="px-4 sm:px-6 py-4 text-left font-bold">User Information</th>
                 <th className="px-4 sm:px-6 py-4 text-left font-bold">Registration Data</th>
@@ -190,13 +190,13 @@ export const UserManagementPage = () => {
                 <th className="px-4 sm:px-6 py-4 text-right font-bold">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-muted/60">
+            <tbody className="divide-y divide-slate-300 dark:divide-white/10">
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
                   <tr
                     key={user.id}
                     onClick={() => handleOpenDialog(user)}
-                    className="group hover:bg-muted/30 transition-all duration-200 cursor-pointer"
+                    className="group hover:bg-slate-50/80 dark:hover:bg-muted/30 transition-all duration-200 cursor-pointer border-b border-slate-300 dark:border-white/10"
                   >
                     <td className="px-4 sm:px-6 py-4">
                       <div className="flex items-center gap-3">

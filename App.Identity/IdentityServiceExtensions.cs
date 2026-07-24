@@ -92,7 +92,7 @@ namespace OOH.Identity
                     ValidAudience = configuration["Authentication:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
 
-                        Convert.FromBase64String(configuration["Authentication:SecretForKey"])
+                        Convert.FromBase64String(configuration["Authentication:SecretForKey"]!)
                         )
 
 
@@ -119,6 +119,7 @@ namespace OOH.Identity
             services.AddEndpointsApiExplorer();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddTransient<OOH.Application.Contracts.Infrastructure.IPushNotificationService, PushNotificationService>();
 
 
             services.AddIdentityApiEndpoints<ApplicationUser>()

@@ -59,6 +59,11 @@ using OOH.Application.Features.Tenders.Vendors.Queries.GetVendorDetail;
 using OOH.Application.Features.Tenders.Vendors.Queries.GetVendorList;
 using OOH.Domain.Entities;
 using OOH.Domain.Entities.Global;
+using OOH.Application.Features.Global.VendorCategories.Commands.CreateVendorCategory;
+using OOH.Application.Features.Global.VendorCategories.Commands.UpdateVendorCategory;
+using OOH.Application.Features.Global.VendorCategories.Commands.DeleteVendorCategory;
+using OOH.Application.Features.Global.VendorCategories.Queries.GetVendorCategoryList;
+using OOH.Application.Features.Global.VendorCategories.Queries.GetVendorCategoryDetail;
 using OOH.Domain.Entities.Tenders;
 using System;
 using System.Collections.Generic;
@@ -90,6 +95,21 @@ namespace OOH.Application.Profiles
             CreateMap<City, UpdateCityDto>().ReverseMap();
 
             CreateMap<City, DeleteCityCommand>().ReverseMap();
+
+            #endregion
+
+
+            #region VendorCategory
+
+            CreateMap<VendorCategory, VendorCategoryListVM>().ReverseMap();
+            CreateMap<VendorCategory, VendorCategoryDetailVM>().ReverseMap();
+
+            CreateMap<VendorCategory, CreateVendorCategoryCommand>().ReverseMap();
+            CreateMap<VendorCategory, CreateVendorCategoryDto>().ReverseMap();
+
+            CreateMap<VendorCategory, UpdateVendorCategoryCommand>().ReverseMap();
+
+            CreateMap<VendorCategory, DeleteVendorCategoryCommand>().ReverseMap();
 
             #endregion
 

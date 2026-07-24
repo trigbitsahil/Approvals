@@ -1,0 +1,1 @@
+System.register(["./index-legacy-CinU_Xjh.js"],function(e,t){var n;return{setters:[function(e){n=e.i}],execute:function(){e("default",n)}}});

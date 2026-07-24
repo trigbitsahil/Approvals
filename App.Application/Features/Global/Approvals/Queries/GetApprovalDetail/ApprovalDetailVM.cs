@@ -47,6 +47,7 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail
 
         public string? VendorId { get; set; }
         public string? VendorName { get; set; }
+        public string? VendorCategoryName { get; set; }
 
         public string? DepartmentId { get; set; }
 
@@ -55,6 +56,8 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail
         public string?  MediaName { get; set; }
 
         public string? ContractName { get; set; }
+        public string? ContractId { get; set; }
+        public string? LinkedContractName { get; set; }
  
         public string? FromBankId { get; set; }
         public string? ToBankId { get; set; }

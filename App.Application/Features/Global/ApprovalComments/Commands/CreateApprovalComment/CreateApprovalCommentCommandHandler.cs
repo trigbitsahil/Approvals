@@ -19,21 +19,28 @@ namespace OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprov
         private readonly IEmailService _emailService;
 
         private readonly IApprovalApproverRepository _ApprovalApproverRepository;
-
-
         private readonly IApprovalRepository _approvalRepository;
+        private readonly IPushNotificationService _pushNotificationService;
+        private readonly IEncryptionService _encryptionService;
+        private readonly ILoggedInUserService _loggedInUserService;
+
         public CreateApprovalCommentCommandHandler(IMapper mapper,
             IApprovalCommentRepository ApprovalCommentRepository,
             IEmailService emailService,
-             IApprovalApproverRepository ApprovalApproverRepository,
-             IApprovalRepository approvalRepository
-            )
+            IApprovalApproverRepository ApprovalApproverRepository,
+            IApprovalRepository approvalRepository,
+            IPushNotificationService pushNotificationService,
+            IEncryptionService encryptionService,
+            ILoggedInUserService loggedInUserService)
         {
             _mapper = mapper;
             _ApprovalCommentRepository = ApprovalCommentRepository;
             _emailService = emailService;
             _approvalRepository = approvalRepository;
             _ApprovalApproverRepository = ApprovalApproverRepository;
+            _pushNotificationService = pushNotificationService;
+            _encryptionService = encryptionService;
+            _loggedInUserService = loggedInUserService;
         }
 
 
@@ -118,6 +125,44 @@ namespace OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprov
 
                     bool isSent = await _emailService.SendEmail(email);
 
+                    // --- Push Notification Logic ---
+                    try
+                    {
+                        string approvalName = (objApproval != null && !string.IsNullOrEmpty(objApproval.Name)) 
+                            ? _encryptionService.Decrypt(objApproval.Name) 
+                            : "an approval";
+                        string commenterEmail = _loggedInUserService.UserEmail ?? "Someone";
+                        
+                        string pushTitle = "New Comment Added";
+                        string pushBody = $"{commenterEmail} commented on '{approvalName}': '{request.CommentText}'";
+
+                        if (commenterEmail.Equals(objApproval.RequestedBy, StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Creator added the comment -> notify all assigned users
+                            foreach(var approver in entitylist)
+                            {
+                                if (!string.IsNullOrEmpty(approver.ApprovalApproverEmail))
+                                {
+                                    await _pushNotificationService.SendNotificationAsync(approver.ApprovalApproverEmail, pushTitle, pushBody);
+                                }
+                            }
+                            Console.WriteLine($"[CreateApprovalCommentCommandHandler] Sent notifications to {entitylist.Count} assigned approvers.");
+                        }
+                        else
+                        {
+                            // Someone else added the comment -> notify creator
+                            if (!string.IsNullOrEmpty(objApproval.RequestedBy))
+                            {
+                                await _pushNotificationService.SendNotificationAsync(objApproval.RequestedBy, pushTitle, pushBody);
+                                Console.WriteLine($"[CreateApprovalCommentCommandHandler] Sent notification to creator: {objApproval.RequestedBy}");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[CreateApprovalCommentCommandHandler] Error sending push notification: {ex.Message}");
+                    }
+                    // -------------------------------
 
                     createApprovalCommentCommandResponse.Data = _mapper.Map<CreateApprovalCommentDto>(entity);
 

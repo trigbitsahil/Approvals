@@ -39,6 +39,9 @@ import SignInForm from "./modules/auth/signIn";
 import { BankList } from "@/components/banks/BankList";
 import { VendorList } from "@/components/vendors/VendorList";
 import { BankTransactionList } from "@/components/banks/BankTransactionList";
+import { VendorCategoryList } from "@/components/vendors/VendorCategoryList";
+// import { InventoryTransactionsList } from './components/inventory/InventoryTransactionsList';
+import { ContractsList } from './components/contracts/ContractsList';
 import { Toaster } from "./components/ui/sonner";
 import { DashboardPage } from "./components/dashboard/DashboardPage";
 import ForgotPasswordForm from "./modules/auth/forgotPassword";
@@ -51,7 +54,7 @@ import { useAuth, AuthProvider } from "@/contexts/AuthContext";
 import { getAccessToken, storeTokens } from "@/utils/authToken";
 import axios from "axios";
 import { toast } from "sonner";
-
+import { requestFirebaseNotificationPermission, onMessageListener } from "@/utils/firebase";
 
 const localeMessages = {
   en: () => import("@/locales/en/messages.js"),
@@ -85,8 +88,28 @@ const TokenAuthRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+
+
 // Layouts
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
+  useEffect(() => {
+    requestFirebaseNotificationPermission();
+    const unsubscribe = onMessageListener((payload: any) => {
+      console.log('Received foreground message: ', payload);
+      const title = payload?.notification?.title || payload?.data?.title || 'New Notification';
+      const body = payload?.notification?.body || payload?.data?.body || '';
+      toast(title, {
+        description: body,
+      });
+    });
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
+
   return (
     <SidebarProvider>
       <div className="flex">
@@ -358,6 +381,14 @@ function AppContent() {
                   }
                 />
                 <Route
+                  path="/vendor-categories"
+                  element={
+                    <ProtectedRoute>
+                      <VendorCategoryList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/bank-transactions"
                   element={
                     <ProtectedRoute>
@@ -428,6 +459,9 @@ function AppContent() {
                 />
 
                 {/* Fallback & Root */}
+                <Route path="/vendors" element={<VendorList />} />
+                <Route path="/contracts" element={<ContractsList />} />
+                <Route path="/banks/:bankId/transactions" element={<BankTransactionList />} />
                 <Route path="/" element={<Navigate to="/approvals" replace />} />
                 <Route path="*" element={<Navigate to="/signin" replace />} />
               </Routes>

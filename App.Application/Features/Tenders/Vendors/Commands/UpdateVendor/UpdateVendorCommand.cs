@@ -31,11 +31,6 @@ namespace OOH.Application.Features.Tenders.Vendors.Commands.UpdateVendor
 
         public string Note { get; set; }
 
-
-   
-
-
-
-
+        public string VendorCategoryId { get; set; }
     }
 }

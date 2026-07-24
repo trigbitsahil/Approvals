@@ -1,8 +1,13 @@
-System.NullReferenceException: Object reference not set to an instance of an object.
-   at OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail.GetApprovalDetailQueryHandler.Handle(GetApprovalDetailQuery request, CancellationToken cancellationToken) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Application\Features\Global\Approvals\Queries\GetApprovalDetail\GetApprovalDetailQueryHandler.cs:line 50
-   at OOH.Application.Behaviors.TransactionBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Application\Behaviors\TransactionBehavior.cs:line 25
-   at OOH.API.Controllers.ApprovalController.GetApprovalByID(String id) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Server\Controllers\ApprovalController.cs:line 97
-   at lambda_method311(Closure, Object)
+AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+ApprovalComment -> CreateApprovalCommentDto
+OOH.Domain.Entities.Global.ApprovalComment -> OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprovalComment.CreateApprovalCommentDto
+   at lambda_method402(Closure, Object, CreateApprovalCommentDto, ResolutionContext)
+   at OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprovalComment.CreateApprovalCommentCommandHandler.Handle(CreateApprovalCommentCommand request, CancellationToken cancellationToken) in /Users/sahilrattan/Desktop/approvals/App.Application/Features/Global/ApprovalComments/Commands/CreateApprovalComment/CreateApprovalCommentCommandHandler.cs:line 122
+   at OOH.Application.Behaviors.TransactionBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in /Users/sahilrattan/Desktop/approvals/App.Application/Behaviors/TransactionBehavior.cs:line 25
+   at OOH.API.Controllers.ApprovalCommentController.PostApprovalComment(CreateApprovalCommentCommand createEntityCommand) in /Users/sahilrattan/Desktop/approvals/App.Server/Controllers/ApprovalCommentController.cs:line 91
+   at lambda_method396(Closure, Object)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -13,5 +18,5 @@ System.NullReferenceException: Object reference not set to an instance of an obj
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at ActivityLoggingMiddleware.Invoke(HttpContext context) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Server\Middleware\ActivityLoggingMiddleware.cs:line 107
-   at OOH.API.Middleware.ExceptionHandlerMiddleware.Invoke(HttpContext context) in D:\Work\Dev\Projects\OOH\Code\Approvals\App.Server\Middleware\ExceptionHandlerMiddleware.cs:line 20
+   at ActivityLoggingMiddleware.Invoke(HttpContext context) in /Users/sahilrattan/Desktop/approvals/App.Server/Middleware/ActivityLoggingMiddleware.cs:line 107
+   at OOH.API.Middleware.ExceptionHandlerMiddleware.Invoke(HttpContext context) in /Users/sahilrattan/Desktop/approvals/App.Server/Middleware/ExceptionHandlerMiddleware.cs:line 20

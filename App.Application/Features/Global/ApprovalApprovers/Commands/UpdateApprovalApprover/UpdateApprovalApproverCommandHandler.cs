@@ -47,13 +47,15 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
         //  private readonly ILetterRepository _letterRepository;
 
         private readonly IEmailService _emailService;
+        private readonly IPushNotificationService _pushNotificationService;
 
         public UpdateApprovalApproverCommandHandler(IMapper mapper, IApprovalApproverRepository ApprovalApproverRepository, 
             IApprovalRepository approvalRepository, 
              IEmailService emailService,
              IBankRepository bankRepository,
              IBankTransactionRepository bankTransactionRepository,
-             IEncryptionService encryptionService
+             IEncryptionService encryptionService,
+             IPushNotificationService pushNotificationService
             // IDocumentUrlRepository documentUrlRepository,
             //IExpenseTransactionRepository expenseTransactionRepository 
  
@@ -67,6 +69,7 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
             _encryptionService = encryptionService;
         
             _emailService = emailService;
+            _pushNotificationService = pushNotificationService;
          
             //_documentUrlRepository = documentUrlRepository;
             //_expenseTransactionRepository = expenseTransactionRepository;
@@ -290,6 +293,27 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
                                     VendorId = objApproval.VendorId
                                 };
                                 await _bankTransactionRepository.AddAsync(creditTx);
+
+                                // Send push notification for bank transfer
+                                if (!string.IsNullOrEmpty(objApproval.RequestedBy))
+                                {
+                                    try
+                                    {
+                                        string decryptedApprovalName = !string.IsNullOrEmpty(objApproval.Name) ? _encryptionService.Decrypt(objApproval.Name) : "Approval Request";
+                                        string decryptedFromBank = !string.IsNullOrEmpty(fromBank.Name) ? _encryptionService.Decrypt(fromBank.Name) : "Unknown Bank";
+                                        string decryptedToBank = !string.IsNullOrEmpty(toBank.Name) ? _encryptionService.Decrypt(toBank.Name) : "Unknown Bank";
+
+                                        string pushTitle = "Bank Transfer Processed";
+                                        string pushBody = $"Amount of {objApproval.TransactionAmount.Value} transferred from {decryptedFromBank} to {decryptedToBank} for approval '{decryptedApprovalName}'.";
+
+                                        await _pushNotificationService.SendNotificationAsync(objApproval.RequestedBy, pushTitle, pushBody);
+                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Successfully sent bank transfer notification to {objApproval.RequestedBy}");
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Error sending bank transfer notification: {ex.Message}");
+                                    }
+                                }
                             }
                         }
                         else if (string.IsNullOrEmpty(objApproval.FromBankId) && !string.IsNullOrEmpty(objApproval.ToBankId) && objApproval.TransactionAmount.HasValue && objApproval.TransactionAmount > 0 && (!string.IsNullOrEmpty(objApproval.ApprovalType) && _encryptionService.Decrypt(objApproval.ApprovalType) == "Initial Balance"))
@@ -318,6 +342,26 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
                                     VendorId = null
                                 };
                                 await _bankTransactionRepository.AddAsync(transaction);
+
+                                // Send push notification for initial balance deposit
+                                if (!string.IsNullOrEmpty(objApproval.RequestedBy))
+                                {
+                                    try
+                                    {
+                                        string decryptedApprovalName = !string.IsNullOrEmpty(objApproval.Name) ? _encryptionService.Decrypt(objApproval.Name) : "Approval Request";
+                                        string decryptedToBank = !string.IsNullOrEmpty(toBank.Name) ? _encryptionService.Decrypt(toBank.Name) : "Unknown Bank";
+
+                                        string pushTitle = "Initial Balance Deposited";
+                                        string pushBody = $"Amount of {objApproval.TransactionAmount.Value} deposited to {decryptedToBank} for approval '{decryptedApprovalName}'.";
+
+                                        await _pushNotificationService.SendNotificationAsync(objApproval.RequestedBy, pushTitle, pushBody);
+                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Successfully sent deposit notification to {objApproval.RequestedBy}");
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Error sending deposit notification: {ex.Message}");
+                                    }
+                                }
                             }
                         }
 
@@ -387,6 +431,28 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
                       );
 
                      bool isSent = await _emailService.SendEmail(email);
+                     
+                     // Send Push Notification back to Creator
+                     if (!string.IsNullOrEmpty(objApproval.RequestedBy))
+                     {
+                         try
+                         {
+                             string decryptedApprovalName = (!string.IsNullOrEmpty(objApproval.Name))
+                                 ? _encryptionService.Decrypt(objApproval.Name)
+                                 : "Approval Request";
+
+                             string pushTitle = $"Approval {approvedOrRejected}";
+                             string pushBody = $"{recordToUpdate.ApprovalApproverEmail} has {approvedOrRejected.ToLower()} '{decryptedApprovalName}'. Current status: {currentStatus}.";
+                             
+                             Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Attempting to send push notification to creator: {objApproval.RequestedBy}");
+                             await _pushNotificationService.SendNotificationAsync(objApproval.RequestedBy, pushTitle, pushBody);
+                             Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Successfully invoked SendNotificationAsync for creator");
+                         }
+                         catch (Exception ex)
+                         {
+                             Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Error sending push notification: {ex.Message}\n{ex.StackTrace}");
+                         }
+                     }
 
                      updateApprovalApproverCommandResponse.Data = _mapper.Map<UpdateApprovalApproverDto>(recordToUpdate);
 

@@ -10,6 +10,7 @@ export type VendorListVM = {
     panNumber?: string | null;
     address?: string | null;
     note?: string | null;
+    vendorCategoryId?: string | null;
     isVoided?: boolean;
     createdBy?: string | null;
     createdDate?: string;

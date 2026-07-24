@@ -94,6 +94,7 @@ namespace OOH.Domain
         public static string ObstructionTenure = "ObstrcTenr";
 
         public static string Vendor = "Vndr";
+        public static string VendorCategory = "VndCat";
 
         public static string ShareLink = "ShrLnk";
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { DashboardMetrics } from "./DashboardProcessor";
 import { DollarSign, ArrowUpRight, ArrowDownRight, Clock, CheckCircle2, XCircle } from "lucide-react";
+import { FaRupeeSign } from "react-icons/fa";
 
 interface KPIGridProps {
     metrics: DashboardMetrics;
@@ -14,22 +15,22 @@ export const KPIGrid: React.FC<KPIGridProps> = ({ metrics, onCardClick, activeFi
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <KPICard 
                 title="Total Available Funds"
-                value={`$${metrics.totalFunds.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-                icon={<DollarSign className="h-6 w-6 text-primary" />}
+                value={`₹${metrics.totalFunds.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                icon={<FaRupeeSign className="h-6 w-6 text-primary" />}
                 trend="Net Account Balances"
                 trendColor="text-primary"
             />
              
             <KPICard 
                 title="Total Credits (In)"
-                value={`$${metrics.totalCredit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                value={`₹${metrics.totalCredit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                 icon={<ArrowUpRight className="h-6 w-6 text-emerald-500" />}
                 trend="All incoming funds"
                 trendColor="text-emerald-500"
             />
             <KPICard 
                 title="Total Debits (Out)"
-                value={`$${metrics.totalDebit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                value={`₹${metrics.totalDebit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                 icon={<ArrowDownRight className="h-6 w-6 text-rose-500" />}
                 trend="All outgoing funds"
                 trendColor="text-rose-500"
@@ -55,7 +56,7 @@ export const KPIGrid: React.FC<KPIGridProps> = ({ metrics, onCardClick, activeFi
 };
 
 const KPICard = ({ title, value, icon, trend, trendColor }: { title: string, value: string, icon: React.ReactNode, trend: string, trendColor: string }) => (
-    <div className="relative group overflow-hidden bg-card/60 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-[2rem] p-6 transition-all hover:border-primary/20 shadow-sm hover:shadow-lg">
+    <div className="relative group overflow-hidden bg-white dark:bg-card/60 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-6 transition-all hover:border-primary/30 shadow-sm hover:shadow-md">
         <div className="absolute -right-4 -top-4 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
             {icon}
         </div>
@@ -63,7 +64,7 @@ const KPICard = ({ title, value, icon, trend, trendColor }: { title: string, val
             <div>
                 <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{title}</p>
             </div>
-            <div className="p-3 bg-background/50 rounded-2xl border border-white/5 shadow-inner">
+            <div className="p-3 bg-slate-100 dark:bg-background/50 rounded-2xl border border-slate-200/60 dark:border-white/5 shadow-inner">
                 {icon}
             </div>
         </div>
@@ -77,7 +78,7 @@ const KPICard = ({ title, value, icon, trend, trendColor }: { title: string, val
 );
 
 const MiniStat = ({ title, value, icon, color, bg, isActive }: { title: string, value: number, icon: React.ReactNode, color: string, bg: string, isActive?: boolean }) => (
-    <div className={`bg-card/40 border ${isActive ? 'border-primary ring-1 ring-primary shadow-[0_0_15px_rgba(var(--primary),0.2)]' : 'border-slate-200 dark:border-white/5'} rounded-2xl p-4 flex items-center justify-between transition-all`}>
+    <div className={`bg-white dark:bg-card/40 border ${isActive ? 'border-primary ring-1 ring-primary shadow-md' : 'border-slate-200/80 dark:border-white/5'} rounded-2xl p-4 shadow-sm dark:shadow-none flex items-center justify-between transition-all`}>
         <div>
             <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{title}</p>
             <p className="text-xl font-black text-foreground">{value}</p>

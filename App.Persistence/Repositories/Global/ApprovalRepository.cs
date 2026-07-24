@@ -229,11 +229,11 @@ namespace OOH.Persistence.Repositories
             {
 
 
-                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName, from_bank.name as FromBankName, to_bank.name as ToBankName, vendor.name as VendorName";
+                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName, from_bank.name as FromBankName, to_bank.name as ToBankName, vendor.name as VendorName, vendor_category.name as VendorCategoryName, linked_contract.name as LinkedContractName";
 
                 if (category == "Contract")
                 {
-                    query = query + $" , contract_media_unit.name as  MediaName , contract.name as ContractName";
+                    query = query + $" , contract_media_unit.name as  MediaName ";
                 }
                 else if (category == "Tender")
                 {
@@ -254,6 +254,8 @@ namespace OOH.Persistence.Repositories
                 query = query + $" left  join banks as from_bank on from_bank.bank_id = Approval.from_bank_id ";
                 query = query + $" left  join banks as to_bank on to_bank.bank_id = Approval.to_bank_id ";
                 query = query + $" left  join vendor on vendor.vendor_id = Approval.vendor_id ";
+                query = query + $" left  join vendor_category on vendor_category.vendor_category_id = vendor.vendor_category_id ";
+                query = query + $" left  join contract as linked_contract on linked_contract.contract_id = Approval.contract_id ";
 
                 if (category == "Contract")
                 {
@@ -352,11 +354,11 @@ namespace OOH.Persistence.Repositories
                 //query = query + $" and Approval.Approval_ID = @id ";
 
                  
-                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName";
+                string query = $"SELECT   {GetColumnsAsPropertiesWithTableName()} , approval_status.name as ApprovalStatusName, linked_contract.name as LinkedContractName";
 
                 if (category == "Contract")
                 {
-                    query = query + $" , contract_media_unit.name as  MediaName , contract.name as ContractName";
+                    query = query + $" , contract_media_unit.name as  MediaName ";
                 }
                 else if (category == "Tender")
                 {
@@ -376,6 +378,7 @@ namespace OOH.Persistence.Repositories
                 query = query + $" FROM Approval";
 
                 query = query + $" left  join approval_status on approval_status.approval_status_id = Approval.approval_status_id ";
+                query = query + $" left  join contract as linked_contract on linked_contract.contract_id = Approval.contract_id ";
 
                 if (category == "Contract")
                 {

@@ -16,9 +16,10 @@ namespace OOH.Application.Features.Tenders.Vendors.Commands.UpdateVendor
             .WithMessage("{PropertyName} is required")
             .NotNull()
             .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
-
-
-
+            RuleFor(r => r.VendorCategoryId)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required")
+                .NotNull();
         }
 
     }

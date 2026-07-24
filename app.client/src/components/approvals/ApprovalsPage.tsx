@@ -37,6 +37,8 @@ import { UserService } from "@/api/services/UserService";
 import { ApprovalService } from "@/api/services/ApprovalService";
 import { ApprovalApproverService } from "@/api/services/ApprovalApproverService";
 import { ApprovalStatusService } from "@/api/services/ApprovalStatusService";
+import { ContractService } from "@/api/services/ContractService";
+import { VendorCategoryService } from "@/api/services/VendorCategoryService";
 import { DocumentsService } from "@/api/services/DocumentsService";
 import { ExpenseTransactionService } from "@/api/services/ExpenseTransactionService";
 import { VendorService } from "@/api/services/VendorService";
@@ -178,6 +180,8 @@ export default function ApprovalsPage() {
   const [users, setUsers] = useState<UserListVM[]>([]);
   const [approvalStatuses, setApprovalStatuses] = useState<ApprovalStatusListVM[]>([]);
   const [vendors, setVendors] = useState<VendorListVM[]>([]);
+  const [vendorCategories, setVendorCategories] = useState<any[]>([]);
+  const [contracts, setContracts] = useState<any[]>([]);
   const [banks, setBanks] = useState<BankListVM[]>([]);
   const [approvals, setApprovals] = useState<ApprovalListVM[]>([]);
   const [loadingApprovals, setLoadingApprovals] = useState(true);
@@ -279,6 +283,7 @@ export default function ApprovalsPage() {
   const [expenseAmount, setExpenseAmount] = useState<string>("");
   const [expenseDate, setExpenseDate] = useState<string>(new Date().toISOString().split("T")[0]);
   const [selectedVendorId, setSelectedVendorId] = useState("");
+  const [selectedContractId, setSelectedContractId] = useState("");
   const [isAdvance, setIsAdvance] = useState(false);
   const [expenseName, setExpenseName] = useState("");
   const [expenseDescription, setExpenseDescription] = useState("");
@@ -347,16 +352,24 @@ export default function ApprovalsPage() {
       };
 
       try {
-        const [userRes, statusRes, loggedInRes, vendorRes, bankRes] = await Promise.all([
+        const [userRes, statusRes, loggedInRes, vendorRes, bankRes, contractRes, vendorCategoryRes] = await Promise.all([
           safeFetch(UserService.getApiVUser("1"), { success: false, data: [] }),
           safeFetch(ApprovalStatusService.getApiVApprovalStatus("1"), { success: false, data: [] } as any),
           safeFetch(UserService.getLoggedInUser("1"), { success: false, data: null } as any),
           safeFetch(VendorService.getApiVVendor("1"), { success: false, data: [] } as any),
-          safeFetch(BankService.getBanks() as any, { success: false, data: [] })
+          safeFetch(BankService.getBanks() as any, { success: false, data: [] }),
+          safeFetch(ContractService.getApiVContract("1"), { success: false, data: [] } as any),
+          safeFetch(VendorCategoryService.getAllVendorCategories(), [])
         ]);
         if (userRes.success && userRes.data) setUsers(userRes.data);
         if (statusRes.success && statusRes.data) setApprovalStatuses(statusRes.data);
         if (vendorRes.success && vendorRes.data) setVendors(vendorRes.data);
+        if (vendorCategoryRes) setVendorCategories(vendorCategoryRes);
+        if (Array.isArray(contractRes)) {
+          setContracts(contractRes);
+        } else if (contractRes.success && contractRes.data) {
+          setContracts(contractRes.data);
+        }
         if ((bankRes as any).data) setBanks((bankRes as any).data.filter((b: any) => b.isActive !== false));
         if (loggedInRes.success && loggedInRes.data?.departmentId) {
           setLoggedInDepartmentId(loggedInRes.data.departmentId);
@@ -525,6 +538,7 @@ export default function ApprovalsPage() {
     setToBankId(approval.toBankId || "");
     setTransactionAmount(approval.transactionAmount ? approval.transactionAmount.toString() : "");
     setSelectedVendorId(approval.vendorId || "");
+    setSelectedContractId(approval.contractId || "");
 
     // Set category states (read-only in UI during edit)
     if (approval.category === "Project") {
@@ -592,6 +606,7 @@ export default function ApprovalsPage() {
           toBankId: toBankId || null,
           transactionAmount: transactionAmount ? parseFloat(transactionAmount) : null,
           vendorId: isInitialBalance ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
+          contractId: isInitialBalance ? null : (selectedContractId === "none" ? null : (selectedContractId || null)),
         });
 
         if (!updateRes.success) {
@@ -617,6 +632,7 @@ export default function ApprovalsPage() {
           toBankId: toBankId || null,
           transactionAmount: transactionAmount ? parseFloat(transactionAmount) : null,
           vendorId: isInitialBalance ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
+          contractId: isInitialBalance ? null : (selectedContractId === "none" ? null : (selectedContractId || null)),
         };
 
         // If OfficeNote type, embed the officeNote object
@@ -954,7 +970,7 @@ export default function ApprovalsPage() {
               return (
               <div 
                 key={s.label} 
-                className={`group flex items-center gap-4 bg-card/40 border rounded-3xl p-5 backdrop-blur-md shadow-sm transition-all hover:bg-card/60 cursor-pointer ${isActive ? 'border-primary' : 'border-border/50'}`}
+                className={`group flex items-center gap-4 bg-white dark:bg-card/40 border rounded-3xl p-5 backdrop-blur-md shadow-sm transition-all hover:shadow-md cursor-pointer ${isActive ? 'border-primary ring-1 ring-primary' : 'border-slate-200/80 dark:border-white/10'}`}
                 onClick={() => {
                   if (s.label === "Total") {
                     searchParams.delete("status");
@@ -997,7 +1013,7 @@ export default function ApprovalsPage() {
                 return (
                   <div
                     key={approval.approvalID}
-                    className="group relative flex flex-col bg-card/40 border border-white/5 rounded-[2rem] p-5 hover:bg-card/60 transition-all duration-500 backdrop-blur-3xl shadow-xl overflow-hidden ring-1 ring-white/5 cursor-pointer"
+                    className="group relative flex flex-col bg-white dark:bg-card/40 border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-5 hover:shadow-md transition-all duration-500 backdrop-blur-3xl shadow-sm overflow-hidden cursor-pointer"
                     onClick={() => navigate(`/approvals/${approval.approvalID}`)}
                   >
                     {/* Priority Accent Bar */}
@@ -1069,21 +1085,21 @@ export default function ApprovalsPage() {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <button
-                            className="p-2.5 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all text-muted-foreground hover:text-foreground"
+                            className="p-2.5 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 transition-all text-muted-foreground hover:text-foreground"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <MoreVertical className="h-4 w-4" />
                           </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-2xl border-white/10 bg-card/95 backdrop-blur-xl p-1 shadow-2xl">
+                        <DropdownMenuContent align="end" className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-card/95 backdrop-blur-xl p-1 shadow-2xl">
                           <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); navigate(`/approvals/${approval.approvalID}`); }}>
                             <Eye className="h-3.5 w-3.5" /> View Details
                           </DropdownMenuItem>
-                          {approval.approvalStatusName === 'Approved' && !approval.isReversed && (
+                          {/* {approval.approvalStatusName === 'Approved' && !approval.isReversed && (
                             <DropdownMenuItem className="gap-2 rounded-xl  " onClick={(e) => { e.stopPropagation(); setReverseApprovalId(approval.approvalID || null); setIsReverseDialogOpen(true); }}>
                               <Undo2 className="h-3.5 w-3.5" /> Reverse Transaction
                             </DropdownMenuItem>
-                          )}
+                          )} */}
                           {approval.approvalStatusName === 'Pending' && !!sessionStorage.getItem('view_password') && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
                             <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); handleEdit(approval); }}>
                               <Edit2 className="h-3.5 w-3.5" /> Edit Request
@@ -1105,10 +1121,10 @@ export default function ApprovalsPage() {
               })}
             </div>
           ) : (
-            <div className="bg-card/40 border border-border/40 rounded-3xl overflow-x-auto backdrop-blur-xl shadow-sm">
+            <div className="bg-white dark:bg-card/40 border border-slate-300/80 dark:border-border/40 rounded-3xl overflow-x-auto backdrop-blur-xl shadow-sm">
               <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
-                  <tr className="bg-muted/30 border-b border-border/20 text-xs font-semibold text-muted-foreground">
+                  <tr className="bg-slate-50 dark:bg-muted/30 border-b border-slate-300 dark:border-border/60 text-xs font-semibold text-muted-foreground">
 
                     <th className="px-6 py-5">Approval Name</th>
                     <th className="px-6 py-5">Type</th>
@@ -1121,7 +1137,7 @@ export default function ApprovalsPage() {
                   {filteredApprovals.map((approval) => (
                     <tr
                       key={approval.approvalID}
-                      className="group hover:bg-muted/30 transition-all border-b border-border/10 last:border-0 font-medium cursor-pointer"
+                      className="group hover:bg-slate-50/80 dark:hover:bg-muted/30 transition-all border-b border-slate-300 dark:border-white/10 last:border-0 font-medium cursor-pointer"
                       onClick={() => navigate(`/approvals/${approval.approvalID}`)}
                     >
                      
@@ -1153,20 +1169,10 @@ export default function ApprovalsPage() {
                               <MoreVertical className="h-4 w-4" />
                             </button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="rounded-2xl border-border/50 bg-card p-1">
+                          <DropdownMenuContent align="end" className="rounded-2xl border-slate-200 dark:border-border/50 bg-white dark:bg-card p-1 shadow-lg">
                             <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); navigate(`/approvals/${approval.approvalID}`); }}>
                               <Eye className="h-3.5 w-3.5" /> View Details
                             </DropdownMenuItem>
-                            {/* {approval.approvalStatusName === 'Approved' && !approval.isReversed && (
-                              <DropdownMenuItem className="gap-2 rounded-xl " onClick={(e) => { e.stopPropagation(); setReverseApprovalId(approval.approvalID || null); setIsReverseDialogOpen(true); }}>
-                                <Undo2 className="h-3.5 w-3.5" /> Reverse Transaction
-                              </DropdownMenuItem>
-                            )} */}
-                            {/* {approval.approvalStatusName === 'Pending' && !!sessionStorage.getItem('view_password') && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
-                              <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); handleEdit(approval); }}>
-                                <Edit2 className="h-3.5 w-3.5" /> Edit
-                              </DropdownMenuItem>
-                            )} */}
                             {approval.approvalStatusName === 'Pending' && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
                               <DropdownMenuItem
                                 className="gap-2 rounded-xl text-red-500 focus:bg-destructive/10"
@@ -1491,7 +1497,7 @@ export default function ApprovalsPage() {
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Transaction Amount</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">₹</span>
                   <input
                     type="number"
                     placeholder="0.00"
@@ -1514,7 +1520,7 @@ export default function ApprovalsPage() {
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Amount</label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">₹</span>
                         <input
                           type="number"
                           placeholder="0.00"
@@ -1652,19 +1658,41 @@ export default function ApprovalsPage() {
                   </div> */}
               {/* ── Vendor Selection (optional) ── */}
               {!isInitialBalance && (
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Vendor (Optional)</label>
-                  <Select value={selectedVendorId} onValueChange={setSelectedVendorId}>
-                    <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
-                      <SelectValue placeholder="-- Select Vendor --" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-border/50">
-                      <SelectItem value="none">-- None --</SelectItem>
-                      {vendors.map(v => (
-                        <SelectItem key={v.vendorID} value={v.vendorID!}>{v.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Vendor (Optional)</label>
+                    <Select value={selectedVendorId} onValueChange={setSelectedVendorId}>
+                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                        <SelectValue placeholder="-- Select Vendor --" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl border-border/50">
+                        <SelectItem value="none">-- None --</SelectItem>
+                        {vendors.map(v => {
+                          const categoryName = vendorCategories.find(c => c.vendorCategoryId === v.vendorCategoryId)?.name;
+                          const displayName = categoryName ? `${v.name} (${categoryName})` : v.name;
+                          return (
+                            <SelectItem key={v.vendorID} value={v.vendorID!}>
+                              {displayName}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Contract</label>
+                    <Select value={selectedContractId} onValueChange={setSelectedContractId}>
+                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                        <SelectValue placeholder="-- Select Contract --" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl border-border/50">
+                        <SelectItem value="none">-- None --</SelectItem>
+                        {contracts.map(c => (
+                          <SelectItem key={c.contractId} value={c.contractId}>{c.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               )}
 

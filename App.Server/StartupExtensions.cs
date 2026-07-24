@@ -26,6 +26,12 @@ namespace OOH.API
         {
             builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = long.MaxValue);
 
+            // Initialize Firebase
+            FirebaseAdmin.FirebaseApp.Create(new FirebaseAdmin.AppOptions()
+            {
+                Credential = Google.Apis.Auth.OAuth2.GoogleCredential.FromFile(Path.Combine(builder.Environment.ContentRootPath, "firebase-service-account.json")),
+            });
+
             builder.Services.AddApplicationServices();
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddPersistenceServices(builder.Configuration);
@@ -133,7 +139,7 @@ namespace OOH.API
             {
                 options.AddPolicy("open", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
+                    policy.SetIsOriginAllowed(origin => true) // Allow ngrok URLs
                           .AllowAnyMethod()
                           .AllowAnyHeader()
                           .AllowCredentials();

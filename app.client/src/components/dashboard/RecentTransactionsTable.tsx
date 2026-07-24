@@ -61,11 +61,11 @@ export const RecentTransactionsTable: React.FC<RecentTransactionsTableProps> = (
     }, [transactions, searchTerm, sortConfig]);
 
     return (
-        <div className="bg-card/60 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-[2rem] overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-card/60 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 rounded-[2rem] overflow-hidden shadow-sm dark:shadow-none">
             <div className="p-6 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-sm font-black uppercase tracking-widest text-foreground">Recent Transactions</h2>
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase opacity-70">Top 50 records in range</p>
+
                 </div>
                 <div className="relative w-full sm:w-64">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60" />
@@ -81,8 +81,7 @@ export const RecentTransactionsTable: React.FC<RecentTransactionsTableProps> = (
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
-                        <TableRow className="hover:bg-transparent border-b border-slate-200 dark:border-white/5">
-
+                        <TableRow className="hover:bg-transparent border-b border-slate-300 dark:border-white/5">
                             <TableHead className="font-semibold text-xs text-muted-foreground uppercase tracking-wider px-6 py-4 cursor-pointer hover:text-foreground select-none" onClick={() => handleSort('date')}>
                                 <div className="flex items-center">Date {getSortIcon('date')}</div>
                             </TableHead>
@@ -112,7 +111,7 @@ export const RecentTransactionsTable: React.FC<RecentTransactionsTableProps> = (
                             </TableRow>
                         ) : (
                             filteredAndSortedTransactions.map((t, index) => (
-                                <TableRow key={`${t.transactionId}-${t.bankName || index}-${t.transactionType || index}`} className="transition-colors border-b border-slate-200 dark:border-white/5 group hover:bg-slate-50/50 dark:hover:bg-white/5">
+                                <TableRow key={`${t.transactionId}-${t.bankName || index}-${t.transactionType || index}`} className="transition-colors border-b border-slate-300 dark:border-white/5 group hover:bg-slate-50/50 dark:hover:bg-white/5">
                                     
                                     <TableCell className="px-6 py-4 text-sm font-medium text-muted-foreground tabular-nums">
                                         {t.createdDate ? format(parseISO(t.createdDate), "dd MMM yyyy, HH:mm") : "N/A"}
@@ -125,14 +124,14 @@ export const RecentTransactionsTable: React.FC<RecentTransactionsTableProps> = (
                                             {t.transactionType || "Unknown"}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="px-6 py-4 text-right text-sm font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
-                                        {(t.deposit && t.deposit > 0) ? `$${t.deposit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : "-"}
+                                    <TableCell className="px-6 py-4 text-right text-xs font-black tabular-nums text-emerald-600 dark:text-emerald-400">
+                                        {(t.deposit && t.deposit > 0) ? `₹${t.deposit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : "-"}
                                     </TableCell>
-                                    <TableCell className="px-6 py-4 text-right text-sm font-semibold tabular-nums text-rose-600 dark:text-rose-400">
-                                        {(t.withdrawal && t.withdrawal > 0) ? `$${t.withdrawal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : "-"}
+                                    <TableCell className="px-6 py-4 text-right text-xs font-black tabular-nums text-rose-600 dark:text-rose-400">
+                                        {(t.withdrawal && t.withdrawal > 0) ? `₹${t.withdrawal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : "-"}
                                     </TableCell>
-                                    <TableCell className="px-6 py-4 text-right text-sm font-semibold tabular-nums text-foreground">
-                                        ${t.runningBalance?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                                    <TableCell className="px-6 py-4 text-right text-xs font-black tabular-nums text-slate-700 dark:text-slate-300">
+                                        ₹{t.runningBalance?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                                     </TableCell>
                                 </TableRow>
                             ))

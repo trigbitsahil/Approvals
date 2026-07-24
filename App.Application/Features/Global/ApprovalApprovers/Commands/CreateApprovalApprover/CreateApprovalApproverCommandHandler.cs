@@ -10,16 +10,26 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.CreateAppro
     public class CreateApprovalApproverCommandHandler : IRequestHandler<CreateApprovalApproverCommand, CreateApprovalApproverCommandResponse>
     {
         private readonly IApprovalApproverRepository _ApprovalApproverRepository;
-
+        private readonly IApprovalRepository _approvalRepository;
         private readonly IMapper _mapper;
-
         private readonly IEmailService _emailService;
+        private readonly IPushNotificationService _pushNotificationService;
+        private readonly IEncryptionService _encryptionService;
 
-        public CreateApprovalApproverCommandHandler(IMapper mapper, IApprovalApproverRepository ApprovalApproverRepository, IEmailService emailService)
+        public CreateApprovalApproverCommandHandler(
+            IMapper mapper, 
+            IApprovalApproverRepository ApprovalApproverRepository, 
+            IApprovalRepository approvalRepository,
+            IEmailService emailService, 
+            IPushNotificationService pushNotificationService,
+            IEncryptionService encryptionService)
         {
             _mapper = mapper;
             _ApprovalApproverRepository = ApprovalApproverRepository;
+            _approvalRepository = approvalRepository;
             _emailService = emailService;
+            _pushNotificationService = pushNotificationService;
+            _encryptionService = encryptionService;
         }
 
 
@@ -55,6 +65,7 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.CreateAppro
                 ApprovalApprover entity = _mapper.Map<ApprovalApprover>(request);
 
 
+                entity.ApprovalId = request.ApprovalID;
                 entity.ApprovalApproverId = entityKeyColumnValue;
  
 
@@ -69,7 +80,25 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.CreateAppro
                 else
                 {
                     createApprovalApproverCommandResponse.Data = _mapper.Map<CreateApprovalApproverDto>(entity);
-
+                    try
+                    {
+                        var approval = await _approvalRepository.GetByIdAsync(request.ApprovalID);
+                        string approvalName = (approval != null && !string.IsNullOrEmpty(approval.Name)) 
+                            ? _encryptionService.Decrypt(approval.Name) 
+                            : "a new request";
+                        
+                        Console.WriteLine($"[CreateApprovalApproverCommandHandler] Attempting to send push notification to {entity.ApprovalApproverEmail}");
+                        await _pushNotificationService.SendNotificationAsync(
+                            entity.ApprovalApproverEmail,
+                            "New Approval Request",
+                            $"You have been assigned as an approver for '{approvalName}'."
+                        );
+                        Console.WriteLine($"[CreateApprovalApproverCommandHandler] Successfully invoked SendNotificationAsync");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[CreateApprovalApproverCommandHandler] Error sending push notification: {ex.Message}\n{ex.StackTrace}");
+                    }
                 }
 
             }

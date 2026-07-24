@@ -60,7 +60,7 @@ import {
   closestCenter,
   pointerWithin
 } from "@dnd-kit/core";
-import { Pencil, MoreVertical, Trash2, Landmark } from "lucide-react";
+import { Pencil, MoreVertical, Trash2, Landmark, FileSignature } from "lucide-react";
 import { toast } from "sonner";
 import type { FolderIntermediateListByFolderVM } from "@/api/models/FolderIntermediateListByFolderVM";
 
@@ -95,7 +95,14 @@ const data = {
   teams: [{ name: "OOH", logo: GalleryVerticalEnd, plan: "" }],
   user: { name: "User", email: "user@example.com", avatar: "" },
   navMain: [
-  
+     {
+      title: "Dashboard",
+      url: "#",
+      icon: BarChart3,
+      items: [
+        { title: "Dashboard", url: "/dashboard" },
+      ],
+    },
    
  
     {
@@ -118,6 +125,7 @@ const data = {
       icon: Truck,
       items: [
         { title: "Vendor List", url: "/vendors" },
+          { title: "Vendor Category", url: "/vendor-categories" },
       ],
     },
     {
@@ -134,17 +142,17 @@ const data = {
       icon: User,
       items: [
         { title: "User Management", url: "/users" },
-        // { title: "Roles", url: "/roles" },
       ],
     },
-       {
-      title: "Dashboard",
+    {
+      title: "Contracts",
       url: "#",
-      icon: BarChart3,
+      icon: FileSignature,
       items: [
-        { title: "Dashboard", url: "/dashboard" },
+        { title: "Contract Management", url: "/contracts" },
       ],
-    }
+    },
+    
     // {
     //   title: "Transaction Workflow",
     //   url: "#",

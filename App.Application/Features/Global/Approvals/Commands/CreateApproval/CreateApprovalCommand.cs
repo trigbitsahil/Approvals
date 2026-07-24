@@ -44,5 +44,6 @@ namespace OOH.Application.Features.Global.Approvals.Commands.CreateApproval
         public string? ToBankId { get; set; }
         public decimal? TransactionAmount { get; set; }
         public string? VendorId { get; set; }
+        public string? ContractId { get; set; }
     }
 }

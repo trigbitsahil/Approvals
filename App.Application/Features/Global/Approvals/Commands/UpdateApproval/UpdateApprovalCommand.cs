@@ -33,7 +33,7 @@ namespace OOH.Application.Features.Global.Approvals.Commands.UpdateApproval
         public string? FromBankId { get; set; }
         public string? ToBankId { get; set; }
         public decimal? TransactionAmount { get; set; }
-
-
+        public string? VendorId { get; set; }
+        public string? ContractId { get; set; }
     }
 }

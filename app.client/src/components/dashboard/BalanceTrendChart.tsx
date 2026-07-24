@@ -14,7 +14,7 @@ const COLORS = [
 
 export const BalanceTrendChart: React.FC<BalanceTrendChartProps> = ({ trends, bankNames }) => {
     return (
-        <div className="bg-card/60 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-[2rem] p-6 shadow-sm h-[320px] flex flex-col mt-6">
+        <div className="bg-white dark:bg-card/60 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-6 shadow-sm dark:shadow-none h-[320px] flex flex-col mt-6">
             <div className="mb-6">
                 <h2 className="text-sm font-black uppercase tracking-widest text-foreground">Balance Trends</h2>
                 <p className="text-[10px] font-bold text-muted-foreground uppercase opacity-70">Historical Account Balances</p>
@@ -28,7 +28,7 @@ export const BalanceTrendChart: React.FC<BalanceTrendChartProps> = ({ trends, ba
                 ) : (
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={trends} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" strokeOpacity={0.35} />
                             <XAxis 
                                 dataKey="date" 
                                 axisLine={false} 
@@ -39,7 +39,7 @@ export const BalanceTrendChart: React.FC<BalanceTrendChartProps> = ({ trends, ba
                             <YAxis 
                                 axisLine={false} 
                                 tickLine={false} 
-                                tickFormatter={(value) => `$${value >= 1000 ? (value/1000).toFixed(0) + 'k' : value}`}
+                                tickFormatter={(value) => `₹${value >= 1000 ? (value/1000).toFixed(0) + 'k' : value}`}
                                 tick={{ fontSize: 10, fontWeight: 700, fill: "currentColor", opacity: 0.5 }}
                                 dx={-10}
                             />
@@ -52,7 +52,7 @@ export const BalanceTrendChart: React.FC<BalanceTrendChartProps> = ({ trends, ba
                                 }}
                                 itemStyle={{ fontSize: '12px', fontWeight: 800 }}
                                 labelStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}
-                                formatter={(value: number) => [`$${value.toLocaleString(undefined, {minimumFractionDigits: 2})}`, '']}
+                                formatter={(value: number) => [`₹${value.toLocaleString(undefined, {minimumFractionDigits: 2})}`, '']}
                             />
                             <Legend 
                                 iconType="circle" 

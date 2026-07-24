@@ -11,7 +11,7 @@ interface DashboardApprovalsTableProps {
 
 export const DashboardApprovalsTable: React.FC<DashboardApprovalsTableProps> = ({ approvals, title }) => {
     return (
-        <div className="bg-card/60 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-[2rem] overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-card/60 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 rounded-[2rem] overflow-hidden shadow-sm dark:shadow-none">
             <div className="p-6 border-b border-slate-200 dark:border-white/10">
                 <h2 className="text-sm font-black uppercase tracking-widest text-foreground">{title}</h2>
                 <p className="text-[10px] font-bold text-muted-foreground uppercase opacity-70">Filtered Approvals</p>
@@ -53,7 +53,7 @@ export const DashboardApprovalsTable: React.FC<DashboardApprovalsTableProps> = (
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="px-6 py-4 text-xs font-black tabular-nums">
-                                        {a.transactionAmount ? `$${a.transactionAmount.toLocaleString()}` : "-"}
+                                        {a.transactionAmount ? `₹${a.transactionAmount.toLocaleString()}` : "-"}
                                     </TableCell>
                                 </TableRow>
                             ))

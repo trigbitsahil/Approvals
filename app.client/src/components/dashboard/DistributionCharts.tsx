@@ -10,7 +10,7 @@ const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6'
 
 export const DistributionCharts: React.FC<DistributionChartsProps> = ({ bankDistribution, typeDistribution }) => {
     return (
-        <div className="bg-card/60 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-[2rem] p-6 shadow-sm h-[400px] flex flex-col">
+        <div className="bg-white dark:bg-card/60 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-6 shadow-sm dark:shadow-none h-[400px] flex flex-col">
             <div className="mb-2">
                 <h2 className="text-sm font-black uppercase tracking-widest text-foreground">Distributions</h2>
                 <p className="text-[10px] font-bold text-muted-foreground uppercase opacity-70">Volume by Bank</p>
@@ -38,7 +38,7 @@ export const DistributionCharts: React.FC<DistributionChartsProps> = ({ bankDist
                                 ))}
                             </Pie>
                             <Tooltip 
-                                formatter={(value: number) => `$${value.toLocaleString(undefined, {minimumFractionDigits: 2})}`}
+                                formatter={(value: number) => `₹${value.toLocaleString(undefined, {minimumFractionDigits: 2})}`}
                                 contentStyle={{ 
                                     backgroundColor: 'rgba(0,0,0,0.8)', 
                                     borderRadius: '16px',

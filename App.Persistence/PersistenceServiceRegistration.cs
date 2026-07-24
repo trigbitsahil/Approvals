@@ -34,6 +34,8 @@ namespace OOH.Persistence
             
 
             services.AddScoped<IVendorRepository, VendorRepository>();
+            services.AddScoped<IContractRepository, ContractRepository>();
+            services.AddScoped<IVendorCategoryRepository, VendorCategoryRepository>();
 
           
 

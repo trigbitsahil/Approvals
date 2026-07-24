@@ -47,6 +47,10 @@ namespace OOH.Domain.Entities.Global
         public string Category { get; set; }
         [Column("category_id")]
         public string CategoryId { get; set; }
+        
+        [Column("contract_id")]
+        public string? ContractId { get; set; }
+        
         [Required]
         [Column("is_voided")]
         public bool IsVoided { get; set; }
@@ -80,6 +84,8 @@ namespace OOH.Domain.Entities.Global
 
         [Column("transaction_amount")]
         public decimal? TransactionAmount { get; set; }
+
+
 
     }
 }

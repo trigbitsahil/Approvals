@@ -7,7 +7,7 @@ interface TrendChartProps {
 
 export const TrendChart: React.FC<TrendChartProps> = ({ trends }) => {
     return (
-        <div className="bg-card/60 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-[2rem] p-6 shadow-sm h-[400px] flex flex-col">
+        <div className="bg-white dark:bg-card/60 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-6 shadow-sm dark:shadow-none h-[400px] flex flex-col">
             <div className="mb-6">
                 <h2 className="text-sm font-black uppercase tracking-widest text-foreground">Transaction Trends</h2>
                 <p className="text-[10px] font-bold text-muted-foreground uppercase opacity-70">Daily Volume Analysis</p>
@@ -31,7 +31,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ trends }) => {
                                     <stop offset="95%" stopColor="#f43f5e" stopOpacity={0}/>
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" strokeOpacity={0.35} />
                             <XAxis 
                                 dataKey="date" 
                                 axisLine={false} 
@@ -42,7 +42,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ trends }) => {
                             <YAxis 
                                 axisLine={false} 
                                 tickLine={false} 
-                                tickFormatter={(value) => `$${value >= 1000 ? (value/1000).toFixed(0) + 'k' : value}`}
+                                tickFormatter={(value) => `₹${value >= 1000 ? (value/1000).toFixed(0) + 'k' : value}`}
                                 tick={{ fontSize: 10, fontWeight: 700, fill: "currentColor", opacity: 0.5 }}
                                 dx={-10}
                             />
@@ -55,6 +55,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ trends }) => {
                                 }}
                                 itemStyle={{ fontSize: '12px', fontWeight: 800 }}
                                 labelStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}
+                                formatter={(value: number) => [`₹${value.toLocaleString(undefined, {minimumFractionDigits: 2})}`, '']}
                             />
                             <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase' }}/>
                             <Area type="monotone" dataKey="credit" name="Credits (In)" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorCredit)" />
