@@ -1,6 +1,8 @@
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -108,6 +110,9 @@ namespace OOH.Identity
            // services.AddDbContext<OOHIdentityDBContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddEntityFrameworkNpgsql().AddDbContext<OOHIdentityDBContext>(options => options.UseNpgsql(configuration["ConnectionStrings:DefaultConnection"]));
+
+            services.AddDataProtection()
+                .PersistKeysToDbContext<OOHIdentityDBContext>();
          
            //  services.AddEntityFrameworkNpgsql().AddDbContext<OOHIdentityDBContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=PostDB@123;Database=learning_db"));
 

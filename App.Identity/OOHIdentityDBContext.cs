@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +12,10 @@ using System.Threading.Tasks;
 
 namespace OOH.Identity
 {
-    public class OOHIdentityDBContext : IdentityDbContext<ApplicationUser, IdentityRole,string>
+    public class OOHIdentityDBContext : IdentityDbContext<ApplicationUser, IdentityRole, string>, IDataProtectionKeyContext
     {
         public DbSet<UserFCMToken> UserFCMTokens { get; set; }
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 
         public OOHIdentityDBContext()
         {
