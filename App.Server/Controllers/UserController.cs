@@ -16,6 +16,8 @@ using OOH.Application.Features.Global.Users.Queries.GetUserRoles;
 using OOH.Application.Features.Global.Users.Queries.GetAllRoles;
 using OOH.Application.Features.Global.Users.Commands.RegisterFCMToken;
 using OOH.Application.Contracts.Infrastructure;
+using OOH.Application.Models.Mail;
+using Microsoft.AspNetCore.WebUtilities;
 using OOH.Identity.Models;
 
 namespace OOH.API.Controllers
@@ -229,6 +231,95 @@ namespace OOH.API.Controllers
             {
                 response.Success = false;
                 response.Message = result.Errors.FirstOrDefault()?.Description ?? "Error updating the password";
+                return BadRequest(response);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("ForgotPassword", Name = "ForgotPassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<DeleteUserCommandResponse>> ForgotPassword([FromBody] ForgotPasswordCommand request)
+        {
+            var userManager = HttpContext.RequestServices.GetService<UserManager<ApplicationUser>>();
+            var emailService = HttpContext.RequestServices.GetService<IEmailService>();
+            
+            var response = new DeleteUserCommandResponse();
+            if (userManager == null || emailService == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            ApplicationUser user = await userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User Not Found";
+                return BadRequest(response);
+            }
+
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            bool isSent = false;
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                var param = new Dictionary<string, string>
+                {
+                   { "token", token } ,
+                   { "email", request.Email }
+                };
+
+                var callback = QueryHelpers.AddQueryString(request.ClientUrl ?? "http://localhost:3000/reset-password", param);
+                EmailInfo objEmailInfo = new EmailInfo(callback, request.Email, "", "Reset Password Token", "dev@wallop.in", null);
+                isSent = await emailService.SendEmail(objEmailInfo);
+            }
+
+            if (isSent)
+            {
+                response.Success = true;
+                return Ok(response);
+            }
+            else 
+            {
+                response.Success = false;
+                response.Message = "Error sending the reset email.";
+                return BadRequest(response);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("ResetPassword", Name = "ResetPassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<DeleteUserCommandResponse>> ResetPassword([FromBody] ResetPasswordCommand request)
+        {
+            var userManager = HttpContext.RequestServices.GetService<UserManager<ApplicationUser>>();
+            var response = new DeleteUserCommandResponse();
+
+            if (userManager == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            ApplicationUser user = await userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User Not Found";
+                return BadRequest(response);
+            }
+
+            var result = await userManager.ResetPasswordAsync(user, request.Token, request.Password);
+
+            if (result.Succeeded)
+            {
+                response.Success = true;
+                return Ok(response);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = result.Errors.FirstOrDefault()?.Description ?? "Error resetting the password.";
                 return BadRequest(response);
             }
         }

@@ -19,7 +19,7 @@ const ForgotPasswordForm = () => {
       try {
         await UserService.forgotPassword("1", {
           email: values.email,
-          ClientUrl: "https://localhost:5173",
+          ClientUrl: `${window.location.origin}/reset-password`,
         });
 
         alert(

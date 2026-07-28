@@ -22,6 +22,7 @@ const SignUpForm = () => {
       lastName: string;
       email: string;
       password: string;
+      phoneNumber: string;
     }) => {
       try {
         await UserService.postApiVUser("1", {
@@ -29,6 +30,7 @@ const SignUpForm = () => {
           lastName: values.lastName,
           email: values.email,
           password: values.password,
+          phoneNumber: values.phoneNumber,
           userName: values.email,
         });
 
@@ -113,6 +115,25 @@ const SignUpForm = () => {
                       {...input}
                       type="email"
                       placeholder="email@example.com"
+                      className="w-full h-10 rounded-md border border-gray-300 px-3 py-2 text-sm"
+                    />
+                    {meta.touched && meta.error && (
+                      <span className="text-sm text-red-500">{meta.error}</span>
+                    )}
+                  </>
+                )}
+              </Field>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium block mb-1">Phone Number</label>
+              <Field name="phoneNumber" validate={required}>
+                {({ input, meta }) => (
+                  <>
+                    <input
+                      {...input}
+                      type="tel"
+                      placeholder="+1234567890"
                       className="w-full h-10 rounded-md border border-gray-300 px-3 py-2 text-sm"
                     />
                     {meta.touched && meta.error && (
