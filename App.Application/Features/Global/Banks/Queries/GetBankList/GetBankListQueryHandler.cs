@@ -44,11 +44,7 @@ namespace OOH.Application.Features.Global.Banks.Queries.GetBankList
             if (!string.Equals(_loggedInUserService.UserRole, "superadmin", System.StringComparison.OrdinalIgnoreCase) &&
                 !string.Equals(_loggedInUserService.UserRole, "admin", System.StringComparison.OrdinalIgnoreCase))
             {
-                var userBanks = activeBanks.Where(b => b.UserId == _loggedInUserService.UserId).ToList();
-                if (userBanks.Any())
-                {
-                    activeBanks = userBanks;
-                }
+                activeBanks = activeBanks.Where(b => b.UserId == _loggedInUserService.UserId).ToList();
             }
 
             var vm = activeBanks.Select(b => new BankListVM
