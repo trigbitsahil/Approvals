@@ -175,7 +175,7 @@ namespace OOH.Identity.Services
                 return false;
             }
 
-            // Remove this token from any other users to prevent cross-user notifications on shared browsers
+            // 1. Remove this exact token from any other users
             var otherUsersTokens = await _dbContext.UserFCMTokens
                 .Where(t => t.Token == token && t.UserId != userId)
                 .ToListAsync();
@@ -184,21 +184,27 @@ namespace OOH.Identity.Services
             {
                 Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Removing token from {otherUsersTokens.Count} other users.");
                 _dbContext.UserFCMTokens.RemoveRange(otherUsersTokens);
-                await _dbContext.SaveChangesAsync();
             }
 
-            var existingTokens = await _dbContext.UserFCMTokens
-                .Where(t => t.UserId == userId && t.Token == token)
+            // 2. Fetch all existing tokens for this user
+            var userTokens = await _dbContext.UserFCMTokens
+                .Where(t => t.UserId == userId)
                 .ToListAsync();
 
-            if (existingTokens.Count > 1)
+            var matchingToken = userTokens.FirstOrDefault(t => t.Token == token);
+            if (matchingToken == null)
             {
-                Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Cleaning up {existingTokens.Count - 1} duplicate token rows.");
-                _dbContext.UserFCMTokens.RemoveRange(existingTokens.Skip(1));
-                await _dbContext.SaveChangesAsync();
-            }
-            else if (existingTokens.Count == 0)
-            {
+                // If device details match an existing token for this user, remove the old token for this device
+                if (!string.IsNullOrEmpty(deviceDetails))
+                {
+                    var oldDeviceTokens = userTokens.Where(t => t.DeviceDetails == deviceDetails).ToList();
+                    if (oldDeviceTokens.Any())
+                    {
+                        Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Removing {oldDeviceTokens.Count} old tokens for device: {deviceDetails}");
+                        _dbContext.UserFCMTokens.RemoveRange(oldDeviceTokens);
+                    }
+                }
+
                 Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Adding NEW token to database for userId: {userId} ({user.Email})");
                 _dbContext.UserFCMTokens.Add(new UserFCMToken
                 {
@@ -206,13 +212,13 @@ namespace OOH.Identity.Services
                     Token = token,
                     DeviceDetails = deviceDetails
                 });
-                await _dbContext.SaveChangesAsync();
             }
             else
             {
                 Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Token already exists in database for userId: {userId} ({user.Email})");
             }
 
+            await _dbContext.SaveChangesAsync();
             return true;
         }
     }

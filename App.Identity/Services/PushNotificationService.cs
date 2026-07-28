@@ -97,8 +97,10 @@ namespace OOH.Identity.Services
                     if (!res.IsSuccess)
                     {
                         Console.WriteLine($"[PushNotificationService] FCM Error: {res.Exception?.Message}");
-                        // Only mark token for deletion if FCM explicitly reports Unregistered (app uninstalled / permission revoked)
-                        if (res.Exception?.MessagingErrorCode == MessagingErrorCode.Unregistered)
+                        // Mark token for deletion if FCM reports Unregistered, InvalidArgument, or SenderIdMismatch
+                        if (res.Exception?.MessagingErrorCode == MessagingErrorCode.Unregistered ||
+                            res.Exception?.MessagingErrorCode == MessagingErrorCode.InvalidArgument ||
+                            res.Exception?.MessagingErrorCode == MessagingErrorCode.SenderIdMismatch)
                         {
                             deadTokens.Add(tokens[i]);
                         }
