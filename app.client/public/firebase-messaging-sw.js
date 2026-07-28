@@ -16,13 +16,18 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
     console.log("[firebase-messaging-sw.js] Received background message", payload);
     
-    // We are receiving a Data payload from the backend now, so we must manually show it.
-    const title = payload?.data?.title || 'New Notification';
-    const body = payload?.data?.body || 'You have a new update.';
+    const title = payload?.notification?.title || payload?.data?.title || 'New Notification';
+    const body = payload?.notification?.body || payload?.data?.body || 'You have a new update.';
     
     const notificationOptions = {
         body: body,
-        icon: '/firebase-logo.png' // default icon or replace with your app icon
+        icon: '/pwa-192x192.png',
+        badge: '/pwa-192x192.png',
+        tag: 'approval-notification-' + Date.now(),
+        renotify: true,
+        data: {
+            url: payload?.data?.click_action || '/'
+        }
     };
 
     return self.registration.showNotification(title, notificationOptions);
@@ -31,6 +36,8 @@ messaging.onBackgroundMessage((payload) => {
 // ✅ Handle notification click — opens app
 self.addEventListener("notificationclick", (event) => {
     event.notification.close();
+    const urlToOpen = event.notification.data?.url || "/";
+
     event.waitUntil(
         clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
             for (const client of clientList) {
@@ -39,7 +46,7 @@ self.addEventListener("notificationclick", (event) => {
                 }
             }
             if (clients.openWindow) {
-                return clients.openWindow("/");
+                return clients.openWindow(urlToOpen);
             }
         })
     );
