@@ -970,7 +970,7 @@ export default function ApprovalsPage() {
               return (
               <div 
                 key={s.label} 
-                className={`group flex items-center gap-4 bg-white dark:bg-card/40 border rounded-3xl p-5 backdrop-blur-md shadow-sm transition-all hover:shadow-md cursor-pointer ${isActive ? 'border-primary ring-1 ring-primary' : 'border-slate-200/80 dark:border-white/10'}`}
+                className={`group flex items-center gap-4 bg-white dark:bg-card border rounded-3xl p-5 shadow-sm transition-all hover:shadow-md cursor-pointer ${isActive ? 'border-primary ring-1 ring-primary' : 'border-slate-200/80 dark:border-white/10'}`}
                 onClick={() => {
                   if (s.label === "Total") {
                     searchParams.delete("status");
@@ -1013,7 +1013,7 @@ export default function ApprovalsPage() {
                 return (
                   <div
                     key={approval.approvalID}
-                    className="group relative flex flex-col bg-white dark:bg-card/40 border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-5 hover:shadow-md transition-all duration-500 backdrop-blur-3xl shadow-sm overflow-hidden cursor-pointer"
+                    className="group relative flex flex-col bg-white dark:bg-card border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-5 hover:shadow-md transition-all duration-500 shadow-sm overflow-hidden cursor-pointer"
                     onClick={() => navigate(`/approvals/${approval.approvalID}`)}
                   >
                     {/* Priority Accent Bar */}
@@ -1032,7 +1032,7 @@ export default function ApprovalsPage() {
                           {approval.priority || "Normal"} Priority
                         </span>
                       </div>
-                      <div className={`flex items-center gap-1.5 py-1 px-3 rounded-full border shadow-inner backdrop-blur-md ${approval.approvalStatusName === "Approved" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500" :
+                      <div className={`flex items-center gap-1.5 py-1 px-3 rounded-full border shadow-inner ${approval.approvalStatusName === "Approved" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500" :
                         approval.approvalStatusName === "Rejected" ? "bg-rose-500/10 border-rose-500/20 text-rose-500" :
                           "bg-amber-500/10 border-amber-500/20 text-amber-500"
                         }`}>

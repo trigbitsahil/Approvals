@@ -522,7 +522,7 @@ export default function ApprovalDetailPage() {
                 <Badge variant="outline" className={`rounded-xl px-2.5 py-1 text-[9px] sm:text-[10px] font-black uppercase tracking-tighter ${getPriorityColor(approval.priority)}`}>
                   {approval.priority || "Medium"} Priority
                 </Badge>
-                <div className={`flex items-center gap-1.5 sm:gap-2 py-1 px-3 sm:px-4 rounded-full border shadow-sm backdrop-blur-md ${getStatusColor(approval.approvalStatusName)}`}>
+                <div className={`flex items-center gap-1.5 sm:gap-2 py-1 px-3 sm:px-4 rounded-full border shadow-sm ${getStatusColor(approval.approvalStatusName)}`}>
                   {getStatusIcon(approval.approvalStatusName)}
                   <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-tight">{approval.approvalStatusName || "Pending"}</span>
                 </div>
@@ -572,7 +572,7 @@ export default function ApprovalDetailPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="group relative bg-card/60 border border-border/40 rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 backdrop-blur-3xl shadow-2xl transition-all hover:border-primary/30 ring-1 ring-white/5"
+              className="group relative bg-card border border-border/40 rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 shadow-2xl transition-all hover:border-primary/30 ring-1 ring-white/5"
             >
               <div className="absolute top-6 right-8 opacity-10 group-hover:opacity-20 transition-opacity">
                 <FileText className="h-12 w-12" />
@@ -598,14 +598,14 @@ export default function ApprovalDetailPage() {
                   value: approval.vendorCategoryName ? `${approval.vendorName} (${approval.vendorCategoryName})` : approval.vendorName, 
                   icon: User 
                 }] : []),
-                ...(approval.linkedContractName ? [{ label: "Contract", value: approval.linkedContractName, icon: FileText }] : [])
-              ].map((item, idx) => (
+                ...(approval.linkedContractName ? [{ label: "Contract", value: approval.linkedContractName, icon: FileText }] : parentEntityId => null)
+              ].filter(Boolean).map((item: any, idx) => (
                 <motion.div
                   key={item.label}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * (idx + 1) }}
-                  className="flex items-center gap-3 md:gap-4 bg-card/40 border border-border/20 rounded-2xl sm:rounded-3xl p-4 sm:p-5 hover:bg-card/60 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg group ring-1 ring-white/5"
+                  className="flex items-center gap-3 md:gap-4 bg-card border border-border/20 rounded-2xl sm:rounded-3xl p-4 sm:p-5 hover:bg-card/60 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg group ring-1 ring-white/5"
                 >
                   <div className="p-2.5 sm:p-3 bg-primary/10 border border-primary/20 rounded-xl sm:rounded-2xl text-primary shadow-inner group-hover:scale-110 transition-transform shrink-0">
                     <item.icon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -625,7 +625,7 @@ export default function ApprovalDetailPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="bg-card/60 border border-border/40 rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 backdrop-blur-3xl shadow-2xl ring-1 ring-white/5"
+              className="bg-card border border-border/40 rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 shadow-2xl ring-1 ring-white/5"
             >
               <div className="flex items-center justify-between mb-8">
                 <h3 className="text-[10px] font-black uppercase text-muted-foreground tracking-[0.2em] flex items-center gap-2">
@@ -715,7 +715,7 @@ export default function ApprovalDetailPage() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-card/80 backdrop-blur-3xl rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 border border-border/40 shadow-2xl relative overflow-hidden ring-1 ring-white/5"
+              className="bg-card rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 border border-border/40 shadow-2xl relative overflow-hidden ring-1 ring-white/5"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2" />
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 blur-[50px] rounded-full translate-y-1/2 -translate-x-1/2" />
