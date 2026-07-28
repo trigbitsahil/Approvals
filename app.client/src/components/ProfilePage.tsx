@@ -234,9 +234,9 @@ export const ProfilePage = () => {
                 </h2>
                 <p>
                   {email || "Loading..."}{" "}
-                  <button className="text-blue-600 hover:underline text-sm ml-2">
+                  {/* <button className="text-blue-600 hover:underline text-sm ml-2">
                     change email
-                  </button>
+                  </button> */}
                 </p>
               </div>
             </div>
