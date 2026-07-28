@@ -191,15 +191,6 @@ namespace OOH.Identity.Services
                 .Where(t => t.UserId == userId)
                 .ToListAsync();
 
-            // Clean up old legacy tokens that were based on UserAgent instead of deviceId
-            var legacyTokens = userTokens.Where(t => t.DeviceDetails != null && (t.DeviceDetails.Contains("Mozilla") || t.DeviceDetails.Contains("AppleWebKit") || t.DeviceDetails.Contains("Mobile") || t.DeviceDetails.Contains("Safari"))).ToList();
-            if (legacyTokens.Any())
-            {
-                Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Cleaning up {legacyTokens.Count} legacy UserAgent tokens for userId: {userId}");
-                _dbContext.UserFCMTokens.RemoveRange(legacyTokens);
-                userTokens.RemoveAll(t => legacyTokens.Contains(t));
-            }
-
             var matchingToken = userTokens.FirstOrDefault(t => t.Token == token);
             if (matchingToken == null)
             {
@@ -224,10 +215,6 @@ namespace OOH.Identity.Services
             }
             else
             {
-                if (matchingToken.DeviceDetails != deviceDetails)
-                {
-                    matchingToken.DeviceDetails = deviceDetails;
-                }
                 Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Token already exists in database for userId: {userId} ({user.Email})");
             }
 
