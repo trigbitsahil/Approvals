@@ -166,8 +166,8 @@ export const ProfilePage = () => {
       <div className="max-w-5xl mx-auto px-5 py-6">
         <Tabs defaultValue="profile" className="w-full">
           {/* tabs header */}
-          <TabsList className="flex w-full gap-8 border-b">
-            {["profile", "preferences", "integrations", "security"].map(
+          <TabsList className="flex w-full justify-start gap-4 sm:gap-8 border-b overflow-x-auto overflow-y-hidden whitespace-nowrap scrollbar-hide">
+            {["profile", "security"].map(
               (tab) => (
                 <TabsTrigger
                   key={tab}
@@ -244,7 +244,7 @@ export const ProfilePage = () => {
             {/* ------------- FORM FIELDS ------------- */}
             <div className="space-y-6">
               {/* names */}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="firstName" className="text-sm font-medium">
                     First name
@@ -270,7 +270,7 @@ export const ProfilePage = () => {
               </div>
 
               {/* country & phone */}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="country" className="text-sm font-medium">
                     Country
@@ -307,7 +307,7 @@ export const ProfilePage = () => {
               </div>
 
               {/* location & birthday */}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="location" className="text-sm font-medium">
                     Location
