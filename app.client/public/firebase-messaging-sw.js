@@ -29,9 +29,16 @@ const messaging = firebase.messaging();
 // ✅ Handles background messages (app closed / in background)
 messaging.onBackgroundMessage((payload) => {
     console.log("[firebase-messaging-sw.js] Received background message", JSON.stringify(payload));
+    
+    // If the payload already has a notification object, the browser/FCM SDK 
+    // will display it automatically. We must NOT call showNotification again here.
+    if (payload.notification) {
+        console.log("[firebase-messaging-sw.js] Native notification detected, letting FCM SDK handle display.");
+        return;
+    }
 
-    const title = payload?.notification?.title || payload?.data?.title || 'New Notification';
-    const body = payload?.notification?.body || payload?.data?.body || 'You have a new update.';
+    const title = payload?.data?.title || 'New Notification';
+    const body = payload?.data?.body || 'You have a new update.';
 
     const notificationOptions = {
         body: body,
@@ -45,7 +52,7 @@ messaging.onBackgroundMessage((payload) => {
         }
     };
 
-    console.log("[firebase-messaging-sw.js] Showing notification:", title, body);
+    console.log("[firebase-messaging-sw.js] Showing custom fallback notification:", title, body);
     return self.registration.showNotification(title, notificationOptions);
 });
 
