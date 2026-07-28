@@ -167,9 +167,11 @@ namespace OOH.Identity.Services
         }
         public async Task<bool> RegisterFCMTokenAsync(string userId, string token, string? deviceDetails = null)
         {
+            Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Registering token for userId: {userId}, token length: {token?.Length}");
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
+                Console.WriteLine($"[UserService.RegisterFCMTokenAsync] ERROR: User not found in database for userId: {userId}");
                 return false;
             }
 
@@ -180,6 +182,7 @@ namespace OOH.Identity.Services
             
             if (otherUsersTokens.Any())
             {
+                Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Removing token from {otherUsersTokens.Count} other users.");
                 _dbContext.UserFCMTokens.RemoveRange(otherUsersTokens);
                 await _dbContext.SaveChangesAsync();
             }
@@ -190,12 +193,13 @@ namespace OOH.Identity.Services
 
             if (existingTokens.Count > 1)
             {
-                // Clean up duplicates if a race condition caused multiple identical inserts
+                Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Cleaning up {existingTokens.Count - 1} duplicate token rows.");
                 _dbContext.UserFCMTokens.RemoveRange(existingTokens.Skip(1));
                 await _dbContext.SaveChangesAsync();
             }
             else if (existingTokens.Count == 0)
             {
+                Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Adding NEW token to database for userId: {userId} ({user.Email})");
                 _dbContext.UserFCMTokens.Add(new UserFCMToken
                 {
                     UserId = userId,
@@ -204,11 +208,9 @@ namespace OOH.Identity.Services
                 });
                 await _dbContext.SaveChangesAsync();
             }
-            else if (existingTokens.Count == 1 && existingTokens[0].DeviceDetails != deviceDetails)
+            else
             {
-                // Update device details if they changed
-                existingTokens[0].DeviceDetails = deviceDetails;
-                await _dbContext.SaveChangesAsync();
+                Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Token already exists in database for userId: {userId} ({user.Email})");
             }
 
             return true;

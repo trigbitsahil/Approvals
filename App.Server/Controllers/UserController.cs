@@ -46,9 +46,11 @@ namespace OOH.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> RegisterFCMToken([FromBody] RegisterFCMTokenRequest request)
         {
+            Console.WriteLine($"[UserController] POST /FCMToken received. User authenticated: {User.Identity?.IsAuthenticated}, User Name: {User.Identity?.Name}");
             var success = await _mediator.Send(new RegisterFCMTokenCommand { Token = request.Token, DeviceDetails = request.DeviceDetails });
             if (success)
                 return Ok();
+            Console.WriteLine("[UserController] POST /FCMToken returned BadRequest (success = false)");
             return BadRequest();
         }
 

@@ -94,6 +94,19 @@ const TokenAuthRoute = ({ children }: { children: React.ReactNode }) => {
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     requestFirebaseNotificationPermission();
+
+    const handleFocus = () => {
+      console.log("[App.tsx] App focused/reopened, re-verifying FCM token...");
+      requestFirebaseNotificationPermission();
+    };
+
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        requestFirebaseNotificationPermission();
+      }
+    });
+
     const unsubscribe = onMessageListener((payload: any) => {
       console.log('Received foreground message: ', payload);
       const title = payload?.notification?.title || payload?.data?.title || 'New Notification';
@@ -104,6 +117,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     });
 
     return () => {
+      window.removeEventListener("focus", handleFocus);
       if (unsubscribe) {
         unsubscribe();
       }

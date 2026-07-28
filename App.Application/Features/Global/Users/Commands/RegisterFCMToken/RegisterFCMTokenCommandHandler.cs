@@ -22,12 +22,20 @@ namespace OOH.Application.Features.Global.Users.Commands.RegisterFCMToken
         {
             try
             {
-                if (string.IsNullOrEmpty(_loggedInUser.UserId)) return false;
+                Console.WriteLine($"[RegisterFCMTokenCommandHandler] Registering FCM token. LoggedInUserId: '{_loggedInUser.UserId}', Email: '{_loggedInUser.UserEmail}'");
+                if (string.IsNullOrEmpty(_loggedInUser.UserId))
+                {
+                    Console.WriteLine("[RegisterFCMTokenCommandHandler] ERROR: LoggedInUserId is null or empty!");
+                    return false;
+                }
                 
-                return await _userService.RegisterFCMTokenAsync(_loggedInUser.UserId, request.Token, request.DeviceDetails);
+                var result = await _userService.RegisterFCMTokenAsync(_loggedInUser.UserId, request.Token, request.DeviceDetails);
+                Console.WriteLine($"[RegisterFCMTokenCommandHandler] RegisterFCMTokenAsync returned: {result}");
+                return result;
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"[RegisterFCMTokenCommandHandler] Exception: {ex.Message}\n{ex.StackTrace}");
                 return false;
             }
         }

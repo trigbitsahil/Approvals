@@ -19,19 +19,28 @@ const app = initializeApp(firebaseConfig);
 const messaging = typeof window !== 'undefined' && 'serviceWorker' in navigator ? getMessaging(app) : null;
 
 export const requestFirebaseNotificationPermission = async () => {
-  if (!messaging) return;
+  console.log("[FCM] requestFirebaseNotificationPermission triggered...");
+  if (!messaging) {
+    console.warn("[FCM] Firebase messaging is NOT supported or initialized on this device.");
+    return;
+  }
 
   try {
     const permission = await Notification.requestPermission();
+    console.log("[FCM] Notification permission state:", permission);
+
     if (permission === "granted") {
       const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      console.log("[FCM] ServiceWorker registered successfully:", registration.scope);
+
       const token = await getToken(messaging, { 
         vapidKey: "BKMF72hneHKoD4eMXu6N7m1Pa6gdR0X-WZZVjEU4Mu7SmWFnVMJf3SWwTHoVr_BJtHbUlGGeyQ-zak_jna0kAYI",
         serviceWorkerRegistration: registration
       });
       
       if (token) {
-        // Send token to backend with Bearer token authentication
+        console.log("[FCM] Got FCM token from Firebase:", token.substring(0, 15) + "...");
+
         const accessToken = getAccessToken();
         const headers: Record<string, string> = {
           'Content-Type': 'application/json'
@@ -40,6 +49,7 @@ export const requestFirebaseNotificationPermission = async () => {
           headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
+        console.log("[FCM] Registering token with backend at:", `${OpenAPI.BASE}/api/v1/User/FCMToken`);
         const response = await fetch(`${OpenAPI.BASE}/api/v1/User/FCMToken`, {
           method: 'POST',
           credentials: 'include',
@@ -51,20 +61,21 @@ export const requestFirebaseNotificationPermission = async () => {
         });
 
         if (!response.ok) {
-          console.error(`[FCM] Token registration failed with status ${response.status}`);
+          console.error(`[FCM] Backend Token Registration FAILED! Status: ${response.status}`);
         } else {
-          console.log("[FCM] Token successfully registered with backend.");
+          console.log("[FCM] Backend Token Registration SUCCESSFUL! Status: 200 OK");
         }
+      } else {
+        console.warn("[FCM] getToken returned empty or null token!");
       }
     }
   } catch (error) {
-    console.error("An error occurred while retrieving token. ", error);
-    // If Firebase gets stuck due to old project config, clear the indexedDB cache
+    console.error("[FCM] Error in requestFirebaseNotificationPermission:", error);
     if (error instanceof TypeError && error.message.includes('pushManager')) {
-      console.log('Clearing Firebase Messaging IndexedDB due to corrupt token state...');
+      console.log('[FCM] Clearing Firebase Messaging IndexedDB due to corrupt token state...');
       const req = indexedDB.deleteDatabase('firebase-messaging-database');
       req.onsuccess = () => {
-        console.log('Database deleted successfully. Please reload the page.');
+        console.log('[FCM] Database deleted successfully. Please reload the page.');
       };
     }
   }
