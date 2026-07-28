@@ -84,6 +84,13 @@ export const requestFirebaseNotificationPermission = async () => {
       headers['Authorization'] = `Bearer ${accessToken}`;
     }
 
+    // ── Generate or retrieve a stable device ID ──
+    let deviceId = localStorage.getItem('fcm_device_id');
+    if (!deviceId) {
+      deviceId = 'device_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+      localStorage.setItem('fcm_device_id', deviceId);
+    }
+
     console.log("[FCM] Registering token with backend at:", `${OpenAPI.BASE}/api/v1/User/FCMToken`);
     const response = await fetch(`${OpenAPI.BASE}/api/v1/User/FCMToken`, {
       method: 'POST',
@@ -91,7 +98,7 @@ export const requestFirebaseNotificationPermission = async () => {
       headers,
       body: JSON.stringify({
         token,
-        deviceDetails: navigator.userAgent
+        deviceDetails: deviceId
       })
     });
 
