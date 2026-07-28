@@ -194,17 +194,6 @@ namespace OOH.Identity.Services
             var matchingToken = userTokens.FirstOrDefault(t => t.Token == token);
             if (matchingToken == null)
             {
-                // If device details match an existing token for this user, remove the old token for this device
-                if (!string.IsNullOrEmpty(deviceDetails))
-                {
-                    var oldDeviceTokens = userTokens.Where(t => t.DeviceDetails == deviceDetails).ToList();
-                    if (oldDeviceTokens.Any())
-                    {
-                        Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Removing {oldDeviceTokens.Count} old tokens for device: {deviceDetails}");
-                        _dbContext.UserFCMTokens.RemoveRange(oldDeviceTokens);
-                    }
-                }
-
                 Console.WriteLine($"[UserService.RegisterFCMTokenAsync] Adding NEW token to database for userId: {userId} ({user.Email})");
                 _dbContext.UserFCMTokens.Add(new UserFCMToken
                 {
