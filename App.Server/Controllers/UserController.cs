@@ -16,6 +16,7 @@ using OOH.Application.Features.Global.Users.Queries.GetUserRoles;
 using OOH.Application.Features.Global.Users.Queries.GetAllRoles;
 using OOH.Application.Features.Global.Users.Commands.RegisterFCMToken;
 using OOH.Application.Contracts.Infrastructure;
+using OOH.Identity.Models;
 
 namespace OOH.API.Controllers
 {
@@ -186,6 +187,50 @@ namespace OOH.API.Controllers
                 return Ok(response);
             }
             return BadRequest(response);
+        }
+
+        [HttpPost("ChangePassword", Name = "ChangePassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<DeleteUserCommandResponse>> ChangePassword([FromBody] ChangePasswordCommand request)
+        {
+            var userManager = HttpContext.RequestServices.GetService<UserManager<ApplicationUser>>();
+            if (userManager == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            var userId = _loggedInUser.UserId;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            ApplicationUser user = await userManager.FindByIdAsync(userId);
+            var response = new DeleteUserCommandResponse();
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User Not Found";
+                return NotFound(response);
+            }
+
+            var result = await userManager.ChangePasswordAsync(user, request.CurrentPassword ?? "", request.NewPassword ?? "");
+
+            if (result.Succeeded)
+            {
+                response.Success = true;
+                response.Message = "Password changed successfully.";
+                return Ok(response);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = result.Errors.FirstOrDefault()?.Description ?? "Error updating the password";
+                return BadRequest(response);
+            }
         }
     }
 }
@@ -673,54 +718,44 @@ namespace OOH.API.Controllers
 //        [ProducesResponseType(StatusCodes.Status200OK)]
 //        [ProducesResponseType(StatusCodes.Status400BadRequest)]
 //        [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-
-//        public async Task<ActionResult<DeleteUserCommandResponse>> ChangePassword(ChangePasswordCommand request)
+//        public async Task<ActionResult<DeleteUserCommandResponse>> ChangePassword([FromBody] ChangePasswordCommand request)
 //        {
+//            var userManager = HttpContext.RequestServices.GetService<UserManager<ApplicationUser>>();
+//            if (userManager == null)
+//            {
+//                return StatusCode(StatusCodes.Status500InternalServerError);
+//            }
 
-//            ApplicationUser user = await _userManager.FindByIdAsync(_loggedInUser.UserId);
+//            var userId = _loggedInUser.UserId;
+//            if (string.IsNullOrEmpty(userId))
+//            {
+//                return Unauthorized();
+//            }
 
+//            ApplicationUser user = await userManager.FindByIdAsync(userId);
 //            var response = new DeleteUserCommandResponse();
 
 //            if (user == null)
 //            {
 //                response.Success = false;
 //                response.Message = "User Not Found";
-//                return BadRequest(response);
+//                return NotFound(response);
 //            }
 
-
-//            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-
-
-
+//            var result = await userManager.ChangePasswordAsync(user, request.CurrentPassword ?? "", request.NewPassword ?? "");
 
 //            if (result.Succeeded)
 //            {
-
-
-
+//                response.Success = true;
+//                response.Message = "Password changed successfully.";
 //                return Ok(response);
-
-
 //            }
 //            else
 //            {
-
 //                response.Success = false;
-//                if (result.Errors != null && result.Errors.Count() > 0)
-//                {
-//                    response.Message = result.Errors.FirstOrDefault().Description;
-//                }
-//                else
-//                {
-
-//                    response.Message = "Error Updating the record";
-//                }
-                
+//                response.Message = result.Errors.FirstOrDefault()?.Description ?? "Error updating the password";
 //                return BadRequest(response);
 //            }
-
 //        }
 
 //        [HttpPost("ChangeUserPassword", Name = "ChangeUserPassword")]

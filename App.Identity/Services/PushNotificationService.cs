@@ -65,7 +65,7 @@ namespace OOH.Identity.Services
                         {
                             Title = title,
                             Body = body,
-                            Icon = "/pwa-192x192.png"
+                            Icon = "/notification-icon.png"
                         }
                     },
                     Apns = new ApnsConfig()

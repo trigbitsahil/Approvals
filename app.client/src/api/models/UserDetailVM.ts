@@ -6,6 +6,8 @@ export type UserDetailVM = {
     userID?: string | null;
     email?: string | null;
     userName?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
     isActive?: boolean;
     isVoided?: boolean;
     tenantID?: string | null;

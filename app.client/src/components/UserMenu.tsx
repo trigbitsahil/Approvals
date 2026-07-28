@@ -61,9 +61,9 @@ export const UserMenu = () => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => navigate("/profile")}>
           {i18n.t({ id: "ui.My Account", message: "My Account" })}
-        </DropdownMenuLabel>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
 
         <DropdownMenuItem onClick={handleLogout}>

@@ -49,6 +49,8 @@ import { OpenAPI } from "@/api/core/OpenAPI";
 import { CustomOpenAPIConfig } from "@/api/custom/OpenAPIConfig";
 import { AvatarProvider } from "@/stores/AvatarStore";
 import ResetPasswordPage from "./modules/auth/resetPassword";
+import ProfilePage from "./components/ProfilePage";
+
 import FallbackRoot from "./ResetFallback";
 import { useAuth, AuthProvider } from "@/contexts/AuthContext";
 import { getAccessToken, storeTokens } from "@/utils/authToken";
@@ -357,6 +359,14 @@ function AppContent() {
                 />
                 {/* Protected Routes */}
 
+                       <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route
                   path="/dashboard"
                   element={
