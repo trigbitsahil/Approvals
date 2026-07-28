@@ -54,6 +54,35 @@ namespace OOH.Identity.Services
                         { "title", title },
                         { "body", body },
                         { "click_action", "/" }
+                    },
+                    Webpush = new WebpushConfig()
+                    {
+                        Headers = new Dictionary<string, string>()
+                        {
+                            { "Urgency", "high" }
+                        },
+                        Notification = new WebpushNotification()
+                        {
+                            Title = title,
+                            Body = body,
+                            Icon = "/pwa-192x192.png"
+                        }
+                    },
+                    Apns = new ApnsConfig()
+                    {
+                        Headers = new Dictionary<string, string>()
+                        {
+                            { "apns-priority", "10" }
+                        },
+                        Aps = new Aps()
+                        {
+                            Alert = new ApsAlert()
+                            {
+                                Title = title,
+                                Body = body
+                            },
+                            Sound = "default"
+                        }
                     }
                 };
 
@@ -68,9 +97,8 @@ namespace OOH.Identity.Services
                     if (!res.IsSuccess)
                     {
                         Console.WriteLine($"[PushNotificationService] FCM Error: {res.Exception?.Message}");
-                        // If the token is no longer valid, we should mark it for deletion
-                        if (res.Exception?.MessagingErrorCode == MessagingErrorCode.Unregistered || 
-                            res.Exception?.MessagingErrorCode == MessagingErrorCode.InvalidArgument)
+                        // Only mark token for deletion if FCM explicitly reports Unregistered (app uninstalled / permission revoked)
+                        if (res.Exception?.MessagingErrorCode == MessagingErrorCode.Unregistered)
                         {
                             deadTokens.Add(tokens[i]);
                         }
