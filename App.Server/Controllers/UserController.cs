@@ -54,6 +54,25 @@ namespace OOH.API.Controllers
             return BadRequest();
         }
 
+        [HttpDelete("FCMToken")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> DeleteFCMToken([FromQuery] string token)
+        {
+            Console.WriteLine($"[UserController] DELETE /FCMToken received. User authenticated: {User.Identity?.IsAuthenticated}");
+            var userId = _loggedInUser.UserId;
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+                return BadRequest();
+
+            // Resolve IUserService directly since we don't have a MediatR command for delete yet
+            var userService = HttpContext.RequestServices.GetService<OOH.Application.Contracts.Identity.IUserService>();
+            if (userService == null)
+                return StatusCode(500);
+
+            await userService.DeleteFCMTokenAsync(userId, token);
+            return Ok();
+        }
+
+
         [HttpGet("GetLoggedInUser", Name = "GetLoggedInUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -18,5 +18,6 @@ namespace OOH.Application.Contracts.Identity
         Task<List<string>> GetAllRolesAsync();
         Task<bool> CreateRoleAsync(string roleName);
         Task<bool> RegisterFCMTokenAsync(string userId, string token, string? deviceDetails = null);
+        Task<bool> DeleteFCMTokenAsync(string userId, string token);
     }
 }

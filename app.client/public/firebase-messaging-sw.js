@@ -1,6 +1,20 @@
 importScripts("https://www.gstatic.com/firebasejs/10.12.1/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.12.1/firebase-messaging-compat.js");
 
+// ── Force the new service worker to activate immediately ──
+// Without this, a new SW version waits until all tabs are closed before taking over.
+// skipWaiting() ensures the new SW immediately controls all clients.
+self.addEventListener("install", (event) => {
+    console.log("[firebase-messaging-sw.js] Service Worker installing...");
+    self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+    console.log("[firebase-messaging-sw.js] Service Worker activating...");
+    // Take control of all open clients immediately
+    event.waitUntil(clients.claim());
+});
+
 firebase.initializeApp({
     apiKey: "AIzaSyDE9dY3Wx_5n4NGisWCcB-ZvW8d83BCFpU",
     authDomain: "approvals-app-85fd1.firebaseapp.com",
@@ -14,22 +28,24 @@ const messaging = firebase.messaging();
 
 // ✅ Handles background messages (app closed / in background)
 messaging.onBackgroundMessage((payload) => {
-    console.log("[firebase-messaging-sw.js] Received background message", payload);
-    
+    console.log("[firebase-messaging-sw.js] Received background message", JSON.stringify(payload));
+
     const title = payload?.notification?.title || payload?.data?.title || 'New Notification';
     const body = payload?.notification?.body || payload?.data?.body || 'You have a new update.';
-    
+
     const notificationOptions = {
         body: body,
         icon: '/pwa-192x192.png',
         badge: '/pwa-192x192.png',
         tag: 'approval-notification-' + Date.now(),
         renotify: true,
+        requireInteraction: false,
         data: {
-            url: payload?.data?.click_action || '/' 
+            url: payload?.data?.click_action || '/'
         }
     };
 
+    console.log("[firebase-messaging-sw.js] Showing notification:", title, body);
     return self.registration.showNotification(title, notificationOptions);
 });
 

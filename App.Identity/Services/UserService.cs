@@ -221,5 +221,26 @@ namespace OOH.Identity.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> DeleteFCMTokenAsync(string userId, string token)
+        {
+            Console.WriteLine($"[UserService.DeleteFCMTokenAsync] Deleting token for userId: {userId}");
+            var tokensToDelete = await _dbContext.UserFCMTokens
+                .Where(t => t.UserId == userId && t.Token == token)
+                .ToListAsync();
+
+            if (tokensToDelete.Any())
+            {
+                _dbContext.UserFCMTokens.RemoveRange(tokensToDelete);
+                await _dbContext.SaveChangesAsync();
+                Console.WriteLine($"[UserService.DeleteFCMTokenAsync] Deleted {tokensToDelete.Count} token(s) for userId: {userId}");
+            }
+            else
+            {
+                Console.WriteLine($"[UserService.DeleteFCMTokenAsync] No matching token found to delete for userId: {userId}");
+            }
+
+            return true;
+        }
     }
 }
