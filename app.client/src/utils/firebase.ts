@@ -26,25 +26,12 @@ export const requestFirebaseNotificationPermission = async () => {
   }
 
   try {
-    let permission = Notification.permission;
-    
-    // On iOS Safari, calling requestPermission without a user gesture throws or silently breaks PushManager!
-    // Only request it if it's not already granted.
-    if (permission !== "granted") {
-      permission = await Notification.requestPermission();
-    }
-    
+    const permission = await Notification.requestPermission();
     console.log("[FCM] Notification permission state:", permission);
 
     if (permission === "granted") {
-      // Prevent re-registering the service worker on every app load which breaks iOS Web Push
-      let registration = await navigator.serviceWorker.getRegistration('/firebase-messaging-sw.js');
-      if (!registration) {
-        registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-        console.log("[FCM] ServiceWorker registered successfully:", registration.scope);
-      } else {
-        console.log("[FCM] Using existing ServiceWorker registration");
-      }
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      console.log("[FCM] ServiceWorker registered successfully:", registration.scope);
 
       const token = await getToken(messaging, { 
         vapidKey: "BKMF72hneHKoD4eMXu6N7m1Pa6gdR0X-WZZVjEU4Mu7SmWFnVMJf3SWwTHoVr_BJtHbUlGGeyQ-zak_jna0kAYI",

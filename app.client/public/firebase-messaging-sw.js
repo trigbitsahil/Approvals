@@ -26,7 +26,7 @@ messaging.onBackgroundMessage((payload) => {
         tag: 'approval-notification-' + Date.now(),
         renotify: true,
         data: {
-            url: payload?.data?.click_action || '/'
+            url: payload?.data?.click_action || '/' 
         }
     };
 
