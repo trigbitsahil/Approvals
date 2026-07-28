@@ -42,8 +42,8 @@ messaging.onBackgroundMessage((payload) => {
 
     const notificationOptions = {
         body: body,
-        icon: '/pwa-192x192.png',
-        badge: '/pwa-192x192.png',
+        icon: '/notification-icon.png',
+        badge: '/notification-icon.png',
         tag: 'approval-notification-' + Date.now(),
         renotify: true,
         requireInteraction: false,
