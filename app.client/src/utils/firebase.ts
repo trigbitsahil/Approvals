@@ -31,18 +31,30 @@ export const requestFirebaseNotificationPermission = async () => {
       });
       
       if (token) {
-        // Send token to backend
-        await fetch(`${OpenAPI.BASE}/api/v1/User/FCMToken`, {
+        // Send token to backend with Bearer token authentication
+        const accessToken = getAccessToken();
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json'
+        };
+        if (accessToken) {
+          headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+
+        const response = await fetch(`${OpenAPI.BASE}/api/v1/User/FCMToken`, {
           method: 'POST',
           credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers,
           body: JSON.stringify({ 
             token,
             deviceDetails: navigator.userAgent 
           })
         });
+
+        if (!response.ok) {
+          console.error(`[FCM] Token registration failed with status ${response.status}`);
+        } else {
+          console.log("[FCM] Token successfully registered with backend.");
+        }
       }
     }
   } catch (error) {
