@@ -52,9 +52,18 @@ export const requestFirebaseNotificationPermission = async () => {
     // and orphans the old push subscription, breaking background notifications.
     let registration: ServiceWorkerRegistration;
     try {
-      // First check if our SW is already registered
+      // Clean up any other registered service workers (like the old sw.js from VitePWA)
       const existingRegs = await navigator.serviceWorker.getRegistrations();
-      const existingFCMReg = existingRegs.find(r => r.active?.scriptURL.includes('firebase-messaging-sw.js'));
+      for (const reg of existingRegs) {
+        if (reg.active && !reg.active.scriptURL.includes('firebase-messaging-sw.js')) {
+          console.log("[FCM] Unregistering conflicting ServiceWorker:", reg.active.scriptURL);
+          await reg.unregister();
+        }
+      }
+
+      // Re-fetch registrations after cleanup
+      const updatedRegs = await navigator.serviceWorker.getRegistrations();
+      const existingFCMReg = updatedRegs.find(r => r.active?.scriptURL.includes('firebase-messaging-sw.js'));
 
       if (existingFCMReg) {
         console.log("[FCM] Using existing ServiceWorker registration:", existingFCMReg.scope);
