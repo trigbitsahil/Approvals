@@ -36,7 +36,6 @@ import ConfirmationModal from "@/components/ConfirmationModal";
 import { getFileExtension, getMimeType } from "@/utils/file-utils";
 import { useRef } from "react";
 
-import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -497,13 +496,7 @@ export default function ApprovalDetailPage() {
 
   return (
     <div className="relative min-h-screen">
-      {/* BACKGROUND DECORATIONS */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%]  blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%]  blur-[120px] rounded-full" />
-      </div>
-
-      <div className="relative max-w-6xl mx-auto px-4 py-4 md:py-8 space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="relative max-w-6xl mx-auto px-4 py-4 md:py-8 space-y-6 md:space-y-8">
 
         {/* HEADER SECTION */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
@@ -513,7 +506,7 @@ export default function ApprovalDetailPage() {
               onClick={() => navigate(`/approvals`)}
               className="group -ml-3 p-2 h-auto hover:bg-transparent text-muted-foreground hover:text-foreground transition-all"
             >
-              <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="h-4 w-4 mr-2" />
               <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest">Back to List</span>
             </Button>
 
@@ -527,7 +520,7 @@ export default function ApprovalDetailPage() {
                   <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-tight">{approval.approvalStatusName || "Pending"}</span>
                 </div>
               </div>
-            <motion.div className="space-y-4 sm:space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <h1 className="text-3xl sm:text-2xl font-black text-foreground uppercase tracking-tight leading-none mt-2">
                 {approval.name || approval.reference || "No Name"}
               </h1>
@@ -539,7 +532,7 @@ export default function ApprovalDetailPage() {
                 <span className="text-border hidden sm:inline">•</span>
                 <span className="flex items-center gap-1.5 text-sm"><User className="h-3.5 w-3.5" /> Requested by <span className="text-foreground font-bold">{approval.requestedBy || approval.createdBy || "System"}</span></span>
               </div>
-            </motion.div>  </div>
+            </div>  </div>
           </div>
 
           {/* FOLLOW-UP BUTTON */}
@@ -569,11 +562,7 @@ export default function ApprovalDetailPage() {
           <div className="lg:col-span-2 space-y-8">
 
             {/* DESCRIPTION */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="group relative bg-card border border-border/40 rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 shadow-2xl transition-all hover:border-primary/30 ring-1 ring-white/5"
-            >
+            <div className="group relative bg-card border border-border/40 rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 shadow-2xl transition-all hover:border-primary/30 ring-1 ring-white/5">
               <div className="absolute top-6 right-8 opacity-10 group-hover:opacity-20 transition-opacity">
                 <FileText className="h-12 w-12" />
               </div>
@@ -584,7 +573,7 @@ export default function ApprovalDetailPage() {
               <div className="text-sm font-medium leading-relaxed mt-1 break-words">
                 {approval.description || approval.details || "No description provided for this approval request."}
               </div>
-            </motion.div>
+            </div>
 
             {/* INFO GRID */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -598,13 +587,10 @@ export default function ApprovalDetailPage() {
                   value: approval.vendorCategoryName ? `${approval.vendorName} (${approval.vendorCategoryName})` : approval.vendorName, 
                   icon: User 
                 }] : []),
-                ...(approval.linkedContractName ? [{ label: "Contract", value: approval.linkedContractName, icon: FileText }] : parentEntityId => null)
+                ...(approval.linkedContractName ? [{ label: "Contract", value: approval.linkedContractName, icon: FileText }] : [])
               ].filter(Boolean).map((item: any, idx) => (
-                <motion.div
+                <div
                   key={item.label}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * (idx + 1) }}
                   className="flex items-center gap-3 md:gap-4 bg-card border border-border/20 rounded-2xl sm:rounded-3xl p-4 sm:p-5 hover:bg-card/60 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg group ring-1 ring-white/5"
                 >
                   <div className="p-2.5 sm:p-3 bg-primary/10 border border-primary/20 rounded-xl sm:rounded-2xl text-primary shadow-inner group-hover:scale-110 transition-transform shrink-0">
@@ -614,19 +600,14 @@ export default function ApprovalDetailPage() {
                     <p className="text-[9px] font-black uppercase text-muted-foreground tracking-widest">{item.label}</p>
                     <p className="text-sm font-black text-foreground mt-0.5">{item.value}</p>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
              
 
             {/* COMMENTS & AUDIT TRAIL */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="bg-card border border-border/40 rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 shadow-2xl ring-1 ring-white/5"
-            >
+            <div className="bg-card border border-border/40 rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 shadow-2xl ring-1 ring-white/5">
               <div className="flex items-center justify-between mb-8">
                 <h3 className="text-[10px] font-black uppercase text-muted-foreground tracking-[0.2em] flex items-center gap-2">
                   <MessageSquare className="h-4 w-4" />
@@ -705,18 +686,14 @@ export default function ApprovalDetailPage() {
                   </div>
                 )}
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* RIGHT COLUMN: Pipeline / Approvers */}
           <div className="space-y-8">
 
             {/* TRACKING CARD */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="bg-card rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 border border-border/40 shadow-2xl relative overflow-hidden ring-1 ring-white/5"
-            >
+            <div className="bg-card rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 border border-border/40 shadow-2xl relative overflow-hidden ring-1 ring-white/5">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2" />
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 blur-[50px] rounded-full translate-y-1/2 -translate-x-1/2" />
 
@@ -813,7 +790,7 @@ export default function ApprovalDetailPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
 
           </div>
