@@ -18,19 +18,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = typeof window !== 'undefined' && 'serviceWorker' in navigator ? getMessaging(app) : null;
 
-// ── Module-level guard: only register token once per browser session ──
-// This prevents re-registration on every app open/focus, which caused
-// the old service worker push subscription to be orphaned.
-let fcmTokenRegistered = false;
-
 export const requestFirebaseNotificationPermission = async () => {
   console.log("[FCM] requestFirebaseNotificationPermission triggered...");
-
-  // If we've already registered this session, skip.
-  if (fcmTokenRegistered) {
-    console.log("[FCM] Token already registered this session. Skipping.");
-    return;
-  }
 
   if (!messaging) {
     console.warn("[FCM] Firebase messaging is NOT supported or initialized on this device.");
@@ -113,8 +102,6 @@ export const requestFirebaseNotificationPermission = async () => {
     }
 
     console.log("[FCM] Backend Token Registration SUCCESSFUL! Status: 200 OK");
-    // Mark as registered so we don't repeat in the same session
-    fcmTokenRegistered = true;
 
   } catch (error) {
     console.error("[FCM] Error in requestFirebaseNotificationPermission:", error);
@@ -181,6 +168,4 @@ export const unregisterFirebaseToken = async () => {
       console.error("[FCM] Unable to delete Firebase token.", err);
     }
   }
-  // Reset the guard so the next login can register a fresh token
-  fcmTokenRegistered = false;
 };
