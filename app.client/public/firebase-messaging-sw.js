@@ -14,23 +14,10 @@ const messaging = firebase.messaging();
 
 // ✅ Handles background messages (app closed / in background)
 messaging.onBackgroundMessage((payload) => {
-    console.log("[firebase-messaging-sw.js] Received background message", payload);
-    
-    const title = payload?.notification?.title || payload?.data?.title || 'New Notification';
-    const body = payload?.notification?.body || payload?.data?.body || 'You have a new update.';
-    
-    const notificationOptions = {
-        body: body,
-        icon: '/pwa-192x192.png',
-        badge: '/pwa-192x192.png',
-        tag: 'approval-notification-' + Date.now(),
-        renotify: true,
-        data: {
-            url: payload?.data?.click_action || '/'
-        }
-    };
-
-    return self.registration.showNotification(title, notificationOptions);
+    console.log("[firebase-messaging-sw.js] Received background data message", payload);
+    // Note: Do NOT call self.registration.showNotification here if the backend sends 
+    // a Notification object (WebpushNotification or ApnsAlert). 
+    // FCM SDK automatically handles displaying the notification in the background!
 });
 
 // ✅ Handle notification click — opens app
