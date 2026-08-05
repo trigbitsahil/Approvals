@@ -42,15 +42,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             var banks = await _bankRepository.ListAllAsync();
             var approvals = await _approvalRepository.ListAllAsync();
             
-            if (!string.Equals(_loggedInUserService.UserRole, "superadmin", System.StringComparison.OrdinalIgnoreCase) &&
-                !string.Equals(_loggedInUserService.UserRole, "admin", System.StringComparison.OrdinalIgnoreCase))
-            {
-                var userBanks = banks.Where(b => b.UserId == _loggedInUserService.UserId).ToList();
-                if (userBanks.Any())
-                {
-                    banks = userBanks;
-                }
-            }
+
 
             var dtos = new System.Collections.Generic.List<BankTransactionListVM>();
 

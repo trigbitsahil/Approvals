@@ -41,11 +41,7 @@ namespace OOH.Application.Features.Global.Banks.Queries.GetBankList
             var banks = await _bankRepository.ListAllAsync();
             var activeBanks = banks.Where(b => b.Status == "Active" && !b.IsVoided).ToList();
 
-            if (!string.Equals(_loggedInUserService.UserRole, "superadmin", System.StringComparison.OrdinalIgnoreCase) &&
-                !string.Equals(_loggedInUserService.UserRole, "admin", System.StringComparison.OrdinalIgnoreCase))
-            {
-                activeBanks = activeBanks.Where(b => b.UserId == _loggedInUserService.UserId).ToList();
-            }
+
 
             var vm = activeBanks.Select(b => new BankListVM
             {
