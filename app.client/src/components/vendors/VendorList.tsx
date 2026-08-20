@@ -335,7 +335,7 @@ export function VendorList() {
                         <DropdownMenuItem onClick={() => handleEdit(vendor)} className="cursor-pointer">
                           <Edit2 className="mr-2 h-4 w-4" /> Edit Details
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => vendor.vendorID && handleDelete(vendor.vendorID)} className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10">
+                        <DropdownMenuItem onClick={() => vendor.vendorID && handleDelete(vendor.vendorID)} className="cursor-pointer text-red-500 focus:text-destructive focus:bg-destructive/10">
                           <Trash2 className="mr-2 h-4 w-4" /> Delete Vendor
                         </DropdownMenuItem>
                       </DropdownMenuContent>

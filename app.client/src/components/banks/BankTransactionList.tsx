@@ -588,7 +588,7 @@ export const BankTransactionList = () => {
                                                 <TableCell>
                                                     {(() => {
                                                         const txType = (tx.fromBankName && tx.fromBankName !== '-') && (tx.toBankName && tx.toBankName !== '-')
-                                                            ? 'Bank Transfer' 
+                                                            ? (tx.toBankName.startsWith('Vendor:') ? 'Withdrawal' : 'Bank Transfer') 
                                                             : ((tx.toBankName && tx.toBankName !== '-') ? 'Deposit' : 'Withdrawal');
                                                         
                                                         return (

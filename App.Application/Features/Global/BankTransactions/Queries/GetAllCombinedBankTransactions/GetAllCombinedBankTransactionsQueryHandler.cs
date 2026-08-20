@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using OOH.Application.Contracts.Persistence;
+using OOH.Application.Contracts.Persistence.Tenders;
 
 namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombinedBankTransactions
 {
@@ -12,17 +13,20 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IBankRepository _bankRepository;
         private readonly IApprovalRepository _approvalRepository;
+        private readonly IVendorRepository _vendorRepository;
         private readonly OOH.Application.Contracts.Infrastructure.IEncryptionService _encryptionService;
 
         public GetAllCombinedBankTransactionsQueryHandler(
             IBankTransactionRepository bankTransactionRepository,
             IBankRepository bankRepository,
             IApprovalRepository approvalRepository,
+            IVendorRepository vendorRepository,
             OOH.Application.Contracts.Infrastructure.IEncryptionService encryptionService)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
             _approvalRepository = approvalRepository;
+            _vendorRepository = vendorRepository;
             _encryptionService = encryptionService;
         }
 
@@ -44,6 +48,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
             var transactions = await _bankTransactionRepository.ListAllAsync();
             var banks = await _bankRepository.ListAllAsync();
             var approvals = await _approvalRepository.ListAllAsync();
+            var vendors = await _vendorRepository.ListAllAsync();
 
             var dtos = new List<CombinedBankTransactionVM>();
 
@@ -98,13 +103,27 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                     decimal? rbBank1 = debitTxn != null ? (debitTxn.RunningBalance != 0 ? debitTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, debitTxn.FromBankId, debitTxn.TransactionId)) : null;
                     decimal? rbBank2 = creditTxn != null ? (creditTxn.RunningBalance != 0 ? creditTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, creditTxn.ToBankId, creditTxn.TransactionId)) : null;
 
+                    string resolvedToBankName = null;
+                    if (creditTxn != null)
+                    {
+                        resolvedToBankName = SafeDecrypt(banks.FirstOrDefault(b => b.BankId == creditTxn.ToBankId)?.Name);
+                    }
+                    else if (primaryTxn.VendorId != null)
+                    {
+                        var vendor = vendors.FirstOrDefault(v => v.VendorId == primaryTxn.VendorId);
+                        if (vendor != null)
+                        {
+                            resolvedToBankName = "Vendor: " + SafeDecrypt(vendor.Name);
+                        }
+                    }
+
                     dtos.Add(new CombinedBankTransactionVM
                     {
                         ApprovalId = approvalId,
                         ApprovalName = approvalName,
                         Amount = primaryTxn.Amount,
                         FromBankName = debitTxn != null ? SafeDecrypt(banks.FirstOrDefault(b => b.BankId == debitTxn.FromBankId)?.Name) : null,
-                        ToBankName = creditTxn != null ? SafeDecrypt(banks.FirstOrDefault(b => b.BankId == creditTxn.ToBankId)?.Name) : null,
+                        ToBankName = resolvedToBankName,
                         CompletedOn = primaryTxn.CreatedDate.ToString("o"),
                         RunningBalanceBank1 = rbBank1,
                         RunningBalanceBank2 = rbBank2
@@ -139,13 +158,27 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                         decimal? revRbBank1 = revDebitTxn != null ? (revDebitTxn.RunningBalance != 0 ? revDebitTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, revDebitTxn.FromBankId, revDebitTxn.TransactionId)) : null;
                         decimal? revRbBank2 = revCreditTxn != null ? (revCreditTxn.RunningBalance != 0 ? revCreditTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, revCreditTxn.ToBankId, revCreditTxn.TransactionId)) : null;
 
+                        string resolvedRevToBankName = null;
+                        if (revCreditTxn != null)
+                        {
+                            resolvedRevToBankName = SafeDecrypt(banks.FirstOrDefault(b => b.BankId == revCreditTxn.ToBankId)?.Name);
+                        }
+                        else if (primaryRevTxn.VendorId != null)
+                        {
+                            var vendor = vendors.FirstOrDefault(v => v.VendorId == primaryRevTxn.VendorId);
+                            if (vendor != null)
+                            {
+                                resolvedRevToBankName = "Vendor: " + SafeDecrypt(vendor.Name);
+                            }
+                        }
+
                         dtos.Add(new CombinedBankTransactionVM
                         {
                             ApprovalId = approvalId,
                             ApprovalName = approvalName + " (Reversed)",
                             Amount = primaryRevTxn.Amount,
-                            FromBankName = revDebitTxn != null ? banks.FirstOrDefault(b => b.BankId == revDebitTxn.FromBankId)?.Name : null,
-                            ToBankName = revCreditTxn != null ? banks.FirstOrDefault(b => b.BankId == revCreditTxn.ToBankId)?.Name : null,
+                            FromBankName = revDebitTxn != null ? SafeDecrypt(banks.FirstOrDefault(b => b.BankId == revDebitTxn.FromBankId)?.Name) : null,
+                            ToBankName = resolvedRevToBankName,
                             CompletedOn = primaryRevTxn.CreatedDate.ToString("o"),
                             RunningBalanceBank1 = revRbBank1,
                             RunningBalanceBank2 = revRbBank2

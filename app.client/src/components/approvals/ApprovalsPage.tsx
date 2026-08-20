@@ -263,8 +263,10 @@ export default function ApprovalsPage() {
   const [publicName, setPublicName] = useState(getRandomTitle());
   const [description, setDescription] = useState("");
   const [publicDescription, setPublicDescription] = useState(getRandomDesc());
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [priority, setPriority] = useState<Priority>("Medium");
   const [approvalType, setApprovalType] = useState("Bank Transfer");
+  const [transactionCategory, setTransactionCategory] = useState("");
   const [isInitialBalance, setIsInitialBalance] = useState(false);
   const [selectedStatusId, setSelectedStatusId] = useState<string>("");
   const [allApproverApprove, setAllApproverApprove] = useState(true);
@@ -492,8 +494,10 @@ export default function ApprovalsPage() {
     setPublicName(getRandomTitle());
     setDescription("");
     setPublicDescription(getRandomDesc());
+    setErrors({});
     setPriority("Medium");
     setApprovalType("Bank Transfer");
+    setTransactionCategory("");
     setAllApproverApprove(true);
     setSelectedStatusId("");
     setFromBankId("");
@@ -529,7 +533,13 @@ export default function ApprovalsPage() {
       setApprovalType("Bank Transfer"); // Default fallback
     } else {
       setIsInitialBalance(false);
-      setApprovalType(approval.approvalType || "Bank Transfer");
+      if (approval.approvalType === "Expense") {
+        setTransactionCategory("Expense");
+        setApprovalType("Bank Transfer"); // Reset hidden underlying type
+      } else {
+        setTransactionCategory("Bank to Bank");
+        setApprovalType(approval.approvalType || "Bank Transfer");
+      }
     }
 
     setAllApproverApprove(approval.allApproverApprove || false);
@@ -575,16 +585,43 @@ export default function ApprovalsPage() {
   // ===== Submit =====
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const newErrors: Record<string, string> = {};
+
     if (!approvalName.trim()) {
-      toast.error("Approval name is required");
-      return;
+      newErrors.approvalName = "Approval name is required";
     }
 
     if (orderedUsers.length === 0) {
       toast.error("Please select at least one approver");
-      return;
+      return; // Keep this as early return since it's an array/toast
     }
 
+    if (!isInitialBalance && !transactionCategory) {
+      newErrors.transactionCategory = "Transaction Category is required";
+    }
+
+    if (!transactionAmount || parseFloat(transactionAmount) <= 0) {
+      newErrors.transactionAmount = "Transaction Amount is required";
+    }
+
+    if (isInitialBalance) {
+      if (!toBankId) {
+        newErrors.toBankId = "Bank is required for Initial Balance";
+      }
+    } else {
+      if (!fromBankId) {
+        newErrors.fromBankId = "From Bank is required";
+      }
+      if (transactionCategory !== "Expense" && !toBankId) {
+        newErrors.toBankId = "To Bank is required for Bank to Bank transfer";
+      }
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -600,10 +637,10 @@ export default function ApprovalsPage() {
           details: publicDescription,
           priority,
           allApproverApprove,
-          approvalType: approvalType,
+          approvalType: (transactionCategory === "Expense") ? "Expense" : approvalType,
           approvalStatusId: selectedStatusId,
           fromBankId: isInitialBalance ? null : (fromBankId || null),
-          toBankId: toBankId || null,
+          toBankId: (transactionCategory === "Expense") ? null : (toBankId || null),
           transactionAmount: transactionAmount ? parseFloat(transactionAmount) : null,
           vendorId: isInitialBalance ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
           contractId: isInitialBalance ? null : (selectedContractId === "none" ? null : (selectedContractId || null)),
@@ -625,11 +662,11 @@ export default function ApprovalsPage() {
           allApproverApprove,
           category: "-",
           categoryId: "-",
-          approvalType: isInitialBalance ? "Initial Balance" : approvalType,
+          approvalType: isInitialBalance ? "Initial Balance" : ((transactionCategory === "Expense") ? "Expense" : approvalType),
           approvalStatusId: "ApprvlStatus_2025_03_08950e9c8e-a353-4b03-928a-330221292e24",
           departmentId: loggedInDepartmentId || undefined,
           fromBankId: isInitialBalance ? null : (fromBankId || null),
-          toBankId: toBankId || null,
+          toBankId: (transactionCategory === "Expense") ? null : (toBankId || null),
           transactionAmount: transactionAmount ? parseFloat(transactionAmount) : null,
           vendorId: isInitialBalance ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
           contractId: isInitialBalance ? null : (selectedContractId === "none" ? null : (selectedContractId || null)),
@@ -1377,6 +1414,7 @@ export default function ApprovalsPage() {
                   value={approvalName}
                   onChange={e => setApprovalName(e.target.value)}
                 />
+                {errors.approvalName && <p className="text-xs text-red-500 mt-1">{errors.approvalName}</p>}
               </div>
 
               {/* ── Description ── */}
@@ -1415,6 +1453,38 @@ export default function ApprovalsPage() {
                 />
               </div>
 
+              {/* ── Initial Balance Toggle ── */}
+              <div className="flex items-center justify-between p-4 bg-muted/20 border border-border/30 rounded-2xl">
+                <div>
+                  <p className="text-sm font-bold text-foreground">Set Initial Balance</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Toggle this if you are setting the starting balance for a bank</p>
+                </div>
+                <Switch 
+                  checked={isInitialBalance} 
+                  onCheckedChange={(checked) => {
+                    setIsInitialBalance(checked);
+                    setErrors({ ...errors, fromBankId: "", toBankId: "", transactionCategory: "" });
+                  }}
+                />
+              </div>
+
+              {/* ── Transaction Category ── */}
+              {!isInitialBalance && (
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Transaction Category <span className="text-red-500">*</span></label>
+                  <Select value={transactionCategory} onValueChange={(val) => { setTransactionCategory(val); setErrors({ ...errors, transactionCategory: "", toBankId: "" }); }}>
+                    <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                      <SelectValue placeholder="Select Category" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-2xl border-border/50">
+                      <SelectItem value="Bank to Bank">Bank to Bank</SelectItem>
+                      <SelectItem value="Expense">Expense</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.transactionCategory && <p className="text-xs text-red-500 mt-1">{errors.transactionCategory}</p>}
+                </div>
+              )}
+
               {/* ── Details Grid ── */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
@@ -1436,39 +1506,29 @@ export default function ApprovalsPage() {
                   </Select>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Approval Type</label>
-                  <Select value={approvalType} onValueChange={setApprovalType}>
-                    <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
-                      <SelectValue placeholder="Select Type" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-border/50">
-                      <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
-                      <SelectItem value="Convert">Convert</SelectItem>
-                      <SelectItem value="Finalize">Finalize</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* ── Initial Balance Toggle ── */}
-              <div className="flex items-center justify-between p-4 bg-muted/20 border border-border/30 rounded-2xl">
-                <div>
-                  <p className="text-sm font-bold text-foreground">Set Initial Balance</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Toggle this if you are setting the starting balance for a bank</p>
-                </div>
-                <Switch 
-                  checked={isInitialBalance} 
-                  onCheckedChange={setIsInitialBalance} 
-                />
+                {!isInitialBalance && transactionCategory !== "Expense" && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Approval Type</label>
+                    <Select value={approvalType} onValueChange={setApprovalType}>
+                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                        <SelectValue placeholder="Select Type" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl border-border/50">
+                        <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
+                        <SelectItem value="Convert">Convert</SelectItem>
+                        <SelectItem value="Finalize">Finalize</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
               </div>
 
               {/* ── Bank Selection ── */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {!isInitialBalance && (
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">From Bank</label>
-                    <Select value={fromBankId} onValueChange={setFromBankId}>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">From Bank <span className="text-red-500">*</span></label>
+                    <Select value={fromBankId} onValueChange={(val) => { setFromBankId(val); setErrors({ ...errors, fromBankId: "" }); }}>
                       <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
                         <SelectValue placeholder="Select From Bank" />
                       </SelectTrigger>
@@ -1478,34 +1538,43 @@ export default function ApprovalsPage() {
                         ))}
                       </SelectContent>
                     </Select>
+                    {errors.fromBankId && <p className="text-xs text-red-500 mt-1">{errors.fromBankId}</p>}
                   </div>
                 )}
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{isInitialBalance ? "Select Bank" : "To Bank"}</label>
-                  <Select value={toBankId} onValueChange={setToBankId}>
-                    <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
-                      <SelectValue placeholder={isInitialBalance ? "Select Bank" : "Select To Bank"} />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-border/50">
-                      {banks.map(b => (
-                        <SelectItem key={b.bankId} value={b.bankId} disabled={fromBankId === b.bankId}>{b.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {transactionCategory !== "Expense" && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{isInitialBalance ? "Select Bank" : "To Bank"} <span className="text-red-500">*</span></label>
+                    <Select value={toBankId} onValueChange={(val) => { setToBankId(val); setErrors({ ...errors, toBankId: "" }); }}>
+                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                        <SelectValue placeholder={isInitialBalance ? "Select Bank" : "Select To Bank"} />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl border-border/50">
+                        {banks.map(b => (
+                          <SelectItem key={b.bankId} value={b.bankId} disabled={fromBankId === b.bankId}>{b.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.toBankId && <p className="text-xs text-red-500 mt-1">{errors.toBankId}</p>}
+                  </div>
+                )}
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Transaction Amount</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Transaction Amount <span className="text-red-500">*</span></label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">₹</span>
                   <input
                     type="number"
                     placeholder="0.00"
-                    className="w-full bg-muted/30 border border-border/50 rounded-xl pl-6 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                    onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                    className="w-full bg-muted/30 border border-border/50 rounded-xl pl-6 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     value={transactionAmount}
-                    onChange={e => setTransactionAmount(e.target.value)}
+                    onChange={e => {
+                      setTransactionAmount(e.target.value);
+                      if (errors.transactionAmount) setErrors({ ...errors, transactionAmount: "" });
+                    }}
                   />
                 </div>
+                {errors.transactionAmount && <p className="text-xs text-red-500 mt-1">{errors.transactionAmount}</p>}
               </div>
 
               {/* ── Expense Fields (conditional) ── */}
@@ -1524,7 +1593,8 @@ export default function ApprovalsPage() {
                         <input
                           type="number"
                           placeholder="0.00"
-                          className="w-full bg-muted/30 border border-border/50 rounded-xl pl-6 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 transition-all"
+                          onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                          className="w-full bg-muted/30 border border-border/50 rounded-xl pl-6 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 transition-all [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                           value={expenseAmount}
                           onChange={e => setExpenseAmount(e.target.value)}
                         />

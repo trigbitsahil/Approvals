@@ -234,19 +234,14 @@ namespace OOH.API.Controllers
 
                         else if (response2.Data.ApprovalDetails.ApprovalType == "Expense")
                         {
-
-
-                            approvalDetailsText += "<hr /> Expense Name :" + response2.Data.ExpenseTransactionDetails.Name.ToString();
-
-                            approvalDetailsText += "<br/> Expense Description:" + response2.Data.ExpenseTransactionDetails.Description.ToString();
-
-                            approvalDetailsText += "<br/> Date Of Expense :" + response2.Data.ExpenseTransactionDetails.DateOfExpense.ToShortDateString();
-
-                            approvalDetailsText += "<br/> Expense Name:" + response2.Data.ExpenseTransactionDetails.ExpenseName.ToString();
-
-                            approvalDetailsText += "<br/> Expense Type Name:" + response2.Data.ExpenseTransactionDetails.ExpenseTypeName.ToString();
-
-
+                            if (response2.Data.ExpenseTransactionDetails != null)
+                            {
+                                approvalDetailsText += "<hr /> Expense Name :" + response2.Data.ExpenseTransactionDetails.Name?.ToString();
+                                approvalDetailsText += "<br/> Expense Description:" + response2.Data.ExpenseTransactionDetails.Description?.ToString();
+                                approvalDetailsText += "<br/> Date Of Expense :" + response2.Data.ExpenseTransactionDetails.DateOfExpense.ToShortDateString();
+                                approvalDetailsText += "<br/> Expense Name:" + response2.Data.ExpenseTransactionDetails.ExpenseName?.ToString();
+                                approvalDetailsText += "<br/> Expense Type Name:" + response2.Data.ExpenseTransactionDetails.ExpenseTypeName?.ToString();
+                            }
                         }
                         else if (response2.Data.ApprovalDetails.ApprovalType == "OfficeNote")
                         {

@@ -316,6 +316,49 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
                                 }
                             }
                         }
+                        else if (!string.IsNullOrEmpty(objApproval.FromBankId) && string.IsNullOrEmpty(objApproval.ToBankId) && objApproval.TransactionAmount.HasValue && objApproval.TransactionAmount > 0)
+                        {
+                            var fromBank = await _bankRepository.GetByIdAsync(objApproval.FromBankId);
+                            if (fromBank != null)
+                            {
+                                var allTxs = await _bankTransactionRepository.ListAllAsync();
+                                decimal fromBankBal = allTxs.Where(t => t.FromBankId == fromBank.BankId || t.ToBankId == fromBank.BankId)
+                                    .Sum(t => (t.ToBankId == fromBank.BankId ? t.Deposit : 0) - (t.FromBankId == fromBank.BankId ? t.Withdrawal : 0));
+
+                                var expenseTx = new BankTransaction
+                                {
+                                    TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                                    FromBankId = fromBank.BankId,
+                                    ToBankId = null,
+                                    ApprovalId = objApproval.ApprovalId,
+                                    TransactionType = "Withdrawal",
+                                    Amount = objApproval.TransactionAmount.Value,
+                                    Withdrawal = objApproval.TransactionAmount.Value,
+                                    Deposit = 0,
+                                    RunningBalance = fromBankBal - objApproval.TransactionAmount.Value,
+                                    CreatedBy = "System",
+                                    CreatedDate = DateTime.UtcNow,
+                                    TenantId = objApproval.TenantId,
+                                    VendorId = objApproval.VendorId
+                                };
+                                await _bankTransactionRepository.AddAsync(expenseTx);
+
+                                if (!string.IsNullOrEmpty(objApproval.RequestedBy))
+                                {
+                                    try
+                                    {
+                                        string decryptedApprovalName = !string.IsNullOrEmpty(objApproval.Name) ? _encryptionService.Decrypt(objApproval.Name) : "Expense Approval";
+                                        string pushTitle = "Expense Processed";
+                                        string pushBody = $"Amount of {objApproval.TransactionAmount.Value} processed for expense '{decryptedApprovalName}'.";
+                                        await _pushNotificationService.SendNotificationAsync(objApproval.RequestedBy, pushTitle, pushBody);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Error sending expense notification: {ex.Message}");
+                                    }
+                                }
+                            }
+                        }
                         else if (string.IsNullOrEmpty(objApproval.FromBankId) && !string.IsNullOrEmpty(objApproval.ToBankId) && objApproval.TransactionAmount.HasValue && objApproval.TransactionAmount > 0 && (!string.IsNullOrEmpty(objApproval.ApprovalType) && _encryptionService.Decrypt(objApproval.ApprovalType) == "Initial Balance"))
                         {
                             var toBank = await _bankRepository.GetByIdAsync(objApproval.ToBankId);
