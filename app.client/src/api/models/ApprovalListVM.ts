@@ -20,6 +20,8 @@ export type ApprovalListVM = {
     categoryId?: string | null;
     isVoided?: boolean;
     vendorId?: string | null;
+    debtorId?: string | null;
+    distributorId?: string | null;
     createdBy?: string | null;
     createdDate?: string;
     lastModifiedBy?: string | null;

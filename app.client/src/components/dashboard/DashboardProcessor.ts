@@ -1,18 +1,40 @@
 import { BankTransactionListVM } from "@/api/models/BankTransactionListVM";
 import { ApprovalListVM } from "@/api/models/ApprovalListVM";
+import { DebtorListVM } from "@/api/models/DebtorListVM";
+import { DistributorListVM } from "@/api/models/DistributorListVM";
+import { VendorListVM } from "@/api/models/VendorListVM";
 import { parseISO, isAfter, isBefore, startOfDay, endOfDay, subDays, format, isValid } from "date-fns";
+
+export interface EntityStatItem {
+  id: string;
+  name: string;
+  amount: number;
+  count: number;
+  email?: string | null;
+  phone?: string | null;
+}
 
 export interface DashboardMetrics {
   totalFunds: number;
   fundsInProgress: number;
   totalCredit: number;
   totalDebit: number;
+  debtorReceiptsTotal: number;
+  vendorPaymentsTotal: number;
+  distributorDisbursementsTotal: number;
   approvalStats: {
     pending: number;
     approved: number;
     rejected: number;
     completed: number;
   };
+  entityStats: {
+    debtors: { totalAmount: number; count: number; items: EntityStatItem[] };
+    distributors: { totalAmount: number; count: number; items: EntityStatItem[] };
+    vendors: { totalAmount: number; count: number; items: EntityStatItem[] };
+  };
+  statusDistribution: { name: string; value: number; amount: number; color: string }[];
+  approvalTypeDistribution: { name: string; value: number; amount: number }[];
   transactionsByBank: { name: string; value: number }[];
   transactionTrends: { date: string; credit: number; debit: number }[];
   recentTransactions: BankTransactionListVM[];
@@ -34,7 +56,10 @@ export class DashboardProcessor {
     selectedBankId: string | "all",
     selectedApprovalType: string = "all",
     selectedVendorId: string = "all",
-    activeFilter: string | null = null
+    activeFilter: string | null = null,
+    debtors: DebtorListVM[] = [],
+    distributors: DistributorListVM[] = [],
+    vendors: VendorListVM[] = []
   ): DashboardMetrics {
     // 1. Filter Approvals (Date, Bank, ApprovalType, Vendor)
     let filteredApprovals = approvals.filter((a) => {
@@ -105,7 +130,127 @@ export class DashboardProcessor {
       else if (statusName.includes("completed")) approvalStats.completed++;
     });
 
-    // 4. Calculate Aggregates (BEFORE activeFilter clears them)
+    // 4. Entity Aggregations (Debtors, Distributors, Vendors)
+    const debtorMap = new Map<string, string>();
+    debtors.forEach(d => { if (d.debtorId) debtorMap.set(d.debtorId, d.name || "Unknown Debtor"); });
+
+    const distributorMap = new Map<string, string>();
+    distributors.forEach(d => { if (d.distributorId) distributorMap.set(d.distributorId, d.name || "Unknown Distributor"); });
+
+    const vendorMap = new Map<string, string>();
+    vendors.forEach(v => { if (v.vendorID) vendorMap.set(v.vendorID, v.name || "Unknown Vendor"); });
+
+    const debtorAmounts: Record<string, EntityStatItem> = {};
+    const distributorAmounts: Record<string, EntityStatItem> = {};
+    const vendorAmounts: Record<string, EntityStatItem> = {};
+
+    debtors.forEach(d => {
+      if (d.debtorId) {
+        debtorAmounts[d.debtorId] = { id: d.debtorId, name: d.name || 'Unnamed', amount: 0, count: 0, email: d.email, phone: d.phone };
+      }
+    });
+    distributors.forEach(d => {
+      if (d.distributorId) {
+        distributorAmounts[d.distributorId] = { id: d.distributorId, name: d.name || 'Unnamed', amount: 0, count: 0, email: d.email, phone: d.phone };
+      }
+    });
+    vendors.forEach(v => {
+      if (v.vendorID) {
+        vendorAmounts[v.vendorID] = { id: v.vendorID, name: v.name || 'Unnamed', amount: 0, count: 0, email: v.email, phone: v.phone };
+      }
+    });
+
+    let debtorReceiptsTotal = 0;
+    let distributorDisbursementsTotal = 0;
+    let vendorPaymentsTotal = 0;
+
+    filteredApprovals.forEach((a) => {
+      const amt = a.transactionAmount || 0;
+      if (a.debtorId) {
+        debtorReceiptsTotal += amt;
+        if (!debtorAmounts[a.debtorId]) {
+          debtorAmounts[a.debtorId] = { id: a.debtorId, name: debtorMap.get(a.debtorId) || "Debtor #" + a.debtorId, amount: 0, count: 0 };
+        }
+        debtorAmounts[a.debtorId].amount += amt;
+        debtorAmounts[a.debtorId].count += 1;
+      }
+      if (a.distributorId) {
+        distributorDisbursementsTotal += amt;
+        if (!distributorAmounts[a.distributorId]) {
+          distributorAmounts[a.distributorId] = { id: a.distributorId, name: distributorMap.get(a.distributorId) || "Distributor #" + a.distributorId, amount: 0, count: 0 };
+        }
+        distributorAmounts[a.distributorId].amount += amt;
+        distributorAmounts[a.distributorId].count += 1;
+      }
+      if (a.vendorId) {
+        vendorPaymentsTotal += amt;
+        if (!vendorAmounts[a.vendorId]) {
+          vendorAmounts[a.vendorId] = { id: a.vendorId, name: vendorMap.get(a.vendorId) || "Vendor #" + a.vendorId, amount: 0, count: 0 };
+        }
+        vendorAmounts[a.vendorId].amount += amt;
+        vendorAmounts[a.vendorId].count += 1;
+      }
+    });
+
+    const debtorList = Object.values(debtorAmounts).sort((a, b) => b.amount - a.amount);
+    const distributorList = Object.values(distributorAmounts).sort((a, b) => b.amount - a.amount);
+    const vendorList = Object.values(vendorAmounts).sort((a, b) => b.amount - a.amount);
+
+    const entityStats = {
+      debtors: { totalAmount: debtorReceiptsTotal, count: debtors.length, items: debtorList },
+      distributors: { totalAmount: distributorDisbursementsTotal, count: distributors.length, items: distributorList },
+      vendors: { totalAmount: vendorPaymentsTotal, count: vendors.length, items: vendorList }
+    };
+
+    // 5. Status & Approval Type Distributions
+    const statusMap: Record<string, { count: number; amount: number }> = {
+      Pending: { count: 0, amount: 0 },
+      Approved: { count: 0, amount: 0 },
+      Rejected: { count: 0, amount: 0 },
+      Completed: { count: 0, amount: 0 },
+    };
+
+    const typeMap: Record<string, { count: number; amount: number }> = {};
+
+    filteredApprovals.forEach((a) => {
+      const statusName = (a.approvalStatusName || "Pending").trim();
+      const amt = a.transactionAmount || 0;
+      let key = "Pending";
+      if (statusName.toLowerCase().includes("approved")) key = "Approved";
+      else if (statusName.toLowerCase().includes("rejected")) key = "Rejected";
+      else if (statusName.toLowerCase().includes("completed")) key = "Completed";
+
+      if (!statusMap[key]) statusMap[key] = { count: 0, amount: 0 };
+      statusMap[key].count += 1;
+      statusMap[key].amount += amt;
+
+      const typeName = a.approvalType || a.category || "General";
+      if (!typeMap[typeName]) typeMap[typeName] = { count: 0, amount: 0 };
+      typeMap[typeName].count += 1;
+      typeMap[typeName].amount += amt;
+    });
+
+    const statusColors: Record<string, string> = {
+      Pending: "#f59e0b",
+      Approved: "#10b981",
+      Rejected: "#ef4444",
+      Completed: "#3b82f6",
+    };
+
+    const statusDistribution = Object.entries(statusMap).map(([name, data]) => ({
+      name,
+      value: data.count,
+      amount: data.amount,
+      color: statusColors[name] || "#6b7280",
+    }));
+
+    const approvalTypeDistribution = Object.entries(typeMap).map(([name, data]) => ({
+      name,
+      value: data.count,
+      amount: data.amount,
+    }));
+
+    // 6. Calculate Aggregates (BEFORE activeFilter clears them)
     let totalCredit = 0;
     let totalDebit = 0;
     
@@ -140,7 +285,7 @@ export class DashboardProcessor {
       }
     });
 
-    // 5. Apply Active Filter to lists for Tables
+    // 7. Apply Active Filter to lists for Tables
     if (activeFilter === 'pendingApprovals') {
         filteredApprovals = filteredApprovals.filter(a => (a.approvalStatusName || '').toLowerCase() === 'pending');
         filteredTransactions = [];
@@ -180,7 +325,7 @@ export class DashboardProcessor {
         });
     }
 
-    // 6. Format outputs for Recharts
+    // 8. Format outputs for Recharts
     const transactionsByBank = Object.entries(bankAggregates).map(([name, value]) => ({ name, value }));
     const typeDistribution = Object.entries(typeAggregates).map(([name, value]) => ({ name, value }));
     const transactionTrends = Object.entries(trends)
@@ -191,7 +336,7 @@ export class DashboardProcessor {
       .sort((a, b) => new Date(b.createdDate || "").getTime() - new Date(a.createdDate || "").getTime())
       .slice(0, 50);
 
-    // 7. Calculate Balance Trends (Requires historical chronological context)
+    // 9. Calculate Balance Trends (Requires historical chronological context)
     const balancesByDate = new Map<string, Record<string, number>>();
     const bankNamesSet = new Set<string>();
     transactions.forEach(t => { if (t.bankName) bankNamesSet.add(t.bankName); });
@@ -212,8 +357,6 @@ export class DashboardProcessor {
         const dayStr = format(dateObj, "yyyy-MM-dd");
         const bankName = t.bankName || "Unknown Bank";
         
-        // Don't include reversed transactions in balance trends unless they are the last ones.
-        // But runningBalance is already calculated by backend.
         currentBalances[bankName] = t.runningBalance || 0;
         
         balancesByDate.set(dayStr, { ...currentBalances });
@@ -232,11 +375,17 @@ export class DashboardProcessor {
     });
 
     return {
-      totalFunds: totalCredit - totalDebit, // Simplified representation
+      totalFunds: totalCredit - totalDebit,
       fundsInProgress,
       totalCredit,
       totalDebit,
+      debtorReceiptsTotal,
+      vendorPaymentsTotal,
+      distributorDisbursementsTotal,
       approvalStats,
+      entityStats,
+      statusDistribution,
+      approvalTypeDistribution,
       transactionsByBank,
       transactionTrends,
       recentTransactions,
@@ -257,3 +406,4 @@ export class DashboardProcessor {
     return { start, end };
   }
 }
+

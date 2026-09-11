@@ -1,0 +1,24 @@
+export type PendingBankTransactionVM = {
+    transactionId: string;
+    approvalId: string;
+    approvalName?: string;
+    approvalReference?: string;
+    approvalType?: string;
+    fromBankId?: string;
+    fromBankName?: string;
+    assignedBankUserId?: string;
+    toBankId?: string;
+    toBankName?: string;
+    vendorId?: string;
+    vendorName?: string;
+    debtorId?: string;
+    debtorName?: string;
+    distributorId?: string;
+    distributorName?: string;
+    amount: number;
+    isPaidToDistributor: boolean;
+    isConfirm: boolean;
+    createdDate: string;
+    createdBy?: string;
+    derivedStatus: string;
+};

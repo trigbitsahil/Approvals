@@ -30,7 +30,9 @@ dist/
 
 # OS files
 .DS_Store
-Thumbs.dbfirebase-service-account.json
+Thumbs.db
+firebase-service-account.json
+**/firebase-service-account.json
 
 # Logs
 *.log

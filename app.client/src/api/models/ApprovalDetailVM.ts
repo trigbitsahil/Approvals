@@ -36,7 +36,12 @@ export type ApprovalDetailVM = {
     transactionAmount?: number | null;
     vendorId?: string | null;
     vendorName?: string | null;
+    debtorId?: string | null;
+    debtorName?: string | null;
+    distributorId?: string | null;
+    distributorName?: string | null;
     contractId?: string | null;
     linkedContractName?: string | null;
+    vendorCategoryName?: string | null;
 };
 
