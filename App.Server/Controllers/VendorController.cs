@@ -9,6 +9,7 @@ using OOH.Application.Features.Tenders.Vendors.Commands.DeleteVendor;
 using OOH.Application.Features.Tenders.Vendors.Commands.UpdateVendor;
 using OOH.Application.Features.Tenders.Vendors.Queries.GetVendorDetail;
 using OOH.Application.Features.Tenders.Vendors.Queries.GetVendorList;
+using OOH.Application.Features.Tenders.Vendors.Queries.GetVendorSummary;
 
 namespace OOH.API.Controllers
 {
@@ -69,18 +70,20 @@ namespace OOH.API.Controllers
 
             if (dtos.Data != null)
             {
-
                 return Ok(dtos);
-
-
             }
             else
             {
                 return NotFound(dtos);
-
             }
+        }
 
-
+        [HttpGet("{id}/summary", Name = "GetVendorSummary")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<GetVendorSummaryQueryResponse>> GetVendorSummary(string id)
+        {
+            var response = await _mediator.Send(new GetVendorSummaryQuery { VendorId = id });
+            return Ok(response);
         }
 
 

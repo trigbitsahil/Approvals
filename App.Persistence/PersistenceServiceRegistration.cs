@@ -34,6 +34,8 @@ namespace OOH.Persistence
             
 
             services.AddScoped<IVendorRepository, VendorRepository>();
+            services.AddScoped<IDebtorRepository, DebtorRepository>();
+            services.AddScoped<IDistributorRepository, DistributorRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<IVendorCategoryRepository, VendorCategoryRepository>();
 
@@ -55,6 +57,10 @@ namespace OOH.Persistence
             services.AddScoped<IApprovalStatusRepository, ApprovalStatusRepository>();
 
             services.AddScoped<IApprovalCommentRepository, ApprovalCommentRepository>();
+
+            services.AddScoped<IApprovalHistoryRepository, ApprovalHistoryRepository>();
+            services.AddScoped<IApiClientCredentialRepository, OOH.Persistence.Repositories.Global.ApiClientCredentialRepository>();
+            services.AddScoped<IDocumentUrlRepository, OOH.Persistence.Repositories.Global.DocumentUrlRepository>();
 
             services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
             services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();

@@ -4,10 +4,12 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
     {
         public string ApprovalId { get; set; }
         public string ApprovalName { get; set; }
+        public string ApprovalReference { get; set; }
         public decimal Amount { get; set; }
         public string FromBankName { get; set; }
         public string ToBankName { get; set; }
         public string CompletedOn { get; set; }
+        public string ApprovalType { get; set; }
         public decimal? RunningBalanceBank1 { get; set; } // Running balance for FromBank (Debit)
         public decimal? RunningBalanceBank2 { get; set; } // Running balance for ToBank (Credit)
     }

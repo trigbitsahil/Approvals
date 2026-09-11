@@ -19,11 +19,22 @@ obj/
 
 # Node / Next.js
 node_modules/
+**/node_modules/
 .next/
+**/.next/
 out/
 build/
+dist/
+**/dist/
 .env*.local
 
 # OS files
 .DS_Store
 Thumbs.dbfirebase-service-account.json
+
+# Logs
+*.log
+*.txt
+logs/
+**/logs/
+App.Server/logs/

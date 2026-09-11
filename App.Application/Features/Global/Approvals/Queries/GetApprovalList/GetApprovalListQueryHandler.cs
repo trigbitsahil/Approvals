@@ -17,15 +17,17 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalList
         private readonly IMapper _mapper;
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IBankRepository _bankRepository;
+        private readonly IApprovalApproverRepository _approvalApproverRepository;
         private readonly ILoggedInUserService _loggedInUserService;
 
-        public GetApprovalListQueryHandler(IMapper mapper, IApprovalRepository ApprovalRepository, IEncryptionService encryptionService, IBankTransactionRepository bankTransactionRepository, IBankRepository bankRepository, ILoggedInUserService loggedInUserService)
+        public GetApprovalListQueryHandler(IMapper mapper, IApprovalRepository ApprovalRepository, IEncryptionService encryptionService, IBankTransactionRepository bankTransactionRepository, IBankRepository bankRepository, IApprovalApproverRepository approvalApproverRepository, ILoggedInUserService loggedInUserService)
         {
             _mapper = mapper;
             _ApprovalRepository = ApprovalRepository;
             _encryptionService = encryptionService;
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
+            _approvalApproverRepository = approvalApproverRepository;
             _loggedInUserService = loggedInUserService;
         }
 
@@ -47,15 +49,24 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalList
                     if (!string.Equals(_loggedInUserService.UserRole, "superadmin", System.StringComparison.OrdinalIgnoreCase) &&
                         !string.Equals(_loggedInUserService.UserRole, "admin", System.StringComparison.OrdinalIgnoreCase))
                     {
+                        var userEmail = _loggedInUserService.UserEmail;
                         var userBanks = allBanks.Where(b => b.UserId == _loggedInUserService.UserId).Select(b => b.BankId).ToList();
-                        if (userBanks.Any())
-                        {
-                            entitylist = entitylist.Where(a => 
-                                (string.IsNullOrEmpty(a.FromBankId) && string.IsNullOrEmpty(a.ToBankId)) || 
+
+                        var allApprovers = await _approvalApproverRepository.ListAllAsync();
+                        var userApprovalIdsAsApprover = allApprovers
+                            .Where(ap => !string.IsNullOrEmpty(ap.ApprovalApproverEmail) && string.Equals(ap.ApprovalApproverEmail.Trim(), userEmail?.Trim(), System.StringComparison.OrdinalIgnoreCase))
+                            .Select(ap => ap.ApprovalId)
+                            .ToHashSet();
+
+                        entitylist = entitylist.Where(a => 
+                            (!string.IsNullOrEmpty(userEmail) && (string.Equals(a.CreatedBy?.Trim(), userEmail.Trim(), System.StringComparison.OrdinalIgnoreCase) || string.Equals(a.RequestedBy?.Trim(), userEmail.Trim(), System.StringComparison.OrdinalIgnoreCase))) ||
+                            userApprovalIdsAsApprover.Contains(a.ApprovalID) ||
+                            (userBanks.Any() && (
                                 (!string.IsNullOrEmpty(a.FromBankId) && userBanks.Contains(a.FromBankId)) || 
                                 (!string.IsNullOrEmpty(a.ToBankId) && userBanks.Contains(a.ToBankId))
-                            ).ToList();
-                        }
+                            )) ||
+                            (string.IsNullOrEmpty(a.FromBankId) && string.IsNullOrEmpty(a.ToBankId))
+                        ).ToList();
                     }
 
                     var allBankTransactions = await _bankTransactionRepository.ListAllAsync();
