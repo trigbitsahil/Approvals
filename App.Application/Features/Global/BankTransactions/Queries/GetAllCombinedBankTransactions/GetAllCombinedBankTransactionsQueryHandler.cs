@@ -14,6 +14,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
         private readonly IBankRepository _bankRepository;
         private readonly IApprovalRepository _approvalRepository;
         private readonly IVendorRepository _vendorRepository;
+        private readonly IDebtorRepository _debtorRepository;
         private readonly OOH.Application.Contracts.Infrastructure.IEncryptionService _encryptionService;
 
         public GetAllCombinedBankTransactionsQueryHandler(
@@ -21,12 +22,14 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
             IBankRepository bankRepository,
             IApprovalRepository approvalRepository,
             IVendorRepository vendorRepository,
+            IDebtorRepository debtorRepository,
             OOH.Application.Contracts.Infrastructure.IEncryptionService encryptionService)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
             _approvalRepository = approvalRepository;
             _vendorRepository = vendorRepository;
+            _debtorRepository = debtorRepository;
             _encryptionService = encryptionService;
         }
 
@@ -49,32 +52,24 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
             var banks = await _bankRepository.ListAllAsync();
             var approvals = await _approvalRepository.ListAllAsync();
             var vendors = await _vendorRepository.ListAllAsync();
+            var debtors = await _debtorRepository.ListAllAsync();
 
             var dtos = new List<CombinedBankTransactionVM>();
 
             // Group transactions by ApprovalId (excluding non-approval transactions like standalone ones)
             var groupedByApproval = transactions
-                .Where(t => !string.IsNullOrEmpty(t.ApprovalId) && t.ApprovalId != "-")
+                .Where(t => !string.IsNullOrEmpty(t.ApprovalId) && t.ApprovalId != "-" && (t.IsConfirm || t.IsPaidToDistributor) && !t.IsVoided)
                 .GroupBy(t => t.ApprovalId)
                 .ToList();
+
 
             foreach (var group in groupedByApproval)
             {
                 var approvalId = group.Key;
                 var approval = approvals.FirstOrDefault(a => a.ApprovalId == approvalId);
-                string approvalName = null;
-
-                if (approval != null && !string.IsNullOrEmpty(approval.Name))
-                {
-                    try
-                    {
-                        approvalName = _encryptionService.Decrypt(approval.Name);
-                    }
-                    catch
-                    {
-                        approvalName = approval.Name;
-                    }
-                }
+                string approvalName = approval != null ? SafeDecrypt(approval.Name) : null;
+                string approvalReference = approval != null ? SafeDecrypt(approval.Reference) : null;
+                string approvalType = approval != null ? SafeDecrypt(approval.ApprovalType) : null;
 
                 // 1. Process Original Transactions (exclude Reversals)
                 var activeGroup = group.Where(t => t.TransactionType != "Reversal").ToList();
@@ -89,6 +84,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                     {
                         ApprovalId = approvalId,
                         ApprovalName = approvalName,
+                        ApprovalReference = approvalReference,
+                        ApprovalType = approvalType,
                         Amount = legacyTxn.Amount,
                         FromBankName = SafeDecrypt(banks.FirstOrDefault(b => b.BankId == legacyTxn.FromBankId)?.Name),
                         ToBankName = SafeDecrypt(banks.FirstOrDefault(b => b.BankId == legacyTxn.ToBankId)?.Name),
@@ -101,19 +98,41 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                 {
                     var primaryTxn = debitTxn ?? creditTxn;
                     decimal? rbBank1 = debitTxn != null ? (debitTxn.RunningBalance != 0 ? debitTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, debitTxn.FromBankId, debitTxn.TransactionId)) : null;
-                    decimal? rbBank2 = creditTxn != null ? (creditTxn.RunningBalance != 0 ? creditTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, creditTxn.ToBankId, creditTxn.TransactionId)) : null;
+                    decimal? rbBank2 = creditTxn != null ? ((creditTxn.IsConfirm && creditTxn.RunningBalance != 0) ? creditTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, creditTxn.ToBankId, creditTxn.TransactionId)) : null;
+
+                    string resolvedFromBankName = null;
+                    if (debitTxn != null)
+                    {
+                        resolvedFromBankName = SafeDecrypt(banks.FirstOrDefault(b => b.BankId == debitTxn.FromBankId)?.Name);
+                    }
+                    else
+                    {
+                        var debtorId = !string.IsNullOrEmpty(primaryTxn.DebtorId) ? primaryTxn.DebtorId : approval?.DebtorId;
+                        if (!string.IsNullOrEmpty(debtorId))
+                        {
+                            var debtor = debtors.FirstOrDefault(d => d.DebtorId == debtorId);
+                            if (debtor != null)
+                            {
+                                resolvedFromBankName = "Debtor: " + SafeDecrypt(debtor.Name);
+                            }
+                        }
+                    }
 
                     string resolvedToBankName = null;
                     if (creditTxn != null)
                     {
                         resolvedToBankName = SafeDecrypt(banks.FirstOrDefault(b => b.BankId == creditTxn.ToBankId)?.Name);
                     }
-                    else if (primaryTxn.VendorId != null)
+                    else
                     {
-                        var vendor = vendors.FirstOrDefault(v => v.VendorId == primaryTxn.VendorId);
-                        if (vendor != null)
+                        var vendorId = !string.IsNullOrEmpty(primaryTxn.VendorId) ? primaryTxn.VendorId : approval?.VendorId;
+                        if (!string.IsNullOrEmpty(vendorId))
                         {
-                            resolvedToBankName = "Vendor: " + SafeDecrypt(vendor.Name);
+                            var vendor = vendors.FirstOrDefault(v => v.VendorId == vendorId);
+                            if (vendor != null)
+                            {
+                                resolvedToBankName = "Vendor: " + SafeDecrypt(vendor.Name);
+                            }
                         }
                     }
 
@@ -121,8 +140,10 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                     {
                         ApprovalId = approvalId,
                         ApprovalName = approvalName,
+                        ApprovalReference = approvalReference,
+                        ApprovalType = approvalType,
                         Amount = primaryTxn.Amount,
-                        FromBankName = debitTxn != null ? SafeDecrypt(banks.FirstOrDefault(b => b.BankId == debitTxn.FromBankId)?.Name) : null,
+                        FromBankName = resolvedFromBankName,
                         ToBankName = resolvedToBankName,
                         CompletedOn = primaryTxn.CreatedDate.ToString("o"),
                         RunningBalanceBank1 = rbBank1,
@@ -144,6 +165,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                         {
                             ApprovalId = approvalId,
                             ApprovalName = approvalName + " (Reversed)",
+                            ApprovalReference = approvalReference != null ? (approvalReference + " (Reversed)") : null,
+                            ApprovalType = approvalType,
                             Amount = revLegacyTxn.Amount,
                             FromBankName = banks.FirstOrDefault(b => b.BankId == revLegacyTxn.FromBankId)?.Name,
                             ToBankName = banks.FirstOrDefault(b => b.BankId == revLegacyTxn.ToBankId)?.Name,
@@ -158,17 +181,39 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                         decimal? revRbBank1 = revDebitTxn != null ? (revDebitTxn.RunningBalance != 0 ? revDebitTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, revDebitTxn.FromBankId, revDebitTxn.TransactionId)) : null;
                         decimal? revRbBank2 = revCreditTxn != null ? (revCreditTxn.RunningBalance != 0 ? revCreditTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, revCreditTxn.ToBankId, revCreditTxn.TransactionId)) : null;
 
+                        string resolvedRevFromBankName = null;
+                        if (revDebitTxn != null)
+                        {
+                            resolvedRevFromBankName = SafeDecrypt(banks.FirstOrDefault(b => b.BankId == revDebitTxn.FromBankId)?.Name);
+                        }
+                        else
+                        {
+                            var debtorId = !string.IsNullOrEmpty(primaryRevTxn.DebtorId) ? primaryRevTxn.DebtorId : approval?.DebtorId;
+                            if (!string.IsNullOrEmpty(debtorId))
+                            {
+                                var debtor = debtors.FirstOrDefault(d => d.DebtorId == debtorId);
+                                if (debtor != null)
+                                {
+                                    resolvedRevFromBankName = "Debtor: " + SafeDecrypt(debtor.Name);
+                                }
+                            }
+                        }
+
                         string resolvedRevToBankName = null;
                         if (revCreditTxn != null)
                         {
                             resolvedRevToBankName = SafeDecrypt(banks.FirstOrDefault(b => b.BankId == revCreditTxn.ToBankId)?.Name);
                         }
-                        else if (primaryRevTxn.VendorId != null)
+                        else
                         {
-                            var vendor = vendors.FirstOrDefault(v => v.VendorId == primaryRevTxn.VendorId);
-                            if (vendor != null)
+                            var vendorId = !string.IsNullOrEmpty(primaryRevTxn.VendorId) ? primaryRevTxn.VendorId : approval?.VendorId;
+                            if (!string.IsNullOrEmpty(vendorId))
                             {
-                                resolvedRevToBankName = "Vendor: " + SafeDecrypt(vendor.Name);
+                                var vendor = vendors.FirstOrDefault(v => v.VendorId == vendorId);
+                                if (vendor != null)
+                                {
+                                    resolvedRevToBankName = "Vendor: " + SafeDecrypt(vendor.Name);
+                                }
                             }
                         }
 
@@ -176,8 +221,10 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                         {
                             ApprovalId = approvalId,
                             ApprovalName = approvalName + " (Reversed)",
+                            ApprovalReference = approvalReference != null ? (approvalReference + " (Reversed)") : null,
+                            ApprovalType = approvalType,
                             Amount = primaryRevTxn.Amount,
-                            FromBankName = revDebitTxn != null ? SafeDecrypt(banks.FirstOrDefault(b => b.BankId == revDebitTxn.FromBankId)?.Name) : null,
+                            FromBankName = resolvedRevFromBankName,
                             ToBankName = resolvedRevToBankName,
                             CompletedOn = primaryRevTxn.CreatedDate.ToString("o"),
                             RunningBalanceBank1 = revRbBank1,
@@ -185,6 +232,11 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                         });
                     }
                 }
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.ApprovalType) && !request.ApprovalType.Equals("all", System.StringComparison.OrdinalIgnoreCase))
+            {
+                dtos = dtos.Where(d => d.ApprovalType != null && d.ApprovalType.Equals(request.ApprovalType, System.StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             var response = new GetAllCombinedBankTransactionsQueryResponse
@@ -199,7 +251,10 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
         private decimal CalculateDynamicRunningBalance(IReadOnlyList<OOH.Domain.Entities.Global.BankTransaction> allTransactions, string bankId, string upToTransactionId)
         {
             var bankTransactions = allTransactions
-                .Where(t => t.FromBankId == bankId || t.ToBankId == bankId)
+                .Where(t => !t.IsVoided && (
+                    (t.FromBankId == bankId && (t.IsPaidToDistributor || t.IsConfirm)) ||
+                    (t.ToBankId == bankId && t.IsConfirm)
+                ))
                 .OrderBy(x => x.CreatedDate)
                 .ToList();
 

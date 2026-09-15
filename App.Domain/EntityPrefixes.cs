@@ -95,6 +95,8 @@ namespace OOH.Domain
 
         public static string Vendor = "Vndr";
         public static string VendorCategory = "VndCat";
+        public static string Debtor = "Dbtr";
+        public static string Distributor = "Dstrbtr";
 
         public static string ShareLink = "ShrLnk";
 

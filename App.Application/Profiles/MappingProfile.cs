@@ -57,6 +57,11 @@ using OOH.Application.Features.Tenders.Vendors.Commands.DeleteVendor;
 using OOH.Application.Features.Tenders.Vendors.Commands.UpdateVendor;
 using OOH.Application.Features.Tenders.Vendors.Queries.GetVendorDetail;
 using OOH.Application.Features.Tenders.Vendors.Queries.GetVendorList;
+using OOH.Application.Features.Tenders.Debtors.Commands.CreateDebtor;
+using OOH.Application.Features.Tenders.Debtors.Commands.DeleteDebtor;
+using OOH.Application.Features.Tenders.Debtors.Commands.UpdateDebtor;
+using OOH.Application.Features.Tenders.Debtors.Queries.GetDebtorDetail;
+using OOH.Application.Features.Tenders.Debtors.Queries.GetDebtorList;
 using OOH.Domain.Entities;
 using OOH.Domain.Entities.Global;
 using OOH.Application.Features.Global.VendorCategories.Commands.CreateVendorCategory;
@@ -161,6 +166,36 @@ namespace OOH.Application.Profiles
             CreateMap<Vendor, UpdateVendorDto>().ReverseMap();
 
             CreateMap<Vendor, DeleteVendorCommand>().ReverseMap();
+
+            #endregion
+
+            #region Debtor 
+
+            CreateMap<Debtor, DebtorListVM>().ReverseMap();
+            CreateMap<Debtor, DebtorDetailVM>().ReverseMap();
+
+            CreateMap<Debtor, CreateDebtorCommand>().ReverseMap();
+            CreateMap<Debtor, CreateDebtorDto>().ReverseMap();
+
+            CreateMap<Debtor, UpdateDebtorCommand>().ReverseMap();
+            CreateMap<Debtor, UpdateDebtorDto>().ReverseMap();
+
+            CreateMap<Debtor, DeleteDebtorCommand>().ReverseMap();
+
+            #endregion
+
+            #region Distributor 
+
+            CreateMap<Distributor, OOH.Application.Features.Tenders.Distributors.Queries.GetDistributorList.DistributorListVM>().ReverseMap();
+            CreateMap<Distributor, OOH.Application.Features.Tenders.Distributors.Queries.GetDistributorDetail.DistributorDetailVM>().ReverseMap();
+
+            CreateMap<Distributor, OOH.Application.Features.Tenders.Distributors.Commands.CreateDistributor.CreateDistributorCommand>().ReverseMap();
+            CreateMap<Distributor, OOH.Application.Features.Tenders.Distributors.Commands.CreateDistributor.CreateDistributorDto>().ReverseMap();
+
+            CreateMap<Distributor, OOH.Application.Features.Tenders.Distributors.Commands.UpdateDistributor.UpdateDistributorCommand>().ReverseMap();
+            CreateMap<Distributor, OOH.Application.Features.Tenders.Distributors.Commands.UpdateDistributor.UpdateDistributorDto>().ReverseMap();
+
+            CreateMap<Distributor, OOH.Application.Features.Tenders.Distributors.Commands.DeleteDistributor.DeleteDistributorCommand>().ReverseMap();
 
             #endregion
 

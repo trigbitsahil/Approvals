@@ -26,7 +26,9 @@ import {
   FileText,
   Camera,
   Coins,
-  Truck
+  Truck,
+  Users,
+  Store
 } from "lucide-react";
 import { UserService } from "@/api/services/UserService";
 
@@ -126,6 +128,22 @@ const data = {
       items: [
         { title: "Vendor List", url: "/vendors" },
           { title: "Vendor Category", url: "/vendor-categories" },
+      ],
+    },
+    {
+      title: "Debtors",
+      url: "#",
+      icon: Users,
+      items: [
+        { title: "Debtor List", url: "/debtors" },
+      ],
+    },
+    {
+      title: "Distributors",
+      url: "#",
+      icon: Store,
+      items: [
+        { title: "Distributor List", url: "/distributors" },
       ],
     },
     {

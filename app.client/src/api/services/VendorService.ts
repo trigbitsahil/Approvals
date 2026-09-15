@@ -28,6 +28,42 @@ export class VendorService {
             },
         });
     }
+    public static getVendorById(
+        id: string,
+    ): CancelablePromise<{
+        success?: boolean;
+        message?: string | null;
+        data?: VendorListVM | null;
+    }> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/Vendor/{id}',
+            path: {
+                'id': id,
+            },
+        });
+    }
+
+    public static getVendorSummary(
+        id: string,
+    ): CancelablePromise<{
+        success?: boolean;
+        message?: string | null;
+        data?: {
+            vendorId?: string;
+            totalPaidAmount?: number;
+            pendingAmount?: number;
+            totalTransactionsCount?: number;
+        } | null;
+    }> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/Vendor/{id}/summary',
+            path: {
+                'id': id,
+            },
+        });
+    }
     /**
      * @param requestBody
      * @returns any Success

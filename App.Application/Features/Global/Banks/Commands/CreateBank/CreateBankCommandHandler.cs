@@ -32,7 +32,7 @@ namespace OOH.Application.Features.Global.Banks.Commands.CreateBank
                 Status = request.Status ?? "Active",
                 CreatedBy = request.CreatedBy ?? "System",
                 CreatedDate = DateTime.UtcNow,
-                TenantId = request.TenantId ?? "TNT_2024_10_213955709c-50f7-4170-a976-6dd82fe7c8e3",
+                TenantId = request.TenantId,
                 IsVoided = false
             };
 

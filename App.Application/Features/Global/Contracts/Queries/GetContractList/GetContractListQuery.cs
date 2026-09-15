@@ -1,7 +1,8 @@
 using MediatR;
-using OOH.Application.Contracts.Persistence;
+using OOH.Application.Contracts.Infrastructure;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,14 +10,49 @@ namespace OOH.Application.Features.Global.Contracts.Queries.GetContractList
 {
     public class ContractListVM
     {
+        [JsonPropertyName("contractID")]
         public string ContractId { get; set; }
+
+        [JsonPropertyName("contractNo")]
+        public string? ContractNo { get; set; }
+
+        [JsonPropertyName("name")]
         public string Name { get; set; }
-        public string? Number { get; set; }
+
+        [JsonPropertyName("govtBodyID")]
+        public string? GovtBodyId { get; set; }
+
+        [JsonPropertyName("contractStartDate")]
+        public DateTime? ContractStartDate { get; set; }
+
+        [JsonPropertyName("contractEndDate")]
+        public DateTime? ContractEndDate { get; set; }
+
+        [JsonPropertyName("isVoided")]
         public bool IsVoided { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string LastModifiedBy { get; set; }
+
+        [JsonPropertyName("createdBy")]
+        public string? CreatedBy { get; set; }
+
+        [JsonPropertyName("createdDate")]
+        public DateTime? CreatedDate { get; set; }
+
+        [JsonPropertyName("lastModifiedBy")]
+        public string? LastModifiedBy { get; set; }
+
+        [JsonPropertyName("lastModifiedDate")]
         public DateTime? LastModifiedDate { get; set; }
+
+        [JsonPropertyName("cityName")]
+        public string? CityName { get; set; }
+
+        [JsonPropertyName("govtBodyName")]
+        public string? GovtBodyName { get; set; }
+
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
+
+        public string? Number => ContractNo;
     }
 
     public class GetContractListQuery : IRequest<List<ContractListVM>>
@@ -25,27 +61,17 @@ namespace OOH.Application.Features.Global.Contracts.Queries.GetContractList
 
     public class GetContractListQueryHandler : IRequestHandler<GetContractListQuery, List<ContractListVM>>
     {
-        private readonly IContractRepository _contractRepository;
+        private readonly IExternalApiClientService _externalApiClientService;
 
-        public GetContractListQueryHandler(IContractRepository contractRepository)
+        public GetContractListQueryHandler(IExternalApiClientService externalApiClientService)
         {
-            _contractRepository = contractRepository;
+            _externalApiClientService = externalApiClientService;
         }
 
         public async Task<List<ContractListVM>> Handle(GetContractListQuery request, CancellationToken cancellationToken)
         {
-            var contracts = await _contractRepository.ListAllAsync();
-            return contracts.Where(c => !c.IsVoided).Select(c => new ContractListVM
-            {
-                ContractId = c.ContractId,
-                Name = c.Name,
-                Number = c.Number,
-                IsVoided = c.IsVoided,
-                CreatedBy = c.CreatedBy,
-                CreatedDate = c.CreatedDate,
-                LastModifiedBy = c.LastModifiedBy,
-                LastModifiedDate = c.LastModifiedDate
-            }).ToList();
+            var externalContracts = await _externalApiClientService.GetContractsAsync(cancellationToken);
+            return externalContracts ?? new List<ContractListVM>();
         }
     }
 }

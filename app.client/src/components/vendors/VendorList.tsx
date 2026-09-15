@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { VendorService } from "@/api/services/VendorService";
 import { VendorCategoryService } from "@/api/services/VendorCategoryService";
 import type { VendorListVM } from "@/api/models/VendorListVM";
@@ -8,7 +9,7 @@ import type { VendorCategoryListVM } from "@/api/models/VendorCategoryListVM";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Plus, MoreVertical, Edit2, Trash2, Truck } from "lucide-react";
+import { Plus, MoreVertical, Edit2, Trash2, Truck, Eye } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -31,6 +32,7 @@ import { toast } from "sonner";
 import { useConfirmation } from "@/contexts/ConfirmationContext";
 
 export function VendorList() {
+  const navigate = useNavigate();
   const [vendors, setVendors] = useState<VendorListVM[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -294,7 +296,16 @@ export function VendorList() {
               </TableRow>
             ) : (
               vendors.map((vendor) => (
-                <TableRow key={vendor.vendorID} className="group hover:bg-muted/30 transition-colors">
+                <TableRow
+                  key={vendor.vendorID}
+                  className="group hover:bg-muted/30 transition-colors cursor-pointer"
+                  onClick={(e) => {
+                    if ((e.target as HTMLElement).closest('button, [role="menuitem"]')) return;
+                    if (vendor.vendorID) {
+                      navigate(`/vendors/${vendor.vendorID}`);
+                    }
+                  }}
+                >
                   <TableCell className="font-medium">
                     <div className="flex flex-col">
                       <span className="text-foreground">{vendor.name}</span>
@@ -331,7 +342,13 @@ export function VendorList() {
                           <MoreVertical className="h-4 w-4 text-muted-foreground" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-[160px]">
+                      <DropdownMenuContent align="end" className="w-[180px]">
+                        <DropdownMenuItem
+                          onClick={() => vendor.vendorID && navigate(`/vendors/${vendor.vendorID}`)}
+                          className="cursor-pointer font-medium text-primary"
+                        >
+                          <Eye className="mr-2 h-4 w-4" /> View Details & Ledger
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEdit(vendor)} className="cursor-pointer">
                           <Edit2 className="mr-2 h-4 w-4" /> Edit Details
                         </DropdownMenuItem>

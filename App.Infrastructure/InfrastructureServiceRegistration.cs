@@ -40,6 +40,7 @@ namespace OOH.Infrastructure
 
 
             services.AddScoped<ICurrentTenantService, CurrentTenantService>();
+            services.AddSingleton<IExternalApiClientService, ExternalApiClientService>();
 
 
 

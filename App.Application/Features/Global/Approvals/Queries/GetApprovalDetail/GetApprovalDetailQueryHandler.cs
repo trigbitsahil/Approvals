@@ -65,6 +65,15 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalDetail
                     entity.ApprovalType = !string.IsNullOrEmpty(entity.ApprovalType) ? _encryptionService.Decrypt(entity.ApprovalType) : entity.ApprovalType;
                     entity.Priority = !string.IsNullOrEmpty(entity.Priority) ? _encryptionService.Decrypt(entity.Priority) : entity.Priority;
 
+                    if (!string.IsNullOrEmpty(entity.FromBankName))
+                    {
+                        try { entity.FromBankName = _encryptionService.Decrypt(entity.FromBankName); } catch { }
+                    }
+                    if (!string.IsNullOrEmpty(entity.ToBankName))
+                    {
+                        try { entity.ToBankName = _encryptionService.Decrypt(entity.ToBankName); } catch { }
+                    }
+
                     getApprovalDetailQueryResponse.Data = entity;
                 }
 

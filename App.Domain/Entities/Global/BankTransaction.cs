@@ -20,6 +20,18 @@ namespace OOH.Domain.Entities.Global
         [Column("vendor_id")]
         public string? VendorId { get; set; }
 
+        [Column("debtor_id")]
+        public string? DebtorId { get; set; }
+
+        [Column("distributor_id")]
+        public string? DistributorId { get; set; }
+
+        [Column("is_paid_to_distributor")]
+        public bool IsPaidToDistributor { get; set; }
+
+        [Column("is_confirm")]
+        public bool IsConfirm { get; set; }
+
         [Required]
         [Column("approval_id")]
         public string ApprovalId { get; set; }
@@ -43,6 +55,9 @@ namespace OOH.Domain.Entities.Global
 
         [Column("cleared_on")]
         public DateTime? ClearedOn { get; set; }
+
+        [Column("remarks")]
+        public string? Remarks { get; set; }
 
         [Required]
         [Column("is_voided")]

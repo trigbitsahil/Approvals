@@ -23,6 +23,8 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalList
         public bool AllApproverApprove { get; set; }
 
         public string? VendorId { get; set; }
+        public string? DebtorId { get; set; }
+        public string? DistributorId { get; set; }
         public string? ContractId { get; set; }
 
         public string RequestedBy { get; set; }
@@ -56,5 +58,7 @@ namespace OOH.Application.Features.Global.Approvals.Queries.GetApprovalList
         public string? FromBankId { get; set; }
         public string? ToBankId { get; set; }
         public decimal? TransactionAmount { get; set; }
+        public string? ProjectId { get; set; }
+        public string? ProjectName { get; set; }
     }
 }

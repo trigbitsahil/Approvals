@@ -1,9 +1,17 @@
 export type BankTransactionListVM = {
     transactionId?: string;
     bankId?: string;
+    vendorId?: string | null;
+    debtorId?: string | null;
+    distributorId?: string | null;
     bankName?: string;
+    fromBankName?: string;
+    toBankName?: string;
+    vendorName?: string;
+    distributorName?: string;
     approvalId?: string;
     approvalName?: string;
+    approvalReference?: string;
     transactionType?: string;
     amount: number;
     deposit: number;
@@ -11,4 +19,15 @@ export type BankTransactionListVM = {
     runningBalance: number;
     createdDate?: string;
     createdBy?: string;
+    lastModifiedDate?: string;
+    lastModifiedBy?: string;
+    isPaidToDistributor?: boolean;
+    isConfirm?: boolean;
+    fromBankId?: string | null;
+    toBankId?: string | null;
+    fromBankUserEmail?: string | null;
+    paidToDistributorBy?: string | null;
+    paidToDistributorDate?: string | null;
+    assignedBankUserId?: string | null;
+    derivedStatus?: string;
 };

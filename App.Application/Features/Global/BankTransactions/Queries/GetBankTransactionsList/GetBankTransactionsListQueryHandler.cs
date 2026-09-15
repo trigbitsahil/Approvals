@@ -49,9 +49,13 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             foreach (var bank in banks)
             {
                 var bankTransactions = transactions
-                    .Where(t => t.FromBankId == bank.BankId || t.ToBankId == bank.BankId)
+                    .Where(t => !t.IsVoided && (
+                        (t.FromBankId == bank.BankId && (t.IsPaidToDistributor || t.IsConfirm)) ||
+                        (t.ToBankId == bank.BankId && t.IsConfirm)
+                    ))
                     .OrderBy(x => x.CreatedDate)
                     .ToList();
+
 
                 decimal runningBalance = 0;
 
@@ -65,20 +69,21 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
 
                     runningBalance = runningBalance + currentDeposit - currentWithdrawal;
 
+                    if (t.RunningBalance == 0)
+                    {
+                        t.RunningBalance = runningBalance;
+                        await _bankTransactionRepository.UpdateAsync(t);
+                    }
+
                     string approvalName = null;
+                    string approvalReference = null;
                     if (!string.IsNullOrEmpty(t.ApprovalId) && t.ApprovalId != "-")
                     {
                         var approval = approvals.FirstOrDefault(a => a.ApprovalId == t.ApprovalId);
-                        if (approval != null && !string.IsNullOrEmpty(approval.Name))
+                        if (approval != null)
                         {
-                            try
-                            {
-                                approvalName = _encryptionService.Decrypt(approval.Name);
-                            }
-                            catch
-                            {
-                                approvalName = approval.Name;
-                            }
+                            approvalName = SafeDecrypt(approval.Name);
+                            approvalReference = SafeDecrypt(approval.Reference);
                         }
                     }
 
@@ -90,13 +95,21 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                         BankName = SafeDecrypt(bank.Name),
                         ApprovalId = t.ApprovalId,
                         ApprovalName = approvalName,
+                        ApprovalReference = approvalReference,
                         TransactionType = isWithdrawal ? "Debit" : (isDeposit ? "Credit" : t.TransactionType),
                         Amount = t.Amount,
                         Deposit = currentDeposit,
                         Withdrawal = currentWithdrawal,
-                        RunningBalance = t.RunningBalance != 0 ? t.RunningBalance : runningBalance,
+                        RunningBalance = t.RunningBalance,
+                        IsConfirm = t.IsConfirm,
+                        IsPaidToDistributor = t.IsPaidToDistributor,
+                        FromBankId = t.FromBankId,
+                        ToBankId = t.ToBankId,
+                        Remarks = t.Remarks,
                         CreatedDate = t.CreatedDate.ToString("o"),
-                        CreatedBy = t.CreatedBy
+                        CreatedBy = t.CreatedBy,
+                        LastModifiedDate = t.LastModifiedDate?.ToString("o"),
+                        LastModifiedBy = t.LastModifiedBy
                     });
                 }
             }

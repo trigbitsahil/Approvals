@@ -23,6 +23,7 @@ namespace OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprov
         private readonly IPushNotificationService _pushNotificationService;
         private readonly IEncryptionService _encryptionService;
         private readonly ILoggedInUserService _loggedInUserService;
+        private readonly IApprovalHistoryRepository _historyRepository;
 
         public CreateApprovalCommentCommandHandler(IMapper mapper,
             IApprovalCommentRepository ApprovalCommentRepository,
@@ -31,7 +32,8 @@ namespace OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprov
             IApprovalRepository approvalRepository,
             IPushNotificationService pushNotificationService,
             IEncryptionService encryptionService,
-            ILoggedInUserService loggedInUserService)
+            ILoggedInUserService loggedInUserService,
+            IApprovalHistoryRepository historyRepository = null)
         {
             _mapper = mapper;
             _ApprovalCommentRepository = ApprovalCommentRepository;
@@ -41,6 +43,7 @@ namespace OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprov
             _pushNotificationService = pushNotificationService;
             _encryptionService = encryptionService;
             _loggedInUserService = loggedInUserService;
+            _historyRepository = historyRepository;
         }
 
 
@@ -88,6 +91,17 @@ namespace OOH.Application.Features.Global.ApprovalComments.Commands.CreateApprov
                 }
                 else
                 {
+                    if (_historyRepository != null && !string.IsNullOrEmpty(request.ApprovalId))
+                    {
+                        var author = _loggedInUserService?.UserEmail ?? entity.CreatedBy ?? "User";
+                        await _historyRepository.LogHistoryAsync(
+                            request.ApprovalId,
+                            "Comment Added",
+                            $"Comment added: \"{request.CommentText}\"",
+                            author,
+                            author.Split('@')[0]
+                        );
+                    }
 
 
 

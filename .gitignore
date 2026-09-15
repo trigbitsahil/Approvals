@@ -19,9 +19,13 @@ obj/
 
 # Node / Next.js
 node_modules/
+**/node_modules/
 .next/
+**/.next/
 out/
 build/
+dist/
+**/dist/
 .env*.local
 
 # OS files
@@ -32,6 +36,13 @@ firebase-service-account.json
 
 # Logs
 *.log
+logs/
+**/logs/
+App.Server/logs/
+
+# Logs
+*.log
+*.txt
 logs/
 **/logs/
 App.Server/logs/

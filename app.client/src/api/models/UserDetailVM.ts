@@ -16,5 +16,6 @@ export type UserDetailVM = {
     lastModifiedBy?: string | null;
     lastModifiedDate?: string | null;
     departmentId?: string | null;
+    id?: string | null;
 };
 

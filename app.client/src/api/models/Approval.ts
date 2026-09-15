@@ -24,5 +24,7 @@ export type Approval = {
     mediaId?: string | null;
     dateOfLetter?: string | null;
     departmentId?: string | null;
+    projectId?: string | null;
+    projectName?: string | null;
 };
 

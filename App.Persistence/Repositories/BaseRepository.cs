@@ -613,7 +613,7 @@ namespace OOH.Persistence.Repositories
         {
             var type = typeof(T);
             var columnsAsProperties = string.Join(", ", type.GetProperties()
-                .Where(p => !excludeKey || !p.IsDefined(typeof(KeyAttribute)))
+                .Where(p => (!excludeKey || !p.IsDefined(typeof(KeyAttribute))) && !p.IsDefined(typeof(NotMappedAttribute)))
                 .Select(p =>
                 {
                     var columnAttribute = p.GetCustomAttribute<ColumnAttribute>();
@@ -627,7 +627,7 @@ namespace OOH.Persistence.Repositories
         {
             var type = typeof(T);
             var columnsAsProperties = string.Join(", ", type.GetProperties()
-                .Where(p => !excludeKey || !p.IsDefined(typeof(KeyAttribute)))
+                .Where(p => (!excludeKey || !p.IsDefined(typeof(KeyAttribute))) && !p.IsDefined(typeof(NotMappedAttribute)))
                 .Select(p =>
                 {
                     var columnAttribute = p.GetCustomAttribute<ColumnAttribute>();
@@ -639,7 +639,7 @@ namespace OOH.Persistence.Repositories
         private string GetPropertyNames(bool excludeKey = false)
         {
             var properties = typeof(T).GetProperties()
-                .Where(p => !excludeKey || p.GetCustomAttribute<KeyAttribute>() == null);
+                .Where(p => (!excludeKey || p.GetCustomAttribute<KeyAttribute>() == null) && !p.IsDefined(typeof(NotMappedAttribute)));
 
             var values = string.Join(", ", properties.Select(p => $"@{p.Name}"));
 
@@ -649,7 +649,7 @@ namespace OOH.Persistence.Repositories
         private IEnumerable<PropertyInfo> GetProperties(bool excludeKey = false)
         {
             var properties = typeof(T).GetProperties()
-                .Where(p => !excludeKey || p.GetCustomAttribute<KeyAttribute>() == null);
+                .Where(p => (!excludeKey || p.GetCustomAttribute<KeyAttribute>() == null) && !p.IsDefined(typeof(NotMappedAttribute)));
 
             return properties;
         }
@@ -670,7 +670,7 @@ namespace OOH.Persistence.Repositories
         private IEnumerable<PropertyInfo> GetPropertiesForUpdate(T entity, bool excludeKey = false)
         {
             var properties = typeof(T).GetProperties()
-                .Where(p => !excludeKey || p.GetCustomAttribute<KeyAttribute>() == null);
+                .Where(p => (!excludeKey || p.GetCustomAttribute<KeyAttribute>() == null) && !p.IsDefined(typeof(NotMappedAttribute)));
 
             List<PropertyInfo> updatableProperties = new List<PropertyInfo>();
 

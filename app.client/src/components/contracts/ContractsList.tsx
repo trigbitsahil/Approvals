@@ -10,6 +10,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { 
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+} from "@/components/ui/select";
 import { ContractService } from "@/api/services/ContractService";
 import { ContractFormDialog } from "./ContractFormDialog";
 import ConfirmationModal from "@/components/ConfirmationModal";
@@ -156,11 +159,7 @@ export function ContractsList() {
               Manage your company contracts.
             </p>
           </div>
-          <div className="flex items-center w-full sm:w-auto">
-            <Button onClick={handleAddContract} className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white shadow-sm">
-              <Plus className="mr-2 h-4 w-4" /> Add Contract
-            </Button>
-          </div>
+           
         </div>
 
               <Card className="border-none shadow-md overflow-hidden p-0 gap-0">
@@ -188,33 +187,32 @@ export function ContractsList() {
               <Table className="w-full min-w-[600px]">
                 <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="w-[120px] font-semibold">
+                    <TableHead className="w-[15%] font-semibold">
                       <Button variant="ghost" onClick={() => handleSort("number")} className="font-semibold px-0 hover:bg-transparent">
                         Number <ArrowUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     </TableHead>
-                    <TableHead className="font-semibold">
+                    <TableHead className="w-[40%] font-semibold">
                       <Button variant="ghost" onClick={() => handleSort("name")} className="font-semibold px-0 hover:bg-transparent">
                         Name <ArrowUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     </TableHead>
-                    <TableHead className="font-semibold">
+                    <TableHead className="w-[25%] font-semibold">
                       <Button variant="ghost" onClick={() => handleSort("createdBy")} className="font-semibold px-0 hover:bg-transparent">
                         Created By <ArrowUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     </TableHead>
-                    <TableHead className="font-semibold">
-                      <Button variant="ghost" onClick={() => handleSort("createdDate")} className="font-semibold px-0 hover:bg-transparent">
+                    <TableHead className="w-[20%] text-right font-semibold pr-4 sm:pr-6">
+                      <Button variant="ghost" onClick={() => handleSort("createdDate")} className="font-semibold px-0 hover:bg-transparent justify-end w-full">
                         Created Date <ArrowUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     </TableHead>
-                    <TableHead className="text-right font-semibold">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={5} className="h-24 text-center">
+                      <TableCell colSpan={4} className="h-24 text-center">
                         <div className="flex justify-center items-center text-muted-foreground">
                           <span className="animate-spin mr-2">⏳</span> Loading...
                         </div>
@@ -222,7 +220,7 @@ export function ContractsList() {
                     </TableRow>
                   ) : paginatedContracts.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                      <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
                         No contracts found.
                       </TableCell>
                     </TableRow>
@@ -238,31 +236,8 @@ export function ContractsList() {
                         <TableCell className="text-muted-foreground">
                           {contract.createdBy || "-"}
                         </TableCell>
-                        <TableCell className="text-muted-foreground">
+                        <TableCell className="text-muted-foreground text-right pr-4 sm:pr-6">
                           {contract.createdDate ? format(new Date(contract.createdDate), 'MMM dd, yyyy') : "-"}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-[160px]">
-                              <DropdownMenuItem onClick={() => handleEditContract(contract)}>
-                                <Edit3 className="mr-2 h-4 w-4" />
-                                Edit
-                              </DropdownMenuItem>
-                              <DropdownMenuItem 
-                                onClick={() => confirmDelete(contract.contractId)}
-                                className="text-red-600 focus:text-red-600"
-                              >
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
                         </TableCell>
                       </TableRow>
                     ))
@@ -273,41 +248,46 @@ export function ContractsList() {
             
             {/* Pagination Controls */}
             {!loading && filteredAndSortedContracts.length > 0 && (
-              <div className="flex flex-col sm:flex-row items-center justify-between px-4 py-4 border-t bg-muted/20 gap-4">
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground w-full sm:w-auto justify-center sm:justify-start">
+              <div className="flex flex-col sm:flex-row items-center justify-between px-4 py-3 border-t bg-muted/20 gap-3 text-xs">
+                <div className="flex items-center space-x-2 text-muted-foreground">
                   <span>Show</span>
-                  <select 
-                    className="border rounded px-2 py-1 bg-background"
-                    value={pageSize}
-                    onChange={(e) => setPageSize(Number(e.target.value))}
-                  >
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={50}>50</option>
-                  </select>
+                  <Select value={String(pageSize)} onValueChange={(val) => setPageSize(Number(val))}>
+                    <SelectTrigger className="h-7 w-[65px] border border-border/60 bg-background text-foreground text-xs focus:ring-0 focus:ring-offset-0 px-2 justify-between rounded-lg">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent side="top" align="center" className="rounded-xl border-border/60 bg-popover text-popover-foreground shadow-md min-w-[65px]">
+                      <SelectItem value="5">5</SelectItem>
+                      <SelectItem value="10">10</SelectItem>
+                      <SelectItem value="20">20</SelectItem>
+                      <SelectItem value="50">50</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <span>entries</span>
                 </div>
-                <div className="flex items-center space-x-2 w-full sm:w-auto justify-center sm:justify-end">
-                  <div className="text-sm text-muted-foreground mr-4">
+                <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-3">
+                  <span className="text-muted-foreground">
                     Page {currentPage} of {totalPages}
+                  </span>
+                  <div className="flex items-center space-x-1 shrink-0">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="h-7 w-7 p-0 rounded-lg"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="h-7 w-7 p-0 rounded-lg"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
                 </div>
               </div>
             )}

@@ -33,11 +33,17 @@ import { NavigationMenuBar } from "./components/NavigationMenu";
 import DocumentsPage from "@/components/documents/DocumentsPage";
 import  ApprovalsPage  from "@/components/approvals/ApprovalsPage";
 import ApprovalDetailPage from "@/components/approvals/ApprovalDetailPage";
+import ApprovalHistoryPage from "@/components/approvals/ApprovalHistoryPage";
 import  LedgerPage  from "@/components/ledger/LedgerPage";
 import SignUpForm from "./modules/auth/signUp";
 import SignInForm from "./modules/auth/signIn";
 import { BankList } from "@/components/banks/BankList";
 import { VendorList } from "@/components/vendors/VendorList";
+import VendorDetailPage from "@/components/vendors/VendorDetailPage";
+import { DebtorList } from "@/components/debtors/DebtorList";
+import DebtorDetailPage from "@/components/debtors/DebtorDetailPage";
+import { DistributorList } from "@/components/distributors/DistributorList";
+import DistributorDetailPage from "@/components/distributors/DistributorDetailPage";
 import { BankTransactionList } from "@/components/banks/BankTransactionList";
 import { VendorCategoryList } from "@/components/vendors/VendorCategoryList";
 // import { InventoryTransactionsList } from './components/inventory/InventoryTransactionsList';
@@ -393,6 +399,46 @@ function AppContent() {
                   }
                 />
                 <Route
+                  path="/vendors/:id"
+                  element={
+                    <ProtectedRoute>
+                      <VendorDetailPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/debtors"
+                  element={
+                    <ProtectedRoute>
+                      <DebtorList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/debtors/:id"
+                  element={
+                    <ProtectedRoute>
+                      <DebtorDetailPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/distributors"
+                  element={
+                    <ProtectedRoute>
+                      <DistributorList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/distributors/:id"
+                  element={
+                    <ProtectedRoute>
+                      <DistributorDetailPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/vendor-categories"
                   element={
                     <ProtectedRoute>
@@ -460,6 +506,14 @@ function AppContent() {
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/approvals/:id/history"
+                  element={
+                    <ProtectedRoute>
+                      <ApprovalHistoryPage />
+                    </ProtectedRoute>
+                  }
+                />
 
                 <Route
                   path="/Ledger"
@@ -472,6 +526,8 @@ function AppContent() {
 
                 {/* Fallback & Root */}
                 <Route path="/vendors" element={<VendorList />} />
+                <Route path="/debtors" element={<DebtorList />} />
+                <Route path="/distributors" element={<DistributorList />} />
                 <Route path="/contracts" element={<ContractsList />} />
                 <Route path="/banks/:bankId/transactions" element={<BankTransactionList />} />
                 <Route path="/" element={<Navigate to="/approvals" replace />} />

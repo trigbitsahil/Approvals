@@ -3,12 +3,15 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
-import { CheckCircle2, Clock, Plus, Search, LayoutGrid, List, MoreVertical, Trash2, Edit2, Eye, FileText, ArrowRight, Loader2, BadgeCheck, ShieldCheck, AlertTriangle, Send, GripVertical, X, Upload, ChevronDown, ChevronUp, Users, Tag, Calendar, Wallet, Building2, Folder, Undo2 } from "lucide-react";
+import { CheckCircle2, Clock, Plus, Search, LayoutGrid, List, MoreVertical, Trash2, Edit2, Eye, FileText, ArrowRight, Loader2, BadgeCheck, ShieldCheck, AlertTriangle, Send, GripVertical, X, Upload, ChevronDown, ChevronUp, Users, Tag, Calendar, Wallet, Building2, Folder, Undo2, Check, ChevronsUpDown } from "lucide-react";
 import { faker } from '@faker-js/faker';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/utils/cn";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -42,10 +45,16 @@ import { VendorCategoryService } from "@/api/services/VendorCategoryService";
 import { DocumentsService } from "@/api/services/DocumentsService";
 import { ExpenseTransactionService } from "@/api/services/ExpenseTransactionService";
 import { VendorService } from "@/api/services/VendorService";
+import { DebtorService } from "@/api/services/DebtorService";
+import { DistributorService } from "@/api/services/DistributorService";
+import { ProjectService } from "@/api/services/ProjectService";
 import type { UserListVM } from "@/api/models/UserListVM";
 import type { ApprovalListVM } from "@/api/models/ApprovalListVM";
 import type { ApprovalStatusListVM } from "@/api/models/ApprovalStatusListVM";
 import type { VendorListVM } from "@/api/models/VendorListVM";
+import type { DebtorListVM } from "@/api/models/DebtorListVM";
+import type { DistributorListVM } from "@/api/models/DistributorListVM";
+import type { ProjectVM } from "@/api/models/ProjectVM";
 import type { ExpenseTransactionListForApprovalVM } from "@/api/models/ExpenseTransactionListForApprovalVM";
 import { BankService } from "@/api/services/BankService";
 import { BankTransactionService } from "@/api/services/BankTransactionService";
@@ -180,9 +189,12 @@ export default function ApprovalsPage() {
   const [users, setUsers] = useState<UserListVM[]>([]);
   const [approvalStatuses, setApprovalStatuses] = useState<ApprovalStatusListVM[]>([]);
   const [vendors, setVendors] = useState<VendorListVM[]>([]);
+  const [debtors, setDebtors] = useState<DebtorListVM[]>([]);
+  const [distributors, setDistributors] = useState<DistributorListVM[]>([]);
   const [vendorCategories, setVendorCategories] = useState<any[]>([]);
   const [contracts, setContracts] = useState<any[]>([]);
   const [banks, setBanks] = useState<BankListVM[]>([]);
+  const [projects, setProjects] = useState<ProjectVM[]>([]);
   const [approvals, setApprovals] = useState<ApprovalListVM[]>([]);
   const [loadingApprovals, setLoadingApprovals] = useState(true);
   const [loggedInDepartmentId, setLoggedInDepartmentId] = useState<string | null>(null);
@@ -285,7 +297,12 @@ export default function ApprovalsPage() {
   const [expenseAmount, setExpenseAmount] = useState<string>("");
   const [expenseDate, setExpenseDate] = useState<string>(new Date().toISOString().split("T")[0]);
   const [selectedVendorId, setSelectedVendorId] = useState("");
+  const [selectedDebtorId, setSelectedDebtorId] = useState("");
+  const [selectedDistributorId, setSelectedDistributorId] = useState("");
   const [selectedContractId, setSelectedContractId] = useState("");
+  const [selectedProjectId, setSelectedProjectId] = useState("");
+  const [openProjectPopover, setOpenProjectPopover] = useState(false);
+  const [openContractPopover, setOpenContractPopover] = useState(false);
   const [isAdvance, setIsAdvance] = useState(false);
   const [expenseName, setExpenseName] = useState("");
   const [expenseDescription, setExpenseDescription] = useState("");
@@ -354,18 +371,24 @@ export default function ApprovalsPage() {
       };
 
       try {
-        const [userRes, statusRes, loggedInRes, vendorRes, bankRes, contractRes, vendorCategoryRes] = await Promise.all([
+        const [userRes, statusRes, loggedInRes, vendorRes, bankRes, contractRes, vendorCategoryRes, debtorRes, distributorRes, projectRes] = await Promise.all([
           safeFetch(UserService.getApiVUser("1"), { success: false, data: [] }),
           safeFetch(ApprovalStatusService.getApiVApprovalStatus("1"), { success: false, data: [] } as any),
           safeFetch(UserService.getLoggedInUser("1"), { success: false, data: null } as any),
           safeFetch(VendorService.getApiVVendor("1"), { success: false, data: [] } as any),
           safeFetch(BankService.getBanks() as any, { success: false, data: [] }),
           safeFetch(ContractService.getApiVContract("1"), { success: false, data: [] } as any),
-          safeFetch(VendorCategoryService.getAllVendorCategories(), [])
+          safeFetch(VendorCategoryService.getAllVendorCategories(), []),
+          safeFetch(DebtorService.getApiVDebtor("1"), { success: false, data: [] } as any),
+          safeFetch(DistributorService.getApiVDistributor("1"), { success: false, data: [] } as any),
+          safeFetch(ProjectService.getProjects("1"), { success: false, data: [] } as any)
         ]);
         if (userRes.success && userRes.data) setUsers(userRes.data);
         if (statusRes.success && statusRes.data) setApprovalStatuses(statusRes.data);
         if (vendorRes.success && vendorRes.data) setVendors(vendorRes.data);
+        if (debtorRes.success && debtorRes.data) setDebtors(debtorRes.data);
+        if (distributorRes.success && distributorRes.data) setDistributors(distributorRes.data);
+        if (projectRes && (projectRes as any).success && (projectRes as any).data) setProjects((projectRes as any).data);
         if (vendorCategoryRes) setVendorCategories(vendorCategoryRes);
         if (Array.isArray(contractRes)) {
           setContracts(contractRes);
@@ -408,7 +431,18 @@ export default function ApprovalsPage() {
   }, []);
 
   // ===== User Selection =====
+  const ALLOWED_APPROVER_EMAILS = [
+   "shahid.hakim@gmail.com",
+   "shahid.hakim@wallop.in",
+   "sanny.panesar@wallop.com",
+   "sanny.panesar@gmail.com",
+  ];
+
   const filteredUsers = users.filter(u => {
+    const userEmail = (u.email || "").toLowerCase();
+    const isAllowedApprover = ALLOWED_APPROVER_EMAILS.some(e => e.toLowerCase() === userEmail);
+    if (!isAllowedApprover) return false;
+
     const q = userSearch.toLowerCase();
     const alreadySelected = orderedUsers.some(ou => ou.userId === (u.userID || u.id));
     if (alreadySelected) return false;
@@ -421,6 +455,10 @@ export default function ApprovalsPage() {
   });
 
   const addUser = (u: UserListVM) => {
+    if (loggedInUserEmail && u.email && u.email.toLowerCase() === loggedInUserEmail.toLowerCase()) {
+      toast.error("You cannot select yourself as an approver.");
+      return;
+    }
     const newUser: OrderedUser = {
       userId: u.userID || u.id || "",
       email: u.email || "",
@@ -513,6 +551,12 @@ export default function ApprovalsPage() {
     setExpenseAmount("");
     setExpenseDate(new Date().toISOString().split("T")[0]);
     setSelectedVendorId("");
+    setSelectedDebtorId("");
+    setSelectedDistributorId("");
+    setSelectedProjectId("");
+    setSelectedContractId("");
+    setOpenProjectPopover(false);
+    setOpenContractPopover(false);
     setIsAdvance(false);
     setExpenseName("");
     setExpenseDescription("");
@@ -522,6 +566,7 @@ export default function ApprovalsPage() {
   // ===== Handle Edit =====
   const handleEdit = async (approval: ApprovalListVM) => {
     setEditingApproval(approval);
+    setSelectedProjectId(approval.projectId || "");
     setApprovalName(approval.name || "");
     setPublicName(approval.reference || "");
     setDescription(approval.description || "");
@@ -536,6 +581,9 @@ export default function ApprovalsPage() {
       if (approval.approvalType === "Expense") {
         setTransactionCategory("Expense");
         setApprovalType("Bank Transfer"); // Reset hidden underlying type
+      } else if (approval.approvalType === "Receipt") {
+        setTransactionCategory("Receipt");
+        setApprovalType("Bank Transfer");
       } else {
         setTransactionCategory("Bank to Bank");
         setApprovalType(approval.approvalType || "Bank Transfer");
@@ -548,6 +596,8 @@ export default function ApprovalsPage() {
     setToBankId(approval.toBankId || "");
     setTransactionAmount(approval.transactionAmount ? approval.transactionAmount.toString() : "");
     setSelectedVendorId(approval.vendorId || "");
+    setSelectedDebtorId(approval.debtorId || "");
+    setSelectedDistributorId(approval.distributorId || "");
     setSelectedContractId(approval.contractId || "");
 
     // Set category states (read-only in UI during edit)
@@ -604,9 +654,26 @@ export default function ApprovalsPage() {
       newErrors.transactionAmount = "Transaction Amount is required";
     }
 
+    if (!isInitialBalance && transactionCategory !== "Receipt" && (!selectedDistributorId || selectedDistributorId === "none")) {
+      newErrors.selectedDistributorId = "Distributor is required";
+    }
+
+
+    if (loggedInUserEmail && orderedUsers.some(u => u.email && u.email.toLowerCase() === loggedInUserEmail.toLowerCase())) {
+      toast.error("You cannot select yourself as an approver.");
+      return;
+    }
+
     if (isInitialBalance) {
       if (!toBankId) {
         newErrors.toBankId = "Bank is required for Initial Balance";
+      }
+    } else if (transactionCategory === "Receipt") {
+      if (!toBankId) {
+        newErrors.toBankId = "To Bank is required for Receipt";
+      }
+      if (!selectedDebtorId || selectedDebtorId === "none") {
+        newErrors.selectedDebtorId = "Debtor is required";
       }
     } else {
       if (!fromBankId) {
@@ -615,6 +682,10 @@ export default function ApprovalsPage() {
       if (transactionCategory !== "Expense" && !toBankId) {
         newErrors.toBankId = "To Bank is required for Bank to Bank transfer";
       }
+    }
+
+    if ((transactionCategory === "Expense" || approvalType === "Expense") && (!selectedVendorId || selectedVendorId === "none")) {
+      newErrors.selectedVendorId = "Vendor is required for Expense";
     }
 
     setErrors(newErrors);
@@ -626,6 +697,9 @@ export default function ApprovalsPage() {
     setIsSubmitting(true);
     try {
       let finalApprovalId = editingApproval?.approvalID || "";
+      const selectedProj = projects.find(p => p.projectId === selectedProjectId);
+      const projIdPayload = (selectedProjectId === "none" || !selectedProjectId) ? null : selectedProjectId;
+      const projNamePayload = selectedProj?.name || null;
 
       if (editingApproval) {
         // UPDATE
@@ -637,13 +711,17 @@ export default function ApprovalsPage() {
           details: publicDescription,
           priority,
           allApproverApprove,
-          approvalType: (transactionCategory === "Expense") ? "Expense" : approvalType,
+          approvalType: (transactionCategory === "Expense") ? "Expense" : ((transactionCategory === "Receipt") ? "Receipt" : approvalType),
           approvalStatusId: selectedStatusId,
-          fromBankId: isInitialBalance ? null : (fromBankId || null),
+          fromBankId: (isInitialBalance || transactionCategory === "Receipt") ? null : (fromBankId || null),
           toBankId: (transactionCategory === "Expense") ? null : (toBankId || null),
           transactionAmount: transactionAmount ? parseFloat(transactionAmount) : null,
-          vendorId: isInitialBalance ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
+          vendorId: (isInitialBalance || (transactionCategory !== "Expense" && approvalType !== "Expense")) ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
+          debtorId: (isInitialBalance || transactionCategory !== "Receipt") ? null : (selectedDebtorId === "none" ? null : (selectedDebtorId || null)),
+          distributorId: (isInitialBalance || transactionCategory === "Receipt" || selectedDistributorId === "none") ? null : (selectedDistributorId || null),
           contractId: isInitialBalance ? null : (selectedContractId === "none" ? null : (selectedContractId || null)),
+          projectId: projIdPayload,
+          projectName: projNamePayload,
         });
 
         if (!updateRes.success) {
@@ -662,14 +740,18 @@ export default function ApprovalsPage() {
           allApproverApprove,
           category: "-",
           categoryId: "-",
-          approvalType: isInitialBalance ? "Initial Balance" : ((transactionCategory === "Expense") ? "Expense" : approvalType),
+          approvalType: isInitialBalance ? "Initial Balance" : ((transactionCategory === "Expense") ? "Expense" : ((transactionCategory === "Receipt") ? "Receipt" : approvalType)),
           approvalStatusId: "ApprvlStatus_2025_03_08950e9c8e-a353-4b03-928a-330221292e24",
           departmentId: loggedInDepartmentId || undefined,
-          fromBankId: isInitialBalance ? null : (fromBankId || null),
+          fromBankId: (isInitialBalance || transactionCategory === "Receipt") ? null : (fromBankId || null),
           toBankId: (transactionCategory === "Expense") ? null : (toBankId || null),
           transactionAmount: transactionAmount ? parseFloat(transactionAmount) : null,
-          vendorId: isInitialBalance ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
+          vendorId: (isInitialBalance || (transactionCategory !== "Expense" && approvalType !== "Expense")) ? null : (selectedVendorId === "none" ? null : (selectedVendorId || null)),
+          debtorId: (isInitialBalance || transactionCategory !== "Receipt") ? null : (selectedDebtorId === "none" ? null : (selectedDebtorId || null)),
+          distributorId: (isInitialBalance || transactionCategory === "Receipt" || selectedDistributorId === "none") ? null : (selectedDistributorId || null),
           contractId: isInitialBalance ? null : (selectedContractId === "none" ? null : (selectedContractId || null)),
+          projectId: projIdPayload,
+          projectName: projNamePayload,
         };
 
         // If OfficeNote type, embed the officeNote object
@@ -1463,15 +1545,16 @@ export default function ApprovalsPage() {
                   checked={isInitialBalance} 
                   onCheckedChange={(checked) => {
                     setIsInitialBalance(checked);
-                    setErrors({ ...errors, fromBankId: "", toBankId: "", transactionCategory: "" });
+                    setErrors({ ...errors, fromBankId: "", toBankId: "", transactionCategory: "", selectedDistributorId: "" });
                   }}
+
                 />
               </div>
 
               {/* ── Transaction Category ── */}
               {!isInitialBalance && (
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Transaction Category <span className="text-red-500">*</span></label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Approval Type<span className="text-red-500">*</span></label>
                   <Select value={transactionCategory} onValueChange={(val) => { setTransactionCategory(val); setErrors({ ...errors, transactionCategory: "", toBankId: "" }); }}>
                     <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
                       <SelectValue placeholder="Select Category" />
@@ -1479,6 +1562,7 @@ export default function ApprovalsPage() {
                     <SelectContent className="rounded-2xl border-border/50">
                       <SelectItem value="Bank to Bank">Bank to Bank</SelectItem>
                       <SelectItem value="Expense">Expense</SelectItem>
+                      <SelectItem value="Receipt">Receipt</SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.transactionCategory && <p className="text-xs text-red-500 mt-1">{errors.transactionCategory}</p>}
@@ -1506,9 +1590,9 @@ export default function ApprovalsPage() {
                   </Select>
                 </div>
 
-                {!isInitialBalance && transactionCategory !== "Expense" && (
+                {!isInitialBalance && transactionCategory !== "Expense" && transactionCategory !== "Receipt" && (
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Approval Type</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Transaction Category</label>
                     <Select value={approvalType} onValueChange={setApprovalType}>
                       <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
                         <SelectValue placeholder="Select Type" />
@@ -1525,7 +1609,7 @@ export default function ApprovalsPage() {
 
               {/* ── Bank Selection ── */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {!isInitialBalance && (
+                {!isInitialBalance && transactionCategory !== "Receipt" && (
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">From Bank <span className="text-red-500">*</span></label>
                     <Select value={fromBankId} onValueChange={(val) => { setFromBankId(val); setErrors({ ...errors, fromBankId: "" }); }}>
@@ -1555,6 +1639,46 @@ export default function ApprovalsPage() {
                       </SelectContent>
                     </Select>
                     {errors.toBankId && <p className="text-xs text-red-500 mt-1">{errors.toBankId}</p>}
+                  </div>
+                )}
+                {transactionCategory === "Receipt" && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Debtor <span className="text-red-500">*</span></label>
+                    <Select value={selectedDebtorId} onValueChange={(val) => { setSelectedDebtorId(val); setErrors({ ...errors, selectedDebtorId: "" }); }}>
+                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                        <SelectValue placeholder="-- Select Debtor --" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl border-border/50">
+                        <SelectItem value="none">-- Select Debtor --</SelectItem>
+                        {debtors.map(d => (
+                          <SelectItem key={d.debtorId!} value={d.debtorId!}>
+                            {d.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.selectedDebtorId && <p className="text-xs text-red-500 mt-1">{errors.selectedDebtorId}</p>}
+                  </div>
+                )}
+
+                {transactionCategory !== "Receipt" && !isInitialBalance && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Distributor <span className="text-red-500">*</span></label>
+                    <Select value={selectedDistributorId} onValueChange={(val) => { setSelectedDistributorId(val); setErrors({ ...errors, selectedDistributorId: "" }); }}>
+
+                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                        <SelectValue placeholder="-- Select Distributor --" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl border-border/50">
+                        <SelectItem value="none">-- Select Distributor --</SelectItem>
+                        {distributors.map(d => (
+                          <SelectItem key={d.distributorId!} value={d.distributorId!}>
+                            {d.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.selectedDistributorId && <p className="text-xs text-red-500 mt-1">{errors.selectedDistributorId}</p>}
                   </div>
                 )}
               </div>
@@ -1668,7 +1792,6 @@ export default function ApprovalsPage() {
                     <FileText className="h-3 w-3" />
                     Office Note Details
                   </p>
-                  {/* ... Existing OfficeNote Fields ... */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Date of Event</label>
                     <input
@@ -1700,68 +1823,174 @@ export default function ApprovalsPage() {
                 </div>
               )}
 
-              {/* ── Status (Full or partial?) ── */}
-              {/* <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                      Approval Status <span className="text-destructive">*</span>
-                    </label>
-                    <Select value={selectedStatusId} onValueChange={setSelectedStatusId} disabled={loadingFormData}>
-                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
-                        <SelectValue placeholder={loadingFormData ? "Loading statuses..." : "-- Select Status --"} />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-2xl border-border/50">
-                        {loadingFormData ? (
-                          <div className="p-3 text-xs text-muted-foreground text-center flex items-center justify-center gap-2">
-                            <Loader2 className="h-3 w-3 animate-spin" /> Loading...
-                          </div>
-                        ) : approvalStatuses.length === 0 ? (
-                          <div className="p-3 text-xs text-muted-foreground text-center">No statuses found</div>
-                        ) : (
-                          approvalStatuses.map(s => (
-                            <SelectItem key={s.approvalStatusID!} value={s.approvalStatusID!}>
-                              {s.name}
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectContent>
-                    </Select>
-                  </div> */}
-              {/* ── Vendor Selection (optional) ── */}
+              {/* ── Vendor Selection (if Expense) ── */}
+              {!isInitialBalance && (transactionCategory === "Expense" || approvalType === "Expense") && (
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Vendor <span className="text-red-500">*</span></label>
+                  <Select value={selectedVendorId} onValueChange={(val) => { setSelectedVendorId(val); setErrors({ ...errors, selectedVendorId: "" }); }}>
+                    <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
+                      <SelectValue placeholder="-- Select Vendor --" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-2xl border-border/50">
+                      <SelectItem value="none">-- Select Vendor --</SelectItem>
+                      {vendors.map(v => {
+                        const categoryName = vendorCategories.find(c => c.vendorCategoryId === v.vendorCategoryId)?.name;
+                        const displayName = categoryName ? `${v.name} (${categoryName})` : v.name;
+                        return (
+                          <SelectItem key={v.vendorID} value={v.vendorID!}>
+                            {displayName}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  {errors.selectedVendorId && <p className="text-xs text-red-500 mt-1">{errors.selectedVendorId}</p>}
+                </div>
+              )}
+
+              {/* ── Project & Contract Selection (Same Line) ── */}
               {!isInitialBalance && (
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Vendor (Optional)</label>
-                    <Select value={selectedVendorId} onValueChange={setSelectedVendorId}>
-                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
-                        <SelectValue placeholder="-- Select Vendor --" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-2xl border-border/50">
-                        <SelectItem value="none">-- None --</SelectItem>
-                        {vendors.map(v => {
-                          const categoryName = vendorCategories.find(c => c.vendorCategoryId === v.vendorCategoryId)?.name;
-                          const displayName = categoryName ? `${v.name} (${categoryName})` : v.name;
-                          return (
-                            <SelectItem key={v.vendorID} value={v.vendorID!}>
-                              {displayName}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* ── Select Project ── */}
+                  <div className="space-y-1.5 flex flex-col">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Project <span className="text-muted-foreground/60 font-normal">(Optional)</span></label>
+                    <Popover open={openProjectPopover} onOpenChange={setOpenProjectPopover}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={openProjectPopover}
+                          className="w-full justify-between bg-muted/30 border-border/50 rounded-xl h-11 text-sm font-normal text-left px-3 hover:bg-muted/40"
+                        >
+                          <span className="truncate">
+                            {selectedProjectId && selectedProjectId !== "none"
+                              ? projects.find((p) => (p.projectId || "") === selectedProjectId)?.name || "-- Select Project (Optional) --"
+                              : "-- Select Project (Optional) --"}
+                          </span>
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[--radix-popover-trigger-width] p-0 rounded-2xl border-border/50 overflow-hidden" align="start">
+                        <Command className="bg-popover text-popover-foreground">
+                          <CommandInput placeholder="Search project..." className="h-9 text-sm" />
+                          <CommandList className="max-h-[220px]">
+                            <CommandEmpty className="py-3 text-center text-xs text-muted-foreground">No project found.</CommandEmpty>
+                            <CommandGroup>
+                              <CommandItem
+                                value="-- No Project -- none"
+                                onSelect={() => {
+                                  setSelectedProjectId("none");
+                                  setOpenProjectPopover(false);
+                                }}
+                                className="cursor-pointer text-sm"
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    selectedProjectId === "none" || !selectedProjectId ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                -- No Project --
+                              </CommandItem>
+                              {projects.map((proj) => {
+                                const pId = proj.projectId || "";
+                                const isSelected = selectedProjectId === pId;
+                                return (
+                                  <CommandItem
+                                    key={pId || proj.name}
+                                    value={`${proj.name} ${pId}`}
+                                    onSelect={() => {
+                                      setSelectedProjectId(pId);
+                                      setOpenProjectPopover(false);
+                                    }}
+                                    className="cursor-pointer text-sm"
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        isSelected ? "opacity-100" : "opacity-0"
+                                      )}
+                                    />
+                                    {proj.name}
+                                  </CommandItem>
+                                );
+                              })}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Contract</label>
-                    <Select value={selectedContractId} onValueChange={setSelectedContractId}>
-                      <SelectTrigger className="bg-muted/30 border-border/50 rounded-xl h-11 text-sm">
-                        <SelectValue placeholder="-- Select Contract --" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-2xl border-border/50">
-                        <SelectItem value="none">-- None --</SelectItem>
-                        {contracts.map(c => (
-                          <SelectItem key={c.contractId} value={c.contractId}>{c.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+
+                  {/* ── Select Contract ── */}
+                  <div className="space-y-1.5 flex flex-col">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Contract <span className="text-muted-foreground/60 font-normal">(Optional)</span></label>
+                    <Popover open={openContractPopover} onOpenChange={setOpenContractPopover}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={openContractPopover}
+                          className="w-full justify-between bg-muted/30 border-border/50 rounded-xl h-11 text-sm font-normal text-left px-3 hover:bg-muted/40"
+                        >
+                          <span className="truncate">
+                            {selectedContractId && selectedContractId !== "none"
+                              ? contracts.find((c) => (c.contractId || c.contractID || "") === selectedContractId)?.name || "-- Select Contract --"
+                              : "-- Select Contract --"}
+                          </span>
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[--radix-popover-trigger-width] p-0 rounded-2xl border-border/50 overflow-hidden" align="start">
+                        <Command className="bg-popover text-popover-foreground">
+                          <CommandInput placeholder="Search contract..." className="h-9 text-sm" />
+                          <CommandList className="max-h-[220px]">
+                            <CommandEmpty className="py-3 text-center text-xs text-muted-foreground">No contract found.</CommandEmpty>
+                            <CommandGroup>
+                              <CommandItem
+                                value="-- None -- none"
+                                onSelect={() => {
+                                  setSelectedContractId("none");
+                                  setOpenContractPopover(false);
+                                }}
+                                className="cursor-pointer text-sm"
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    selectedContractId === "none" || !selectedContractId ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                -- None --
+                              </CommandItem>
+                              {contracts.map((c) => {
+                                const cId = c.contractId || c.contractID || "";
+                                const isSelected = selectedContractId === cId;
+                                return (
+                                  <CommandItem
+                                    key={cId || c.name}
+                                    value={`${c.name} ${c.contractNo || ""} ${cId}`}
+                                    onSelect={() => {
+                                      setSelectedContractId(cId);
+                                      setOpenContractPopover(false);
+                                    }}
+                                    className="cursor-pointer text-sm"
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        isSelected ? "opacity-100" : "opacity-0"
+                                      )}
+                                    />
+                                    {c.name} {c.contractNo ? `(${c.contractNo})` : ""}
+                                  </CommandItem>
+                                );
+                              })}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
               )}
@@ -1801,9 +2030,9 @@ export default function ApprovalsPage() {
                     onFocus={() => setShowUserDropdown(true)}
                   />
                   {showUserDropdown && !loadingFormData && (
-                    <div className="absolute top-full mt-1 left-0 right-0 bg-card border border-border/50 rounded-2xl shadow-lg z-50 max-h-48 overflow-y-auto">
+                    <div className="absolute top-full mt-1.5 left-0 right-0 bg-popover text-popover-foreground border border-border/80 rounded-2xl shadow-2xl z-[100] max-h-52 overflow-y-auto ring-1 ring-black/10 dark:ring-white/10 p-1.5 backdrop-blur-md">
                       {filteredUsers.length === 0 ? (
-                        <div className="p-3 text-xs text-muted-foreground text-center">
+                        <div className="p-3 text-xs text-muted-foreground text-center font-medium">
                           {userSearch ? "No users found" : "All users added or no users available"}
                         </div>
                       ) : (
@@ -1812,16 +2041,16 @@ export default function ApprovalsPage() {
                             key={u.userID || u.id}
                             type="button"
                             onClick={() => { addUser(u); setShowUserDropdown(false); }}
-                            className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-muted/50 text-left transition-colors first:rounded-t-2xl last:rounded-b-2xl"
+                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-accent hover:text-accent-foreground text-left transition-colors group cursor-pointer"
                           >
-                            <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-[10px] font-black text-primary shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-xs font-black text-primary group-hover:scale-105 transition-transform shrink-0">
                               {(u.firstName || u.email || "?")[0]?.toUpperCase()}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-xs font-bold text-foreground truncate">
-                                {[u.firstName, u.lastName].filter(Boolean).join(" ") || u.userName}
+                              <p className="text-xs font-bold text-foreground group-hover:text-accent-foreground truncate">
+                                {[u.firstName, u.lastName].filter(Boolean).join(" ") || u.userName || u.email}
                               </p>
-                              <p className="text-[10px] text-muted-foreground truncate">{u.email}</p>
+                              <p className="text-[11px] text-muted-foreground group-hover:text-accent-foreground/80 truncate font-mono">{u.email}</p>
                             </div>
                           </button>
                         ))

@@ -48,6 +48,8 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
 
         private readonly IEmailService _emailService;
         private readonly IPushNotificationService _pushNotificationService;
+        private readonly ILoggedInUserService _loggedInUserService;
+        private readonly IApprovalHistoryRepository _historyRepository;
 
         public UpdateApprovalApproverCommandHandler(IMapper mapper, IApprovalApproverRepository ApprovalApproverRepository, 
             IApprovalRepository approvalRepository, 
@@ -55,10 +57,9 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
              IBankRepository bankRepository,
              IBankTransactionRepository bankTransactionRepository,
              IEncryptionService encryptionService,
-             IPushNotificationService pushNotificationService
-            // IDocumentUrlRepository documentUrlRepository,
-            //IExpenseTransactionRepository expenseTransactionRepository 
- 
+             IPushNotificationService pushNotificationService,
+             ILoggedInUserService loggedInUserService = null,
+             IApprovalHistoryRepository historyRepository = null
             )
         {
             _mapper = mapper;
@@ -70,14 +71,9 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
         
             _emailService = emailService;
             _pushNotificationService = pushNotificationService;
-         
-            //_documentUrlRepository = documentUrlRepository;
-            //_expenseTransactionRepository = expenseTransactionRepository;
-      
+            _loggedInUserService = loggedInUserService;
+            _historyRepository = historyRepository;
         }
-
-
-
 
         public async Task<UpdateApprovalApproverCommandResponse> Handle(UpdateApprovalApproverCommand request, CancellationToken cancellationToken)
         {
@@ -125,6 +121,20 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
                 }
                 else
                 {
+                    if (_historyRepository != null)
+                    {
+                        var statusAction = recordToUpdate.IsApproved ? "Approved" : "Rejected";
+                        var approverUser = recordToUpdate.ApprovalApproverEmail ?? _loggedInUserService?.UserEmail ?? "Approver";
+                        await _historyRepository.LogHistoryAsync(
+                            recordToUpdate.ApprovalId,
+                            statusAction,
+                            $"Approval request {statusAction.ToLower()} by {approverUser}.",
+                            approverUser,
+                            approverUser.Split('@')[0],
+                            recordToUpdate.Remarks
+                        );
+                    }
+
                     List<ApprovalApproverListVM> entitylist = await _ApprovalApproverRepository.ListAllApprovalApproversAsync(request.ApprovalId);
 
                     Approval objApproval = new Approval();
@@ -243,170 +253,137 @@ namespace OOH.Application.Features.Global.ApprovalApprovers.Commands.UpdateAppro
 
                         int i1 = await _approvalRepository.UpdateAsync(objApproval);
 
-                        if (!string.IsNullOrEmpty(objApproval.FromBankId) && !string.IsNullOrEmpty(objApproval.ToBankId) && objApproval.TransactionAmount.HasValue && objApproval.TransactionAmount > 0)
+                        // Create Pending Bank Transaction when approval is APPROVED
+                        if (objApproval.TransactionAmount.HasValue && objApproval.TransactionAmount.Value > 0)
                         {
-                            var fromBank = await _bankRepository.GetByIdAsync(objApproval.FromBankId);
-                            var toBank = await _bankRepository.GetByIdAsync(objApproval.ToBankId);
+                            var existingTxs = await _bankTransactionRepository.ListAllAsync();
+                            bool alreadyExists = existingTxs.Any(t => t.ApprovalId == objApproval.ApprovalId && !t.IsVoided);
 
-                            if (fromBank != null && toBank != null)
+                            if (!alreadyExists)
                             {
-                                var allTxs = await _bankTransactionRepository.ListAllAsync();
+                                string decType = !string.IsNullOrEmpty(objApproval.ApprovalType) ? _encryptionService.Decrypt(objApproval.ApprovalType) : "General";
 
-                                decimal fromBankBal = allTxs.Where(t => t.FromBankId == fromBank.BankId || t.ToBankId == fromBank.BankId)
-                                    .Sum(t => (t.ToBankId == fromBank.BankId ? t.Deposit : 0) - (t.FromBankId == fromBank.BankId ? t.Withdrawal : 0));
-                                
-                                decimal toBankBal = allTxs.Where(t => t.FromBankId == toBank.BankId || t.ToBankId == toBank.BankId)
-                                    .Sum(t => (t.ToBankId == toBank.BankId ? t.Deposit : 0) - (t.FromBankId == toBank.BankId ? t.Withdrawal : 0));
-
-                                var debitTx = new BankTransaction
+                                if (decType == "Initial Balance")
                                 {
-                                    TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
-                                    FromBankId = fromBank.BankId,
-                                    ToBankId = null,
-                                    ApprovalId = objApproval.ApprovalId,
-                                    TransactionType = "Debit",
-                                    Amount = objApproval.TransactionAmount.Value,
-                                    Withdrawal = objApproval.TransactionAmount.Value,
-                                    Deposit = 0,
-                                    RunningBalance = fromBankBal - objApproval.TransactionAmount.Value,
-                                    CreatedBy = "System",
-                                    CreatedDate = DateTime.UtcNow,
-                                    TenantId = objApproval.TenantId,
-                                    VendorId = objApproval.VendorId
-                                };
-                                await _bankTransactionRepository.AddAsync(debitTx);
+                                    var toBank = !string.IsNullOrEmpty(objApproval.ToBankId) ? await _bankRepository.GetByIdAsync(objApproval.ToBankId) : null;
+                                    var allTxs = await _bankTransactionRepository.ListAllAsync();
+                                    decimal toBankBal = toBank != null
+                                        ? allTxs.Where(t => (t.FromBankId == toBank.BankId || t.ToBankId == toBank.BankId) && t.IsConfirm && !t.IsVoided)
+                                                .Sum(t => (t.ToBankId == toBank.BankId ? t.Deposit : 0) - (t.FromBankId == toBank.BankId ? t.Withdrawal : 0))
+                                        : 0;
 
-                                var creditTx = new BankTransaction
-                                {
-                                    TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
-                                    FromBankId = null,
-                                    ToBankId = toBank.BankId,
-                                    ApprovalId = objApproval.ApprovalId,
-                                    TransactionType = "Credit",
-                                    Amount = objApproval.TransactionAmount.Value,
-                                    Withdrawal = 0,
-                                    Deposit = objApproval.TransactionAmount.Value,
-                                    RunningBalance = toBankBal + objApproval.TransactionAmount.Value,
-                                    CreatedBy = "System",
-                                    CreatedDate = DateTime.UtcNow.AddSeconds(1), // Slight offset to ensure order
-                                    TenantId = objApproval.TenantId,
-                                    VendorId = objApproval.VendorId
-                                };
-                                await _bankTransactionRepository.AddAsync(creditTx);
-
-                                // Send push notification for bank transfer
-                                if (!string.IsNullOrEmpty(objApproval.RequestedBy))
-                                {
-                                    try
+                                    var initialBalTx = new BankTransaction
                                     {
-                                        string decryptedApprovalName = !string.IsNullOrEmpty(objApproval.Name) ? _encryptionService.Decrypt(objApproval.Name) : "Approval Request";
-                                        string decryptedFromBank = !string.IsNullOrEmpty(fromBank.Name) ? _encryptionService.Decrypt(fromBank.Name) : "Unknown Bank";
-                                        string decryptedToBank = !string.IsNullOrEmpty(toBank.Name) ? _encryptionService.Decrypt(toBank.Name) : "Unknown Bank";
-
-                                        string pushTitle = "Bank Transfer Processed";
-                                        string pushBody = $"Amount of {objApproval.TransactionAmount.Value} transferred from {decryptedFromBank} to {decryptedToBank} for approval '{decryptedApprovalName}'.";
-
-                                        await _pushNotificationService.SendNotificationAsync(objApproval.RequestedBy, pushTitle, pushBody);
-                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Successfully sent bank transfer notification to {objApproval.RequestedBy}");
-                                    }
-                                    catch (Exception ex)
+                                        TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                                        ApprovalId = objApproval.ApprovalId,
+                                        FromBankId = null,
+                                        ToBankId = objApproval.ToBankId,
+                                        VendorId = null,
+                                        DebtorId = null,
+                                        DistributorId = null,
+                                        TransactionType = "Deposit",
+                                        Amount = objApproval.TransactionAmount.Value,
+                                        Deposit = objApproval.TransactionAmount.Value,
+                                        Withdrawal = 0,
+                                        RunningBalance = toBankBal + objApproval.TransactionAmount.Value,
+                                        IsPaidToDistributor = true,
+                                        IsConfirm = true,
+                                        CreatedBy = _loggedInUserService?.UserEmail ?? recordToUpdate.ApprovalApproverEmail ?? "System",
+                                        CreatedDate = DateTime.UtcNow,
+                                        TenantId = objApproval.TenantId ?? "TNT_2024_10_213955709c-50f7-4170-a976-6dd82fe7c8e3"
+                                    };
+                                    await _bankTransactionRepository.AddAsync(initialBalTx);
+                                }
+                                else if (!string.IsNullOrEmpty(objApproval.FromBankId) && !string.IsNullOrEmpty(objApproval.ToBankId))
+                                {
+                                    // Bank-to-Bank transfer: create dual pending transactions (debitTx for FromBank, creditTx for ToBank)
+                                    var debitTx = new BankTransaction
                                     {
-                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Error sending bank transfer notification: {ex.Message}");
-                                    }
+                                        TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                                        ApprovalId = objApproval.ApprovalId,
+                                        FromBankId = objApproval.FromBankId,
+                                        ToBankId = null,
+                                        VendorId = objApproval.VendorId,
+                                        DebtorId = objApproval.DebtorId,
+                                        DistributorId = objApproval.DistributorId,
+                                        TransactionType = decType,
+                                        Amount = objApproval.TransactionAmount.Value,
+                                        Deposit = 0,
+                                        Withdrawal = 0,
+                                        RunningBalance = 0,
+                                        IsPaidToDistributor = false,
+                                        IsConfirm = false,
+                                        CreatedBy = _loggedInUserService?.UserEmail ?? recordToUpdate.ApprovalApproverEmail ?? "System",
+                                        CreatedDate = DateTime.UtcNow,
+                                        TenantId = objApproval.TenantId ?? "TNT_2024_10_213955709c-50f7-4170-a976-6dd82fe7c8e3"
+                                    };
+                                    await _bankTransactionRepository.AddAsync(debitTx);
+
+                                    var creditTx = new BankTransaction
+                                    {
+                                        TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                                        ApprovalId = objApproval.ApprovalId,
+                                        FromBankId = null,
+                                        ToBankId = objApproval.ToBankId,
+                                        VendorId = objApproval.VendorId,
+                                        DebtorId = objApproval.DebtorId,
+                                        DistributorId = objApproval.DistributorId,
+                                        TransactionType = decType,
+                                        Amount = objApproval.TransactionAmount.Value,
+                                        Deposit = 0,
+                                        Withdrawal = 0,
+                                        RunningBalance = 0,
+                                        IsPaidToDistributor = false,
+                                        IsConfirm = false,
+                                        CreatedBy = _loggedInUserService?.UserEmail ?? recordToUpdate.ApprovalApproverEmail ?? "System",
+                                        CreatedDate = DateTime.UtcNow,
+                                        TenantId = objApproval.TenantId ?? "TNT_2024_10_213955709c-50f7-4170-a976-6dd82fe7c8e3"
+                                    };
+                                    await _bankTransactionRepository.AddAsync(creditTx);
+                                }
+                                else
+                                {
+                                    var pendingTx = new BankTransaction
+                                    {
+                                        TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                                        ApprovalId = objApproval.ApprovalId,
+                                        FromBankId = objApproval.FromBankId,
+                                        ToBankId = objApproval.ToBankId,
+                                        VendorId = objApproval.VendorId,
+                                        DebtorId = objApproval.DebtorId,
+                                        DistributorId = objApproval.DistributorId,
+                                        TransactionType = decType,
+                                        Amount = objApproval.TransactionAmount.Value,
+                                        Deposit = 0,
+                                        Withdrawal = 0,
+                                        RunningBalance = 0,
+                                        IsPaidToDistributor = false,
+                                        IsConfirm = false,
+                                        CreatedBy = _loggedInUserService?.UserEmail ?? recordToUpdate.ApprovalApproverEmail ?? "System",
+                                        CreatedDate = DateTime.UtcNow,
+                                        TenantId = objApproval.TenantId ?? "TNT_2024_10_213955709c-50f7-4170-a976-6dd82fe7c8e3"
+                                    };
+                                    await _bankTransactionRepository.AddAsync(pendingTx);
                                 }
                             }
                         }
-                        else if (!string.IsNullOrEmpty(objApproval.FromBankId) && string.IsNullOrEmpty(objApproval.ToBankId) && objApproval.TransactionAmount.HasValue && objApproval.TransactionAmount > 0)
+
+                        if (!string.IsNullOrEmpty(objApproval.RequestedBy))
                         {
-                            var fromBank = await _bankRepository.GetByIdAsync(objApproval.FromBankId);
-                            if (fromBank != null)
+                            try
                             {
-                                var allTxs = await _bankTransactionRepository.ListAllAsync();
-                                decimal fromBankBal = allTxs.Where(t => t.FromBankId == fromBank.BankId || t.ToBankId == fromBank.BankId)
-                                    .Sum(t => (t.ToBankId == fromBank.BankId ? t.Deposit : 0) - (t.FromBankId == fromBank.BankId ? t.Withdrawal : 0));
+                                string decryptedApprovalName = !string.IsNullOrEmpty(objApproval.Name) ? _encryptionService.Decrypt(objApproval.Name) : "Approval Request";
+                                string pushTitle = "Approval Approved";
+                                string pushBody = $"Your approval '{decryptedApprovalName}' has been approved and added to pending transactions.";
 
-                                var expenseTx = new BankTransaction
-                                {
-                                    TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
-                                    FromBankId = fromBank.BankId,
-                                    ToBankId = null,
-                                    ApprovalId = objApproval.ApprovalId,
-                                    TransactionType = "Withdrawal",
-                                    Amount = objApproval.TransactionAmount.Value,
-                                    Withdrawal = objApproval.TransactionAmount.Value,
-                                    Deposit = 0,
-                                    RunningBalance = fromBankBal - objApproval.TransactionAmount.Value,
-                                    CreatedBy = "System",
-                                    CreatedDate = DateTime.UtcNow,
-                                    TenantId = objApproval.TenantId,
-                                    VendorId = objApproval.VendorId
-                                };
-                                await _bankTransactionRepository.AddAsync(expenseTx);
-
-                                if (!string.IsNullOrEmpty(objApproval.RequestedBy))
-                                {
-                                    try
-                                    {
-                                        string decryptedApprovalName = !string.IsNullOrEmpty(objApproval.Name) ? _encryptionService.Decrypt(objApproval.Name) : "Expense Approval";
-                                        string pushTitle = "Expense Processed";
-                                        string pushBody = $"Amount of {objApproval.TransactionAmount.Value} processed for expense '{decryptedApprovalName}'.";
-                                        await _pushNotificationService.SendNotificationAsync(objApproval.RequestedBy, pushTitle, pushBody);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Error sending expense notification: {ex.Message}");
-                                    }
-                                }
+                                await _pushNotificationService.SendNotificationAsync(objApproval.RequestedBy, pushTitle, pushBody);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Error sending push notification: {ex.Message}");
                             }
                         }
-                        else if (string.IsNullOrEmpty(objApproval.FromBankId) && !string.IsNullOrEmpty(objApproval.ToBankId) && objApproval.TransactionAmount.HasValue && objApproval.TransactionAmount > 0 && (!string.IsNullOrEmpty(objApproval.ApprovalType) && _encryptionService.Decrypt(objApproval.ApprovalType) == "Initial Balance"))
-                        {
-                            var toBank = await _bankRepository.GetByIdAsync(objApproval.ToBankId);
-                            if (toBank != null)
-                            {
-                                var allTxs = await _bankTransactionRepository.ListAllAsync();
-                                decimal toBankBal = allTxs.Where(t => t.FromBankId == toBank.BankId || t.ToBankId == toBank.BankId)
-                                    .Sum(t => (t.ToBankId == toBank.BankId ? t.Deposit : 0) - (t.FromBankId == toBank.BankId ? t.Withdrawal : 0));
 
-                                var transaction = new BankTransaction
-                                {
-                                    TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
-                                    FromBankId = null,
-                                    ToBankId = toBank.BankId,
-                                    ApprovalId = objApproval.ApprovalId,
-                                    TransactionType = "Deposit", // Treat initial balance as a deposit
-                                    Amount = objApproval.TransactionAmount.Value,
-                                    Withdrawal = 0,
-                                    Deposit = objApproval.TransactionAmount.Value,
-                                    RunningBalance = toBankBal + objApproval.TransactionAmount.Value,
-                                    CreatedBy = "System",
-                                    CreatedDate = DateTime.UtcNow,
-                                    TenantId = objApproval.TenantId,
-                                    VendorId = null
-                                };
-                                await _bankTransactionRepository.AddAsync(transaction);
-
-                                // Send push notification for initial balance deposit
-                                if (!string.IsNullOrEmpty(objApproval.RequestedBy))
-                                {
-                                    try
-                                    {
-                                        string decryptedApprovalName = !string.IsNullOrEmpty(objApproval.Name) ? _encryptionService.Decrypt(objApproval.Name) : "Approval Request";
-                                        string decryptedToBank = !string.IsNullOrEmpty(toBank.Name) ? _encryptionService.Decrypt(toBank.Name) : "Unknown Bank";
-
-                                        string pushTitle = "Initial Balance Deposited";
-                                        string pushBody = $"Amount of {objApproval.TransactionAmount.Value} deposited to {decryptedToBank} for approval '{decryptedApprovalName}'.";
-
-                                        await _pushNotificationService.SendNotificationAsync(objApproval.RequestedBy, pushTitle, pushBody);
-                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Successfully sent deposit notification to {objApproval.RequestedBy}");
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine($"[UpdateApprovalApproverCommandHandler] Error sending deposit notification: {ex.Message}");
-                                    }
-                                }
-                            }
-                        }
 
 
                         updateApprovalApproverCommandResponse.Approval = objApproval;

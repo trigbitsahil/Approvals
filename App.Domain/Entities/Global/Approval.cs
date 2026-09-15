@@ -82,8 +82,19 @@ namespace OOH.Domain.Entities.Global
         [Column("vendor_id")]
         public string? VendorId { get; set; }
 
+        [Column("debtor_id")]
+        public string? DebtorId { get; set; }
+
+        [Column("distributor_id")]
+        public string? DistributorId { get; set; }
+
         [Column("transaction_amount")]
         public decimal? TransactionAmount { get; set; }
+
+        [Column("project_id")]
+        public string? ProjectId { get; set; }
+
+
 
 
 
