@@ -436,7 +436,6 @@ export default function ApprovalsPage() {
    "shahid.hakim@wallop.in",
    "sanny.panesar@wallop.com",
    "sanny.panesar@gmail.com",
-   "trigbit.sahilrattan@gmail.com"
   ];
 
   const filteredUsers = users.filter(u => {

@@ -145,7 +145,9 @@ export const BankTransactionList = () => {
         const allowedEmails = [
             "sanny.panesar@gmail.com",
             "shahid.hakim@gmail.com",
-            "summaiya.shaikh@wallop.in"
+            "summaiya.shaikh@wallop.in",
+            "shahid.hakim@wallop.in",
+            
         ];
         return allowedEmails.includes(emailLower);
     }, [currentUser]);
