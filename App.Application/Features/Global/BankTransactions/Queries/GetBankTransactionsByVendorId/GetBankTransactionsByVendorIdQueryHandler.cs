@@ -6,11 +6,10 @@ using System.Collections.Generic;
 using OOH.Application.Contracts.Persistence;
 using OOH.Application.Contracts.Infrastructure;
 using OOH.Application.Contracts.Persistence.Tenders;
-using OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsList;
 
 namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsByVendorId
 {
-    public class GetBankTransactionsByVendorIdQueryHandler : IRequestHandler<GetBankTransactionsByVendorIdQuery, GetBankTransactionsListQueryResponse>
+    public class GetBankTransactionsByVendorIdQueryHandler : IRequestHandler<GetBankTransactionsByVendorIdQuery, GetBankTransactionsByVendorIdQueryResponse>
     {
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IBankRepository _bankRepository;
@@ -45,7 +44,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             }
         }
 
-        public async Task<GetBankTransactionsListQueryResponse> Handle(GetBankTransactionsByVendorIdQuery request, CancellationToken cancellationToken)
+        public async Task<GetBankTransactionsByVendorIdQueryResponse> Handle(GetBankTransactionsByVendorIdQuery request, CancellationToken cancellationToken)
         {
             var transactions = await _bankTransactionRepository.ListAllAsync();
             var banks = await _bankRepository.ListAllAsync();
@@ -62,7 +61,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                 .Select(g => g.First())
                 .ToList();
 
-            var dtos = new List<BankTransactionListVM>();
+            var dtos = new List<BankTransactionByVendorIdVM>();
 
             foreach (var t in vendorTxs)
             {
@@ -90,7 +89,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                     ? t.LastModifiedDate.Value.ToString("o")
                     : t.CreatedDate.ToString("o");
 
-                dtos.Add(new BankTransactionListVM
+                dtos.Add(new BankTransactionByVendorIdVM
                 {
                     TransactionId = t.TransactionId,
                     ApprovalId = t.ApprovalId,
@@ -122,7 +121,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                 });
             }
 
-            return new GetBankTransactionsListQueryResponse
+            return new GetBankTransactionsByVendorIdQueryResponse
             {
                 Success = true,
                 Data = dtos

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OOH.Application.Features.Global.Banks.Queries.GetBankList
 {
-    public class GetBankListQueryHandler : IRequestHandler<GetBankListQuery, List<BankListVM>>
+    public class GetBankListQueryHandler : IRequestHandler<GetBankListQuery, GetBankListQueryResponse>
     {
         private readonly IBankRepository _bankRepository;
         private readonly ILoggedInUserService _loggedInUserService;
@@ -36,12 +36,10 @@ namespace OOH.Application.Features.Global.Banks.Queries.GetBankList
             }
         }
 
-        public async Task<List<BankListVM>> Handle(GetBankListQuery request, CancellationToken cancellationToken)
+        public async Task<GetBankListQueryResponse> Handle(GetBankListQuery request, CancellationToken cancellationToken)
         {
             var banks = await _bankRepository.ListAllAsync();
             var activeBanks = banks.Where(b => b.Status == "Active" && !b.IsVoided).ToList();
-
-
 
             var vm = activeBanks.Select(b => new BankListVM
             {
@@ -56,7 +54,11 @@ namespace OOH.Application.Features.Global.Banks.Queries.GetBankList
                 RunningBalance = 0
             }).ToList();
 
-            return vm;
+            return new GetBankListQueryResponse
+            {
+                Success = true,
+                Data = vm
+            };
         }
     }
 }

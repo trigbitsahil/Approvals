@@ -14,6 +14,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Commands.PayDistribut
     {
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IBankRepository _bankRepository;
+        private readonly IApprovalRepository _approvalRepository;
         private readonly ILoggedInUserService _loggedInUserService;
         private readonly IApprovalHistoryRepository _historyRepository;
 
@@ -21,11 +22,13 @@ namespace OOH.Application.Features.Global.BankTransactions.Commands.PayDistribut
             IBankTransactionRepository bankTransactionRepository,
             IBankRepository bankRepository,
             ILoggedInUserService loggedInUserService,
+            IApprovalRepository approvalRepository = null,
             IApprovalHistoryRepository historyRepository = null)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
             _loggedInUserService = loggedInUserService;
+            _approvalRepository = approvalRepository;
             _historyRepository = historyRepository;
         }
 
@@ -87,6 +90,56 @@ namespace OOH.Application.Features.Global.BankTransactions.Commands.PayDistribut
                 }
 
                 await _bankTransactionRepository.UpdateAsync(tx);
+            }
+
+            // Create a new distributor transaction record if one doesn't exist for this approval
+            Approval approval = null;
+            if (_approvalRepository != null && !string.IsNullOrEmpty(transaction.ApprovalId))
+            {
+                approval = await _approvalRepository.GetByIdAsync(transaction.ApprovalId);
+            }
+
+            string targetDistributorId = transaction.DistributorId 
+                ?? approval?.DistributorId 
+                ?? transaction.ToBankId 
+                ?? approval?.ToBankId 
+                ?? matchingTxs.FirstOrDefault(t => !string.IsNullOrEmpty(t.DistributorId))?.DistributorId 
+                ?? matchingTxs.FirstOrDefault(t => !string.IsNullOrEmpty(t.ToBankId))?.ToBankId;
+
+            string sourceFromBankId = fromBankId ?? approval?.FromBankId;
+
+            if (!string.IsNullOrEmpty(targetDistributorId))
+            {
+                bool alreadyHasDistributorPaymentTx = allTxs.Any(t => t.ApprovalId == transaction.ApprovalId && !t.IsVoided && t.ToBankId == targetDistributorId && t.Deposit > 0 && t.IsPaidToDistributor);
+                if (!alreadyHasDistributorPaymentTx)
+                {
+                    var distTxs = allTxs.Where(t => t.ApprovalId != transaction.ApprovalId && !t.IsVoided && (t.ToBankId == targetDistributorId || t.DistributorId == targetDistributorId) && (t.IsPaidToDistributor || t.IsConfirm)).ToList();
+                    decimal distPrevBal = distTxs.Sum(t => (t.ToBankId == targetDistributorId || t.DistributorId == targetDistributorId ? t.Deposit : 0) - (t.FromBankId == targetDistributorId ? t.Withdrawal : 0));
+                    decimal distRunningBalance = distPrevBal + transaction.Amount;
+
+                    var distributorTx = new BankTransaction
+                    {
+                        TransactionId = "Txn_" + DateTime.Now.ToString("yyyy_MM_dd") + Guid.NewGuid().ToString(),
+                        ApprovalId = transaction.ApprovalId,
+                        FromBankId = null,
+                        ToBankId = targetDistributorId,
+                        DistributorId = targetDistributorId,
+                        VendorId = transaction.VendorId ?? approval?.VendorId,
+                        DebtorId = transaction.DebtorId ?? approval?.DebtorId,
+                        TransactionType = transaction.TransactionType ?? approval?.ApprovalType ?? "Bank Transfer",
+                        Amount = transaction.Amount,
+                        Deposit = transaction.Amount,
+                        Withdrawal = 0,
+                        RunningBalance = distRunningBalance,
+                        IsPaidToDistributor = true,
+                        IsConfirm = false,
+                        CreatedBy = _loggedInUserService?.UserEmail ?? "System",
+                        CreatedDate = DateTime.UtcNow,
+                        TenantId = transaction.TenantId ?? approval?.TenantId ?? "TNT_2024_10_213955709c-50f7-4170-a976-6dd82fe7c8e3"
+                    };
+
+                    await _bankTransactionRepository.AddAsync(distributorTx);
+                }
             }
 
             if (_historyRepository != null && !string.IsNullOrEmpty(transaction.ApprovalId))

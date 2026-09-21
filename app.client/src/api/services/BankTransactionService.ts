@@ -73,13 +73,23 @@ export class BankTransactionService {
         });
     }
 
-    public static confirmTransaction(transactionId: string, remarks?: string): CancelablePromise<any> {
+    public static confirmTransaction(transactionId: string, remarks?: string, confirmedAmount?: number): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/BankTransaction/confirm',
-            body: { transactionId, remarks },
+            body: { transactionId, remarks, confirmedAmount },
+            mediaType: 'application/json',
+        });
+    }
+
+    public static receiveFromDistributor(transactionId: string, amount?: number, remarks?: string): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/BankTransaction/receive-from-distributor',
+            body: { transactionId, amount, remarks },
             mediaType: 'application/json',
         });
     }
 }
+
 

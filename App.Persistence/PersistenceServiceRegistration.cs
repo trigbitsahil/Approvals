@@ -59,6 +59,7 @@ namespace OOH.Persistence
             services.AddScoped<IApprovalCommentRepository, ApprovalCommentRepository>();
 
             services.AddScoped<IApprovalHistoryRepository, ApprovalHistoryRepository>();
+            services.AddScoped<IApprovalRetentionSettingRepository, OOH.Persistence.Repositories.Global.ApprovalRetentionSettingRepository>();
             services.AddScoped<IApiClientCredentialRepository, OOH.Persistence.Repositories.Global.ApiClientCredentialRepository>();
             services.AddScoped<IDocumentUrlRepository, OOH.Persistence.Repositories.Global.DocumentUrlRepository>();
 

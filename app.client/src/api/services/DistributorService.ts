@@ -36,6 +36,22 @@ export class DistributorService {
         });
     }
 
+    public static getDistributorSummary(
+        id: string,
+    ): CancelablePromise<{
+        success?: boolean;
+        message?: string | null;
+        data?: any;
+    }> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/Distributor/{id}/summary',
+            path: {
+                'id': id,
+            },
+        });
+    }
+
     public static createDistributor(
         requestBody: any,
     ): CancelablePromise<{

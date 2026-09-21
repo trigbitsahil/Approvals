@@ -22,7 +22,7 @@ namespace OOH.API.Controllers
         }
 
         [HttpGet("{approvalId}")]
-        public async Task<ActionResult<List<ApprovalHistoryListVM>>> GetApprovalHistory(string approvalId)
+        public async Task<ActionResult<GetApprovalHistoryListQueryResponse>> GetApprovalHistory(string approvalId)
         {
             var query = new GetApprovalHistoryListQuery(approvalId);
             var result = await _mediator.Send(query);

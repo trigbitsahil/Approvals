@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using OOH.Application.Contracts.Persistence;
 using OOH.Application.Contracts.Infrastructure;
-using OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsList;
 
 namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsByDistributorId
 {
-    public class GetBankTransactionsByDistributorIdQueryHandler : IRequestHandler<GetBankTransactionsByDistributorIdQuery, GetBankTransactionsListQueryResponse>
+    public class GetBankTransactionsByDistributorIdQueryHandler : IRequestHandler<GetBankTransactionsByDistributorIdQuery, GetBankTransactionsByDistributorIdQueryResponse>
     {
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IBankRepository _bankRepository;
@@ -44,7 +43,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             }
         }
 
-        public async Task<GetBankTransactionsListQueryResponse> Handle(GetBankTransactionsByDistributorIdQuery request, CancellationToken cancellationToken)
+        public async Task<GetBankTransactionsByDistributorIdQueryResponse> Handle(GetBankTransactionsByDistributorIdQuery request, CancellationToken cancellationToken)
         {
             var transactions = await _bankTransactionRepository.ListAllAsync();
             var banks = await _bankRepository.ListAllAsync();
@@ -52,9 +51,11 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             var vendors = await _vendorRepository.ListAllAsync();
 
             var query = transactions
-                .Where(t => (t.DistributorId == request.DistributorId || approvals.Any(a => a.ApprovalId == t.ApprovalId && a.DistributorId == request.DistributorId))
-                            && (t.IsPaidToDistributor || t.IsConfirm)
-                            && !t.IsVoided);
+                .Where(t => !t.IsVoided && (t.IsPaidToDistributor || t.IsConfirm) &&
+                            (t.ToBankId == request.DistributorId || 
+                             t.FromBankId == request.DistributorId || 
+                             (t.TransactionType == "Refund" && (t.DistributorId == request.DistributorId || t.FromBankId == request.DistributorId)) || 
+                             (t.DistributorId == request.DistributorId && string.IsNullOrEmpty(t.FromBankId) && (t.ToBankId == null || t.ToBankId == request.DistributorId || t.ToBankId.StartsWith("Dstrbtr_", System.StringComparison.OrdinalIgnoreCase)))));
 
             if (!string.IsNullOrWhiteSpace(request.Status) && !request.Status.Equals("all", System.StringComparison.OrdinalIgnoreCase))
             {
@@ -69,16 +70,21 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             }
 
             var distributorTxs = query
-                .OrderByDescending(t => !string.IsNullOrEmpty(t.FromBankId))
+                .OrderByDescending(t => string.IsNullOrEmpty(t.FromBankId) || t.ToBankId == request.DistributorId)
                 .ThenByDescending(t => t.CreatedDate)
                 .GroupBy(t => string.IsNullOrEmpty(t.ApprovalId) ? t.TransactionId : t.ApprovalId)
-                .Select(g => g.First())
+                .Select(g => new
+                {
+                    Primary = g.FirstOrDefault(t => (t.ToBankId == request.DistributorId || (string.IsNullOrEmpty(t.FromBankId) && (t.ToBankId == null || t.ToBankId == request.DistributorId || t.ToBankId.StartsWith("Dstrbtr_", System.StringComparison.OrdinalIgnoreCase)))) && t.TransactionType != "Refund") ?? g.First(),
+                    RefundAmount = g.Where(x => x.TransactionType == "Refund" && !x.IsVoided).Sum(x => x.Amount)
+                })
                 .ToList();
 
-            var dtos = new List<BankTransactionListVM>();
+            var dtos = new List<BankTransactionByDistributorIdVM>();
 
-            foreach (var t in distributorTxs)
+            foreach (var item in distributorTxs)
             {
+                var t = item.Primary;
                 var approval = approvals.FirstOrDefault(a => a.ApprovalId == t.ApprovalId);
                 var fromBank = banks.FirstOrDefault(b => b.BankId == (t.FromBankId ?? approval?.FromBankId));
                 var toBank = banks.FirstOrDefault(b => b.BankId == (t.ToBankId ?? approval?.ToBankId));
@@ -102,7 +108,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                     ? t.LastModifiedDate.Value.ToString("o")
                     : t.CreatedDate.ToString("o");
 
-                dtos.Add(new BankTransactionListVM
+                dtos.Add(new BankTransactionByDistributorIdVM
                 {
                     TransactionId = t.TransactionId,
                     ApprovalId = t.ApprovalId,
@@ -121,11 +127,13 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                     VendorName = vendorName,
                     TransactionType = t.TransactionType,
                     Amount = t.Amount,
-                    Deposit = t.Deposit,
+                    Deposit = t.Deposit > 0 ? t.Deposit : t.Amount,
                     Withdrawal = t.Withdrawal,
+                    RefundAmount = item.RefundAmount,
                     RunningBalance = t.RunningBalance,
                     IsPaidToDistributor = t.IsPaidToDistributor,
                     IsConfirm = t.IsConfirm,
+                    IsPartialAmount = t.IsPartialAmount,
                     Remarks = t.Remarks,
                     CreatedDate = t.CreatedDate.ToString("o"),
                     CreatedBy = t.CreatedBy,
@@ -134,7 +142,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                 });
             }
 
-            return new GetBankTransactionsListQueryResponse
+            return new GetBankTransactionsByDistributorIdQueryResponse
             {
                 Success = true,
                 Data = dtos

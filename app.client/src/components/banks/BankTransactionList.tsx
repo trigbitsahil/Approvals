@@ -55,6 +55,9 @@ export const BankTransactionList = () => {
         if (lower.includes("receipt")) {
             return "bg-emerald-500/15 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300 border border-emerald-500/30";
         }
+        if (lower.includes("refund")) {
+            return "bg-indigo-500/15 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 border border-indigo-500/30";
+        }
         if (lower.includes("bank") || lower.includes("transfer")) {
             return "bg-sky-500/15 text-sky-700 dark:bg-sky-500/20 dark:text-sky-300 border border-sky-500/30";
         }

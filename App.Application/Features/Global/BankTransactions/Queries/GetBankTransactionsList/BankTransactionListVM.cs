@@ -16,6 +16,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
         public string? PaidToDistributorDate { get; set; }
         public bool IsPaidToDistributor { get; set; }
         public bool IsConfirm { get; set; }
+        public bool IsPartialAmount { get; set; }
         public string? BankName { get; set; }
         public string? FromBankName { get; set; }
         public string? ToBankName { get; set; }

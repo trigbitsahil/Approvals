@@ -23,10 +23,10 @@ namespace OOH.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<BankListVM>>> GetAllBanks()
+        public async Task<ActionResult<GetBankListQueryResponse>> GetAllBanks()
         {
-            var dtos = await _mediator.Send(new GetBankListQuery());
-            return Ok(new { success = true, data = dtos, message = "Banks fetched successfully." });
+            var response = await _mediator.Send(new GetBankListQuery());
+            return Ok(new { success = true, data = response.Data, message = "Banks fetched successfully." });
         }
 
         [HttpPost]

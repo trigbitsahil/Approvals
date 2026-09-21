@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalHistoryList
 {
-    public class GetApprovalHistoryListQueryHandler : IRequestHandler<GetApprovalHistoryListQuery, List<ApprovalHistoryListVM>>
+    public class GetApprovalHistoryListQueryHandler : IRequestHandler<GetApprovalHistoryListQuery, GetApprovalHistoryListQueryResponse>
     {
         private readonly IApprovalHistoryRepository _historyRepository;
         private readonly IApprovalRepository _approvalRepository;
@@ -47,7 +47,7 @@ namespace OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalH
             }
         }
 
-        public async Task<List<ApprovalHistoryListVM>> Handle(GetApprovalHistoryListQuery request, CancellationToken cancellationToken)
+        public async Task<GetApprovalHistoryListQueryResponse> Handle(GetApprovalHistoryListQuery request, CancellationToken cancellationToken)
         {
             var histories = await _historyRepository.GetByApprovalIdAsync(request.ApprovalId);
             
@@ -160,7 +160,11 @@ namespace OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalH
                 }
             }
 
-            return result.OrderBy(x => x.CreatedDate).ToList();
+            return new GetApprovalHistoryListQueryResponse
+            {
+                Success = true,
+                Data = result.OrderBy(x => x.CreatedDate).ToList()
+            };
         }
     }
 }

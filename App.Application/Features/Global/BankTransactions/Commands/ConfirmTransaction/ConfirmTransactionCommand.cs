@@ -5,6 +5,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Commands.ConfirmTrans
     public class ConfirmTransactionCommand : IRequest<ConfirmTransactionCommandResponse>
     {
         public string TransactionId { get; set; }
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
+        public decimal? ConfirmedAmount { get; set; }
     }
 }

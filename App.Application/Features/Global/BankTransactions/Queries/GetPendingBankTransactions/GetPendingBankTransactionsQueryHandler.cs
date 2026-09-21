@@ -118,6 +118,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetPendingBan
                     Amount = tx.Amount,
                     IsPaidToDistributor = tx.IsPaidToDistributor,
                     IsConfirm = tx.IsConfirm,
+                    IsPartialAmount = tx.IsPartialAmount,
                     Remarks = tx.Remarks,
                     CreatedDate = tx.CreatedDate.ToString("o"),
                     CreatedBy = tx.CreatedBy,

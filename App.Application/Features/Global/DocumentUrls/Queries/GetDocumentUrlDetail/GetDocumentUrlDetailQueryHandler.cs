@@ -35,7 +35,30 @@ namespace OOH.Application.Features.Global.DocumentUrls.Queries.GetDocumentUrlDet
 
             response.Success = true;
             response.Message = "Document detail fetched successfully";
-            response.Data = doc;
+            response.Data = new DocumentUrlDetailVM
+            {
+                DocumentUrlID = doc.DocumentUrlID,
+                Name = doc.Name,
+                Description = doc.Description,
+                Url = doc.Url,
+                BlobUrl = doc.BlobUrl,
+                Category = doc.Category,
+                CategoryID = doc.CategoryID,
+                Extension = doc.Extension,
+                ContentType = doc.ContentType,
+                DocumentFileName = doc.DocumentFileName,
+                DocumentType = doc.DocumentType,
+                DocumentTypeID = doc.DocumentTypeID,
+                DocumentDate = doc.DocumentDate,
+                FileSizeBytes = doc.FileSizeBytes,
+                IsHyperlinkAndNotFile = doc.IsHyperlinkAndNotFile,
+                IsVoided = doc.IsVoided,
+                CreatedBy = doc.CreatedBy,
+                CreatedDate = doc.CreatedDate,
+                LastModifiedBy = doc.LastModifiedBy,
+                LastModifiedDate = doc.LastModifiedDate,
+                TenantId = doc.TenantId
+            };
 
             return response;
         }

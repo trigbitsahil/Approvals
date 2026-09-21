@@ -121,10 +121,20 @@ export default function ApprovalDetailPage() {
   const [loggedInUserEmail, setLoggedInUserEmail] = useState<string | null>(null);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
   const [pendingTx, setPendingTx] = useState<PendingBankTransactionVM | null>(null);
+  const [distributorTx, setDistributorTx] = useState<any | null>(null);
   const [isPayingDistributor, setIsPayingDistributor] = useState(false);
   const [isConfirmingTx, setIsConfirmingTx] = useState(false);
+  const [isReceivingFromDistributor, setIsReceivingFromDistributor] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  const distributorLeftover = useMemo(() => {
+    if (!distributorTx) return 0;
+    const dep = distributorTx.deposit ?? 0;
+    const wth = distributorTx.withdrawal ?? 0;
+    const ref = (distributorTx as any).refundAmount ?? 0;
+    return Math.max(0, dep - wth - ref);
+  }, [distributorTx]);
 
   const isAuthorizedConfirmUser = useMemo(() => {
     if (!loggedInUserEmail) return false;
@@ -168,6 +178,20 @@ export default function ApprovalDetailPage() {
   const [isApproving, setIsApproving] = useState(false);
   const [isRejectMode, setIsRejectMode] = useState(false);
 
+  const fetchDistributorTx = async (distId?: string) => {
+    const targetDistId = distId || approval?.distributorId || pendingTx?.distributorId;
+    if (!targetDistId || !id) return;
+    try {
+      const res = await BankTransactionService.getBankTransactionsByDistributorId(targetDistId);
+      if (res.success && res.data) {
+        const found = (res.data as any[]).find(t => t.approvalId === id);
+        setDistributorTx(found || null);
+      }
+    } catch (err) {
+      console.error("Error fetching distributor tx:", err);
+    }
+  };
+
   const fetchPendingTx = async () => {
     if (!id) return;
     try {
@@ -175,11 +199,15 @@ export default function ApprovalDetailPage() {
       if (pTxRes.success && pTxRes.data) {
         const found = (pTxRes.data as PendingBankTransactionVM[]).find(t => t.approvalId === id);
         setPendingTx(found || null);
+        if (found?.distributorId) {
+          await fetchDistributorTx(found.distributorId);
+        }
       }
     } catch (err) {
       console.error("Error fetching pending tx:", err);
     }
   };
+
 
   const fetchDocuments = async () => {
     if (!id) return;
@@ -203,6 +231,9 @@ export default function ApprovalDetailPage() {
         const approvalRes = await ApprovalService.getApprovalById(id, "1");
         if (approvalRes.success && approvalRes.data) {
           setApproval(approvalRes.data);
+          if (approvalRes.data.distributorId) {
+            await fetchDistributorTx(approvalRes.data.distributorId);
+          }
         }
       } catch (err) {
         console.error("Error fetching approval:", err);
@@ -305,6 +336,32 @@ export default function ApprovalDetailPage() {
       setIsConfirmingTx(false);
     }
   };
+
+  const handleReceiveFromDistributor = async () => {
+    const targetTxId = distributorTx?.transactionId || pendingTx?.transactionId;
+    const targetDistId = approval?.distributorId || distributorTx?.distributorId || pendingTx?.distributorId;
+    if (!targetTxId) return;
+    setIsReceivingFromDistributor(true);
+    try {
+      const res = await BankTransactionService.receiveFromDistributor(targetTxId, distributorLeftover);
+      if (res.success) {
+        toast.success(res.message || "Received from distributor successfully.");
+        setDistributorTx((prev: any) => prev ? { ...prev, refundAmount: (prev.refundAmount || 0) + distributorLeftover } : null);
+        await fetchPendingTx();
+        if (targetDistId) {
+          await fetchDistributorTx(targetDistId);
+        }
+        setHistoryRefreshKey((prev) => prev + 1);
+      } else {
+        toast.error(res.message || "Failed to receive from distributor.");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "An error occurred.");
+    } finally {
+      setIsReceivingFromDistributor(false);
+    }
+  };
+
 
   const refreshComments = async () => {
     if (!id) return;
@@ -890,7 +947,7 @@ export default function ApprovalDetailPage() {
                 </div>
 
                 {/* Bank Transaction Settlement & Processing Action Section */}
-                {pendingTx && (
+                {(pendingTx || distributorTx) && (
                   <div className="pt-4 border-t border-border/40 space-y-2">
                     <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
                       <Truck className="h-3.5 w-3.5 text-primary" /> Bank Settlement Processing
@@ -898,12 +955,28 @@ export default function ApprovalDetailPage() {
 
                     <div className="flex items-center gap-2">
                       <div className="flex-1">
-                        {pendingTx.derivedStatus === "Completed" || pendingTx.isConfirm ? (
-                          <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-xl text-green-600 dark:text-green-400 text-xs font-bold">
-                            <CheckCircle2 className="h-4 w-4 shrink-0" />
-                            <span>Transaction Completed</span>
+                        {pendingTx?.derivedStatus === "Completed" || pendingTx?.isConfirm || distributorTx?.isConfirm ? (
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-xl text-green-600 dark:text-green-400 text-xs font-bold">
+                              <CheckCircle2 className="h-4 w-4 shrink-0" />
+                              <span>Transaction Completed</span>
+                            </div>
+                            {distributorLeftover > 0 && (distributorTx?.isConfirm || pendingTx?.isConfirm) && isAuthorizedConfirmUser && (
+                              <Button
+                                onClick={handleReceiveFromDistributor}
+                                disabled={isReceivingFromDistributor}
+                                className="w-full rounded-xl h-10 px-4 gap-2 font-black uppercase text-xs bg-primary text-white shadow-md transition-all hover:scale-105 active:scale-95"
+                              >
+                                {isReceivingFromDistributor ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Truck className="h-4 w-4" />
+                                )}
+                                Receive from Distributor (₹{distributorLeftover.toLocaleString("en-IN", { minimumFractionDigits: 2 })})
+                              </Button>
+                            )}
                           </div>
-                        ) : (!pendingTx.isConfirm && (pendingTx.isPaidToDistributor || pendingTx.approvalType === "Receipt") && isAuthorizedConfirmUser) ? (
+                        ) : (!pendingTx?.isConfirm && (pendingTx?.isPaidToDistributor || pendingTx?.approvalType === "Receipt") && isAuthorizedConfirmUser) ? (
                           <Button
                             onClick={() => setIsConfirmModalOpen(true)}
                             disabled={isConfirmingTx}
@@ -912,12 +985,12 @@ export default function ApprovalDetailPage() {
                             <CheckCircle2 className="h-4 w-4" />
                             Confirm Transaction
                           </Button>
-                        ) : !pendingTx.isPaidToDistributor && pendingTx.approvalType !== "Receipt" ? (
-                          loggedInUserId && loggedInUserId === pendingTx.assignedBankUserId ? (
+                        ) : !pendingTx?.isPaidToDistributor && pendingTx?.approvalType !== "Receipt" ? (
+                          loggedInUserId && loggedInUserId === pendingTx?.assignedBankUserId ? (
                             <Button
                               onClick={handlePayDistributor}
                               disabled={isPayingDistributor}
-                              className="w-full rounded-xl h-10 px-4 gap-2 font-black uppercase text-xs  text-white shadow-md transition-all hover:scale-105 active:scale-95"
+                              className="w-full rounded-xl h-10 px-4 gap-2 font-black uppercase text-xs text-white shadow-md transition-all hover:scale-105 active:scale-95"
                             >
                               {isPayingDistributor ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -935,7 +1008,7 @@ export default function ApprovalDetailPage() {
                         ) : (
                           <div className="flex items-center gap-2 p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-500 text-xs font-bold">
                             <Clock className="h-4 w-4 shrink-0" />
-                            <span>Paid to Distributor (Awaiting Confirmation)</span>
+                            <span>Awaiting Confirmation</span>
                           </div>
                         )}
                       </div>
@@ -945,7 +1018,7 @@ export default function ApprovalDetailPage() {
                         variant="outline"
                         size="icon"
                         onClick={() => {
-                          const targetId = pendingTx?.transactionId || pendingTx?.approvalId || id;
+                          const targetId = pendingTx?.transactionId || distributorTx?.transactionId || pendingTx?.approvalId || id;
                           if (targetId) {
                             navigate(`/bank-transactions?tab=pending&txId=${targetId}`);
                           } else {
@@ -1043,8 +1116,13 @@ export default function ApprovalDetailPage() {
           onOpenChange={setIsConfirmModalOpen}
           pendingTx={pendingTx}
           approvalId={id || ""}
+          approvalType={approval?.approvalType}
           onSuccess={async () => {
             await fetchPendingTx();
+            const distId = approval?.distributorId || pendingTx?.distributorId;
+            if (distId) {
+              await fetchDistributorTx(distId);
+            }
             await fetchDocuments();
             setHistoryRefreshKey((prev) => prev + 1);
           }}

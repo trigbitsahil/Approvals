@@ -32,6 +32,9 @@ namespace OOH.Domain.Entities.Global
         [Column("is_confirm")]
         public bool IsConfirm { get; set; }
 
+        [Column("is_partial_amount")]
+        public bool IsPartialAmount { get; set; }
+
         [Required]
         [Column("approval_id")]
         public string ApprovalId { get; set; }

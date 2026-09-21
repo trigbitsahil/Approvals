@@ -24,12 +24,15 @@ import { BankTransactionService } from "@/api/services/BankTransactionService";
 import { DocumentsService } from "@/api/services/DocumentsService";
 import { getFileExtension, getMimeType } from "@/utils/file-utils";
 import type { PendingBankTransactionVM } from "@/api/models/PendingBankTransactionVM";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
 
 interface ConfirmTransactionModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   pendingTx: PendingBankTransactionVM | null;
   approvalId: string;
+  approvalType?: string;
   onSuccess: () => Promise<void>;
 }
 
@@ -38,12 +41,22 @@ export default function ConfirmTransactionModal({
   onOpenChange,
   pendingTx,
   approvalId,
+  approvalType,
   onSuccess,
 }: ConfirmTransactionModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [remarks, setRemarks] = useState<string>("");
+  const [settlementType, setSettlementType] = useState<"full" | "partial">("full");
+  const [partialAmount, setPartialAmount] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const isDebtorOrReceipt = Boolean(
+    pendingTx?.debtorId ||
+    pendingTx?.debtorName ||
+    pendingTx?.approvalType?.toLowerCase().includes("receipt") ||
+    approvalType?.toLowerCase().includes("receipt")
+  );
 
   if (!pendingTx) return null;
 
@@ -78,7 +91,7 @@ export default function ConfirmTransactionModal({
 
           const docRes = await DocumentsService.postApiVDocuments("1", {
             name: file.name,
-            description: `Settlement confirmation document for approval: ${pendingTx.approvalName || approvalId}`,
+            description: `Confirmation document for approval: ${pendingTx.approvalName || approvalId}`,
             content: base64Content,
             category: "Approval",
             categoryID: approvalId,
@@ -98,13 +111,16 @@ export default function ConfirmTransactionModal({
         }
       }
 
-      // 2. Confirm transaction with remarks
-      const res = await BankTransactionService.confirmTransaction(pendingTx.transactionId, remarks);
+      // 2. Confirm transaction with remarks & confirmedAmount
+      const confirmedAmt = settlementType === "partial" && partialAmount ? parseFloat(partialAmount) : undefined;
+      const res = await BankTransactionService.confirmTransaction(pendingTx.transactionId, remarks, confirmedAmt);
       if (res.success) {
         toast.success(res.message || "Transaction confirmed successfully.");
         onOpenChange(false);
         setSelectedFiles([]);
         setRemarks("");
+        setSettlementType("full");
+        setPartialAmount("");
         await onSuccess();
       } else {
         toast.error(res.message || "Failed to confirm transaction.");
@@ -129,6 +145,8 @@ export default function ConfirmTransactionModal({
         if (!val) {
           setSelectedFiles([]);
           setRemarks("");
+          setSettlementType("full");
+          setPartialAmount("");
         }
         onOpenChange(val);
       }
@@ -141,6 +159,60 @@ export default function ConfirmTransactionModal({
           </DialogTitle>
           
         </DialogHeader>
+
+        {/* Settlement Type Selection (Only for Expense/Distributor/Bank Transfer, hidden for Receipts/Debtors) */}
+        {!isDebtorOrReceipt && (
+          <div className="space-y-3 p-4 bg-muted/20 border border-border/50 rounded-xl">
+            <label className="text-sm font-semibold text-foreground block">
+              Settlement Option
+            </label>
+            <RadioGroup
+              value={settlementType}
+              onValueChange={(val) => setSettlementType(val as "full" | "partial")}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <div className="flex items-center space-x-2 cursor-pointer">
+                <RadioGroupItem value="full" id="r-full" />
+                <label htmlFor="r-full" className="text-sm font-medium text-foreground cursor-pointer">
+                  Full Amount {pendingTx ? `(₹${pendingTx.amount.toLocaleString("en-IN")})` : ""}
+                </label>
+              </div>
+              <div className="flex items-center space-x-2 cursor-pointer">
+                <RadioGroupItem value="partial" id="r-partial" />
+                <label htmlFor="r-partial" className="text-sm font-medium text-foreground cursor-pointer">
+                  Partial Amount
+                </label>
+              </div>
+            </RadioGroup>
+
+            {settlementType === "partial" && (
+              <div className="pt-2 space-y-1.5 animate-in fade-in-50 duration-200">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-foreground">
+                    Partial Amount
+                  </label>
+                  <span className="text-[11px] text-muted-foreground">
+                    Max allowed: ₹{pendingTx ? pendingTx.amount.toLocaleString("en-IN") : 0}
+                  </span>
+                </div>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-semibold">
+                    ₹
+                  </span>
+                  <Input
+                    type="number"
+                    placeholder="Enter partial amount..."
+                    value={partialAmount}
+                    onChange={(e) => setPartialAmount(e.target.value)}
+                    className="pl-7 bg-background border-border/50 rounded-xl text-sm"
+                    max={pendingTx?.amount}
+                    min={0}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Remarks Section */}
         <div className="space-y-2">
@@ -180,7 +252,7 @@ export default function ConfirmTransactionModal({
             />
             <Upload className="h-6 w-6 text-muted-foreground" />
             <p className="text-sm font-semibold text-foreground">
-              Click or drag settlement documents to upload
+              Click or drag documents to upload
             </p>
             <p className="text-xs text-muted-foreground">Upload receipt, bank statement, or transaction slip</p>
           </div>
@@ -226,6 +298,9 @@ export default function ConfirmTransactionModal({
             variant="ghost"
             onClick={() => {
               setSelectedFiles([]);
+              setRemarks("");
+              setSettlementType("full");
+              setPartialAmount("");
               onOpenChange(false);
             }}
             disabled={isSubmitting}

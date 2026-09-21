@@ -1,11 +1,13 @@
-using OOH.Domain.Entities.Global;
+using OOH.Application.Responses;
 
 namespace OOH.Application.Features.Global.DocumentUrls.Queries.GetDocumentUrlDetail
 {
-    public class GetDocumentUrlDetailQueryResponse
+    public class GetDocumentUrlDetailQueryResponse : BaseResponse
     {
-        public bool Success { get; set; } = true;
-        public string Message { get; set; } = string.Empty;
-        public DocumentUrl? Data { get; set; }
+        public GetDocumentUrlDetailQueryResponse() : base()
+        {
+        }
+
+        public DocumentUrlDetailVM? Data { get; set; }
     }
 }

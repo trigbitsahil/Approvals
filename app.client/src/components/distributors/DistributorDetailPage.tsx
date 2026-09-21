@@ -63,6 +63,7 @@ export default function DistributorDetailPage() {
   const navigate = useNavigate();
 
   const [distributor, setDistributor] = useState<DistributorListVM | null>(null);
+  const [summary, setSummary] = useState<any | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,8 +126,9 @@ export default function DistributorDetailPage() {
     if (!id) return;
     try {
       setLoading(true);
-      const [distRes, txRes, userRes] = await Promise.all([
+      const [distRes, summaryRes, txRes, userRes] = await Promise.all([
         DistributorService.getDistributorById(id),
+        DistributorService.getDistributorSummary(id).catch(() => null),
         BankTransactionService.getBankTransactionsByDistributorId(id, selectedStatus),
         UserService.getApiVUser('1').catch(() => null)
       ]);
@@ -137,6 +139,10 @@ export default function DistributorDetailPage() {
         const allDistRes = await DistributorService.getApiVDistributor('1');
         const found = allDistRes?.data?.find(d => d.distributorId === id);
         if (found) setDistributor(found);
+      }
+
+      if (summaryRes?.data) {
+        setSummary(summaryRes.data);
       }
 
       if (txRes?.data) {
@@ -253,17 +259,26 @@ export default function DistributorDetailPage() {
     setCurrentPage(1);
   }, [startDate, endDate, selectedStatus, pageSize]);
 
-  const totalTransactionsCount = filteredTransactions.length;
+  const isUnlocked = !!sessionStorage.getItem('view_password');
+  const divisor = isUnlocked ? 1 : 1000;
 
-  const totalReceivedAmount = filteredTransactions
-    .filter(t => t.isPaidToDistributor || t.isConfirm)
-    .reduce((sum, t) => sum + (t.amount || 0), 0);
+  const totalTransactionsCount = summary?.totalTransactionsCount ?? filteredTransactions.length;
 
-  const totalSettledAmount = filteredTransactions
-    .filter(t => t.isConfirm)
-    .reduce((sum, t) => sum + (t.amount || 0), 0);
+  const totalReceivedAmount = summary?.totalReceivedAmount != null
+    ? summary.totalReceivedAmount / divisor
+    : filteredTransactions
+        .filter(t => t.isPaidToDistributor || t.isConfirm)
+        .reduce((sum, t) => sum + (t.deposit || t.amount || 0), 0);
 
-  const distributorRunningBalance = totalReceivedAmount - totalSettledAmount;
+  const totalSettledAmount = summary?.totalPaidAmount != null
+    ? summary.totalPaidAmount / divisor
+    : filteredTransactions
+        .filter(t => t.isConfirm)
+        .reduce((sum, t) => sum + (t.withdrawal || t.amount || 0), 0);
+
+  const distributorRunningBalance = summary?.runningBalance != null
+    ? summary.runningBalance / divisor
+    : (totalReceivedAmount - totalSettledAmount);
 
   if (loading) {
     return (
@@ -675,9 +690,21 @@ export default function DistributorDetailPage() {
                   <p className="text-xs font-semibold text-muted-foreground">Approval Request</p>
                   <p className="text-sm sm:text-base font-bold text-foreground truncate">{selectedTxForTimeline.approvalName || "Bank Transaction"}</p>
                 </div>
-                <div className="text-right shrink-0">
-                  <p className="text-xs font-semibold text-muted-foreground">Amount</p>
-                  <p className="text-sm sm:text-base font-extrabold text-foreground">₹{(selectedTxForTimeline.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
+                <div className="text-right shrink-0 flex items-center gap-3 sm:gap-4">
+                  <div>
+                    <p className="text-xs font-semibold text-muted-foreground">Total Disbursed</p>
+                    <p className="text-sm sm:text-base font-extrabold text-foreground">
+                      ₹{(selectedTxForTimeline.deposit || selectedTxForTimeline.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                    </p>
+                  </div>
+                  {selectedTxForTimeline.isConfirm && (
+                    <div className="border-l border-border/60 pl-3 sm:pl-4">
+                      <p className="text-xs font-semibold text-muted-foreground">Actual Paid</p>
+                      <p className="text-sm sm:text-base font-extrabold text-emerald-600 dark:text-emerald-400">
+                        ₹{(selectedTxForTimeline.withdrawal > 0 ? selectedTxForTimeline.withdrawal : selectedTxForTimeline.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -695,7 +722,8 @@ export default function DistributorDetailPage() {
                       </span>
                     </div>
                     <p className="text-xs sm:text-sm text-muted-foreground mt-1 break-words">
-                      Received from <span className="font-semibold text-foreground">{selectedTxForTimeline.fromBankName || "From Bank"}</span>
+                      Received from <span className="font-semibold text-foreground">{selectedTxForTimeline.fromBankName || "From Bank"}</span>:{" "}
+                      <span className="font-bold text-foreground">₹{(selectedTxForTimeline.deposit || selectedTxForTimeline.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</span>
                     </p>
                     <div className="mt-3 text-xs sm:text-sm text-muted-foreground grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 bg-card/60 p-3 rounded-xl border border-border/60 shadow-xs min-w-0">
                       <div className="min-w-0">
@@ -740,6 +768,19 @@ export default function DistributorDetailPage() {
                       <div className="min-w-0">
                         <span className="font-semibold text-foreground">Status:</span>{" "}
                         {selectedTxForTimeline.isConfirm ? "Confirmed" : "Pending Confirmation"}
+                      </div>
+                      <div className="min-w-0">
+                        <span className="font-semibold text-foreground">Confirmed Paid:</span>{" "}
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                          {selectedTxForTimeline.isConfirm 
+                            ? `₹${(selectedTxForTimeline.withdrawal > 0 ? selectedTxForTimeline.withdrawal : selectedTxForTimeline.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`
+                            : "₹0.00"}
+                        </span>
+                        {selectedTxForTimeline.isConfirm && selectedTxForTimeline.withdrawal > 0 && selectedTxForTimeline.withdrawal < (selectedTxForTimeline.deposit || selectedTxForTimeline.amount) && (
+                          <span className="text-[10px] text-muted-foreground block font-medium">
+                            (out of ₹{(selectedTxForTimeline.deposit || selectedTxForTimeline.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })})
+                          </span>
+                        )}
                       </div>
                       {selectedTxForTimeline.isConfirm && selectedTxForTimeline.lastModifiedDate && (
                         <div className="min-w-0">

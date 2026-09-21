@@ -23,6 +23,7 @@ export type BankTransactionListVM = {
     lastModifiedBy?: string;
     isPaidToDistributor?: boolean;
     isConfirm?: boolean;
+    isPartialAmount?: boolean;
     fromBankId?: string | null;
     toBankId?: string | null;
     fromBankUserEmail?: string | null;

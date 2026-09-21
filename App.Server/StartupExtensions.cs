@@ -81,6 +81,7 @@ namespace OOH.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
+            builder.Services.AddHostedService<ApprovalRetentionBackgroundService>();
 
 
 #if DEBUG

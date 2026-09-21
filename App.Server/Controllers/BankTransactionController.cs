@@ -7,6 +7,7 @@ using OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactio
 using OOH.Application.Features.Global.BankTransactions.Queries.GetPendingBankTransactions;
 using OOH.Application.Features.Global.BankTransactions.Commands.PayDistributor;
 using OOH.Application.Features.Global.BankTransactions.Commands.ConfirmTransaction;
+using OOH.Application.Features.Global.BankTransactions.Commands.ReceiveFromDistributor;
 
 namespace OOH.API.Controllers
 {
@@ -51,21 +52,21 @@ namespace OOH.API.Controllers
         }
 
         [HttpGet("distributor/{id}")]
-        public async Task<ActionResult<GetBankTransactionsListQueryResponse>> GetBankTransactionsByDistributorId(string id, [FromQuery] string? status = null)
+        public async Task<ActionResult<OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsByDistributorId.GetBankTransactionsByDistributorIdQueryResponse>> GetBankTransactionsByDistributorId(string id, [FromQuery] string? status = null)
         {
             var response = await _mediator.Send(new OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsByDistributorId.GetBankTransactionsByDistributorIdQuery { DistributorId = id, Status = status });
             return Ok(new { success = true, data = response.Data, message = "Distributor Bank Transactions fetched successfully." });
         }
 
         [HttpGet("debtor/{id}")]
-        public async Task<ActionResult<GetBankTransactionsListQueryResponse>> GetBankTransactionsByDebtorId(string id, [FromQuery] string? status = null)
+        public async Task<ActionResult<OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsByDebtorId.GetBankTransactionsByDebtorIdQueryResponse>> GetBankTransactionsByDebtorId(string id, [FromQuery] string? status = null)
         {
             var response = await _mediator.Send(new OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsByDebtorId.GetBankTransactionsByDebtorIdQuery { DebtorId = id, Status = status });
             return Ok(new { success = true, data = response.Data, message = "Debtor Bank Transactions fetched successfully." });
         }
 
         [HttpGet("vendor/{id}")]
-        public async Task<ActionResult<GetBankTransactionsListQueryResponse>> GetBankTransactionsByVendorId(string id)
+        public async Task<ActionResult<OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsByVendorId.GetBankTransactionsByVendorIdQueryResponse>> GetBankTransactionsByVendorId(string id)
         {
             var response = await _mediator.Send(new OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransactionsByVendorId.GetBankTransactionsByVendorIdQuery { VendorId = id });
             return Ok(new { success = true, data = response.Data, message = "Vendor Bank Transactions fetched successfully." });
@@ -84,6 +85,17 @@ namespace OOH.API.Controllers
 
         [HttpPost("confirm")]
         public async Task<ActionResult<ConfirmTransactionCommandResponse>> ConfirmTransaction([FromBody] ConfirmTransactionCommand command)
+        {
+            var response = await _mediator.Send(command);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPost("receive-from-distributor")]
+        public async Task<ActionResult<ReceiveFromDistributorCommandResponse>> ReceiveFromDistributor([FromBody] ReceiveFromDistributorCommand command)
         {
             var response = await _mediator.Send(command);
             if (response.Success)

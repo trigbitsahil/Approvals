@@ -159,6 +159,8 @@ namespace OOH.Domain
 
         public static string ApprovalApprover = "ApprvlApprvr";
 
+        public static string ApprovalRetentionSetting = "ApprvlRetnSet";
+
         public static string DepartmentUser = "DepUser";
 
         public static string Department = "Dep";

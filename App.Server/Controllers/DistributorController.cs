@@ -9,6 +9,7 @@ using OOH.Application.Features.Tenders.Distributors.Commands.DeleteDistributor;
 using OOH.Application.Features.Tenders.Distributors.Commands.UpdateDistributor;
 using OOH.Application.Features.Tenders.Distributors.Queries.GetDistributorDetail;
 using OOH.Application.Features.Tenders.Distributors.Queries.GetDistributorList;
+using OOH.Application.Features.Tenders.Distributors.Queries.GetDistributorSummary;
 using System.Threading.Tasks;
 
 namespace OOH.API.Controllers
@@ -52,6 +53,14 @@ namespace OOH.API.Controllers
             {
                 return NotFound(dtos);
             }
+        }
+
+        [HttpGet("{id}/summary", Name = "GetDistributorSummary")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<GetDistributorSummaryQueryResponse>> GetDistributorSummary(string id)
+        {
+            var response = await _mediator.Send(new GetDistributorSummaryQuery { DistributorId = id });
+            return Ok(response);
         }
 
         [HttpPost]

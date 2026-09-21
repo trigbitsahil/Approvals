@@ -18,6 +18,7 @@ export type PendingBankTransactionVM = {
     amount: number;
     isPaidToDistributor: boolean;
     isConfirm: boolean;
+    isPartialAmount?: boolean;
     createdDate: string;
     createdBy?: string;
     derivedStatus: string;

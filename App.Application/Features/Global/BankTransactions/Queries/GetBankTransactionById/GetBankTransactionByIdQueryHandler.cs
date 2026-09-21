@@ -50,16 +50,15 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             
             // Filter by BankId:
             // - FromBank transactions: included if IsPaidToDistributor || IsConfirm (deducts from FromBank)
-            // - ToBank transactions: included ONLY if IsConfirm (adds to ToBank upon confirmation)
+            // - ToBank transactions: included if IsConfirm || TransactionType == "Refund"
             var bankTransactions = transactions
                 .Where(t => !t.IsVoided && (
                     (t.FromBankId == request.BankId && (t.IsPaidToDistributor || t.IsConfirm)) ||
-                    (t.ToBankId == request.BankId && t.IsConfirm)
+                    (t.ToBankId == request.BankId && (t.IsConfirm || t.TransactionType == "Refund"))
                 ))
                 .OrderBy(x => x.CreatedDate)
                 .ToList();
 
-            
             var dtos = new List<BankTransactionListVM>();
             decimal runningBalance = 0;
 
@@ -68,12 +67,12 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                 bool isWithdrawal = t.FromBankId == request.BankId;
                 bool isDeposit = t.ToBankId == request.BankId;
 
-                decimal currentWithdrawal = isWithdrawal ? t.Amount : 0;
-                decimal currentDeposit = isDeposit ? t.Amount : 0;
+                decimal currentWithdrawal = isWithdrawal ? (t.Withdrawal > 0 ? t.Withdrawal : t.Amount) : 0;
+                decimal currentDeposit = isDeposit ? (t.Deposit > 0 ? t.Deposit : t.Amount) : 0;
 
                 runningBalance = runningBalance + currentDeposit - currentWithdrawal;
 
-                if (t.RunningBalance == 0)
+                if (t.RunningBalance != runningBalance)
                 {
                     t.RunningBalance = runningBalance;
                     await _bankTransactionRepository.UpdateAsync(t);
@@ -104,7 +103,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                     Amount = t.Amount,
                     Deposit = currentDeposit,
                     Withdrawal = currentWithdrawal,
-                    RunningBalance = t.RunningBalance,
+                    RunningBalance = runningBalance,
                     IsConfirm = t.IsConfirm,
                     IsPaidToDistributor = t.IsPaidToDistributor,
                     FromBankId = t.FromBankId,
