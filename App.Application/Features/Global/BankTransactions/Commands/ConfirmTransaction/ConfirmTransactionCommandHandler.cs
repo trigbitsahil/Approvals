@@ -20,8 +20,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Commands.ConfirmTrans
         {
             "sanny.panesar@gmail.com",
             "shahid.hakim@gmail.com",
-            "summaiya.shaikh@gmail.com",
-            "summaiya.shaikh@wallop.in"
+            "sumaiya.shaikh@gmail.com",
+            "sumaiya.shaikh@wallop.in"
         };
 
 
