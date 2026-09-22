@@ -10,6 +10,8 @@ using OOH.Application.Features.Global.ApprovalComments.Commands.UpdateApprovalCo
 using OOH.Application.Features.Global.ApprovalComments.Queries.GetApprovalCommentDetail;
 using OOH.Application.Features.Global.ApprovalComments.Queries.GetApprovalCommentList;
 
+using OOH.API.Filter;
+
 namespace OOH.API.Controllers
 {
 
@@ -18,6 +20,7 @@ namespace OOH.API.Controllers
     [ApiVersion(1)]
 
     [Authorize]
+    [SkipTimeZoneConversion]
     public class ApprovalCommentController : ControllerBase
     {
         private readonly IMediator _mediator;

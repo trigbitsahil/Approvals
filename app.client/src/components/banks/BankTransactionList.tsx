@@ -26,10 +26,8 @@ import { Filter, X, TrendingUp, TrendingDown, Calendar, Building2, ChevronRight,
 import { toast } from "sonner";
 import { OpenAPI } from "@/api/core/OpenAPI";
 import { getAccessToken } from "@/utils/authToken";
-
-
-type SortColumn = 'approvalName' | 'bankName' | 'transactionType' | 'deposit' | 'withdrawal' | 'runningBalance' | 'createdDate';
-type SortDirection = 'asc' | 'desc';
+import { useDataTable } from "@/hooks/useDataTable";
+import { SortableHead, DataTablePagination } from "@/components/common";
 
 export const BankTransactionList = () => {
     const navigate = useNavigate();
@@ -167,11 +165,6 @@ export const BankTransactionList = () => {
     const [allFilterEndDate, setAllFilterEndDate] = useState<string>("");
     const [allTypeFilter, setAllTypeFilter] = useState<string>("all");
 
-    // Pagination & Sorting State
-    const [sortConfig, setSortConfig] = useState<{ key: SortColumn; direction: SortDirection } | null>({ key: 'createdDate', direction: 'desc' });
-    const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-
     const [searchClickCount, setSearchClickCount] = useState(0);
     const searchClickTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
     const [isUnlockOpen, setIsUnlockOpen] = useState(false);
@@ -204,7 +197,7 @@ export const BankTransactionList = () => {
 
     const isUnlocked = !!sessionStorage.getItem('view_password');
     const formatAmount = (amt: number) => isUnlocked ? amt : amt / 1000;
-    const getDisplayApprovalName = (name?: string, reference?: string) => {
+    const getDisplayApprovalName = (name?: string, reference?: string, approvalId?: string) => {
         if (isUnlocked) {
             return name || reference || "-";
         }
@@ -265,12 +258,6 @@ export const BankTransactionList = () => {
     useEffect(() => {
         fetchCombinedTransactions(allTypeFilter);
     }, [allTypeFilter]);
-
-    const handleBankFilterChange = (val: string) => {
-        setFilterBankId(val);
-        fetchTransactions(val);
-        setCurrentPage(1); // Reset page on filter change
-    };
 
     const dateFilteredTransactions = useMemo(() => {
         return transactions.filter((tx) => {
@@ -348,68 +335,84 @@ export const BankTransactionList = () => {
         });
     }, [pendingTransactions, allFilterStartDate, allFilterEndDate]);
 
-    const sortedTransactions = useMemo(() => {
-        let sortableItems = [...filteredTransactions];
-        if (sortConfig !== null) {
-            sortableItems.sort((a, b) => {
-                let aValue = a[sortConfig.key] as any;
-                let bValue = b[sortConfig.key] as any;
-                
-                if (sortConfig.key === 'createdDate') {
-                    aValue = aValue ? new Date(aValue).getTime() : 0;
-                    bValue = bValue ? new Date(bValue).getTime() : 0;
-                }
-                
-                // Fallback to empty string for safety on text fields
-                if (aValue === null || aValue === undefined) aValue = "";
-                if (bValue === null || bValue === undefined) bValue = "";
+    // Data Table Hooks for Bank, Pending, and All Tabs
+    const bankTable = useDataTable({
+        data: filteredTransactions,
+        initialSortField: "createdDate",
+        initialSortOrder: "desc",
+        initialPageSize: 10,
+        customValueGetters: {
+            approvalName: (tx) => getDisplayApprovalName(tx.approvalName, tx.approvalReference, tx.approvalId),
+            bankName: (tx) => tx.bankName || "Unknown Bank",
+            transactionType: (tx) => tx.transactionType || "",
+            deposit: (tx) => tx.deposit || 0,
+            withdrawal: (tx) => tx.withdrawal || 0,
+            runningBalance: (tx) => tx.runningBalance || 0,
+            createdDate: (tx) => tx.createdDate ? new Date(tx.createdDate).getTime() : 0,
+        },
+    });
 
-                if (aValue < bValue) {
-                    return sortConfig.direction === 'asc' ? -1 : 1;
-                }
-                if (aValue > bValue) {
-                    return sortConfig.direction === 'asc' ? 1 : -1;
-                }
-                return 0;
-            });
-        }
-        return sortableItems;
-    }, [filteredTransactions, sortConfig]);
+    const pendingTable = useDataTable({
+        data: filteredPendingTransactions,
+        initialSortField: "createdDate",
+        initialSortOrder: "desc",
+        initialPageSize: 10,
+        customValueGetters: {
+            approvalName: (tx) => getDisplayApprovalName(tx.approvalName, tx.approvalReference, tx.approvalId),
+            approvalType: (tx) => tx.approvalType || "Approval",
+            amount: (tx) => tx.amount || 0,
+            fromBankName: (tx) => tx.fromBankName || tx.toBankName || "",
+            distributorName: (tx) => tx.distributorName || "",
+            transactionStatus: (tx) => (tx.isPaidToDistributor || tx.derivedStatus === "Paid to Distributor" || tx.isConfirm || tx.derivedStatus === "Completed")
+                ? "Paid to Distributor"
+                : "Approved",
+            currentStatus: (tx) => (tx.isConfirm || tx.derivedStatus === "Completed")
+                ? "Completed"
+                : (tx.isPaidToDistributor || tx.approvalType === "Receipt" || tx.derivedStatus === "Paid to Distributor")
+                ? "Pending Confirmation"
+                : "Pending Paid to Distributor",
+            status: (tx) => tx.derivedStatus || (tx.isConfirm ? "Completed" : tx.isPaidToDistributor ? "Paid to Distributor" : "Pending"),
+            createdDate: (tx) => tx.createdDate ? new Date(tx.createdDate).getTime() : 0,
+        },
+    });
 
-    const paginatedTransactions = useMemo(() => {
-        const startIndex = (currentPage - 1) * rowsPerPage;
-        return sortedTransactions.slice(startIndex, startIndex + rowsPerPage);
-    }, [sortedTransactions, currentPage, rowsPerPage]);
+    const allTable = useDataTable({
+        data: filteredCombinedTransactions,
+        initialSortField: "completedOn",
+        initialSortOrder: "desc",
+        initialPageSize: 10,
+        customValueGetters: {
+            approvalName: (tx) => getDisplayApprovalName(tx.approvalName, tx.approvalReference, tx.approvalId),
+            approvalType: (tx) => tx.approvalType || "",
+            amount: (tx) => tx.amount || 0,
+            fromBankName: (tx) => tx.fromBankName || "",
+            toBankName: (tx) => tx.toBankName || "",
+            runningBalanceBank1: (tx) => tx.runningBalanceBank1 ?? -Infinity,
+            runningBalanceBank2: (tx) => tx.runningBalanceBank2 ?? -Infinity,
+            completedOn: (tx) => tx.completedOn ? new Date(tx.completedOn).getTime() : 0,
+        },
+    });
 
-    const totalPages = Math.ceil(sortedTransactions.length / rowsPerPage);
-
-    const requestSort = (key: SortColumn) => {
-        let direction: SortDirection = 'asc';
-        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
-            direction = 'desc';
-        }
-        setSortConfig({ key, direction });
-    };
-
-    const getSortIcon = (columnName: SortColumn) => {
-        if (!sortConfig || sortConfig.key !== columnName) {
-            return <ArrowUpDown className="h-3.5 w-3.5 opacity-50" />;
-        }
-        return sortConfig.direction === 'asc' ? <ArrowUp className="h-3.5 w-3.5" /> : <ArrowDown className="h-3.5 w-3.5" />;
+    const handleBankFilterChange = (val: string) => {
+        setFilterBankId(val);
+        fetchTransactions(val);
+        bankTable.setPage(1);
     };
 
     const clearFilters = () => {
         if (activeTab === "bank") {
             setBankFilterStartDate("");
             setBankFilterEndDate("");
+            bankTable.setPage(1);
         } else if (activeTab === "pending") {
             setPendingApprovalTypeFilter("all");
+            pendingTable.setPage(1);
         } else {
             setAllFilterStartDate("");
             setAllFilterEndDate("");
             setAllTypeFilter("all");
+            allTable.setPage(1);
         }
-        setCurrentPage(1);
     };
 
     const hasActiveFilters = activeTab === "bank" 
@@ -601,9 +604,13 @@ export const BankTransactionList = () => {
                             <DatePickerInput 
                                 value={activeTab === "bank" ? bankFilterStartDate : allFilterStartDate} 
                                 onChange={(val) => { 
-                                    if (activeTab === "bank") setBankFilterStartDate(val); 
-                                    else setAllFilterStartDate(val); 
-                                    setCurrentPage(1); 
+                                    if (activeTab === "bank") {
+                                        setBankFilterStartDate(val); 
+                                        bankTable.setPage(1);
+                                    } else {
+                                        setAllFilterStartDate(val); 
+                                        allTable.setPage(1);
+                                    }
                                 }}
                                 className="h-9 bg-muted border-border text-foreground"
                             />
@@ -616,9 +623,13 @@ export const BankTransactionList = () => {
                             <DatePickerInput 
                                 value={activeTab === "bank" ? bankFilterEndDate : allFilterEndDate} 
                                 onChange={(val) => { 
-                                    if (activeTab === "bank") setBankFilterEndDate(val); 
-                                    else setAllFilterEndDate(val); 
-                                    setCurrentPage(1); 
+                                    if (activeTab === "bank") {
+                                        setBankFilterEndDate(val); 
+                                        bankTable.setPage(1);
+                                    } else {
+                                        setAllFilterEndDate(val); 
+                                        allTable.setPage(1);
+                                    }
                                 }}
                                 className="h-9 bg-muted border-border text-foreground"
                             />
@@ -644,27 +655,27 @@ export const BankTransactionList = () => {
                         <Table className="min-w-[800px]">
                             <TableHeader className="bg-muted/30 border-b border-border">
                                 <TableRow className="hover:bg-transparent border-border">
-                                    <TableHead className="font-semibold text-foreground cursor-pointer hover:bg-muted/50" onClick={() => requestSort('approvalName')}>
-                                        <div className="flex items-center gap-1">Name {getSortIcon('approvalName')}</div>
-                                    </TableHead>
-                                    <TableHead className="font-semibold text-foreground cursor-pointer hover:bg-muted/50" onClick={() => requestSort('bankName')}>
-                                        <div className="flex items-center gap-1">Bank Name {getSortIcon('bankName')}</div>
-                                    </TableHead>
-                                    <TableHead className="font-semibold text-foreground cursor-pointer hover:bg-muted/50" onClick={() => requestSort('transactionType')}>
-                                        <div className="flex items-center gap-1">Type {getSortIcon('transactionType')}</div>
-                                    </TableHead>
-                                    <TableHead className="font-semibold text-foreground cursor-pointer hover:bg-muted/50" onClick={() => requestSort('deposit')}>
-                                        <div className="flex items-center justify-end gap-1">Deposit {getSortIcon('deposit')}</div>
-                                    </TableHead>
-                                    <TableHead className="font-semibold text-foreground cursor-pointer hover:bg-muted/50" onClick={() => requestSort('withdrawal')}>
-                                        <div className="flex items-center justify-end gap-1">Withdrawal {getSortIcon('withdrawal')}</div>
-                                    </TableHead>
-                                    <TableHead className="font-semibold text-foreground cursor-pointer hover:bg-muted/50" onClick={() => requestSort('runningBalance')}>
-                                        <div className="flex items-center justify-end gap-1">Running Balance {getSortIcon('runningBalance')}</div>
-                                    </TableHead>
-                                    <TableHead className="font-semibold text-foreground cursor-pointer hover:bg-muted/50" onClick={() => requestSort('createdDate')}>
-                                        <div className="flex items-center gap-1">Date {getSortIcon('createdDate')}</div>
-                                    </TableHead>
+                                    <SortableHead field="approvalName" currentField={bankTable.sortField} currentOrder={bankTable.sortOrder} onSort={bankTable.handleSort}>
+                                        Name
+                                    </SortableHead>
+                                    <SortableHead field="bankName" currentField={bankTable.sortField} currentOrder={bankTable.sortOrder} onSort={bankTable.handleSort}>
+                                        Bank Name
+                                    </SortableHead>
+                                    <SortableHead field="transactionType" currentField={bankTable.sortField} currentOrder={bankTable.sortOrder} onSort={bankTable.handleSort}>
+                                        Type
+                                    </SortableHead>
+                                    <SortableHead field="deposit" align="right" currentField={bankTable.sortField} currentOrder={bankTable.sortOrder} onSort={bankTable.handleSort}>
+                                        Deposit
+                                    </SortableHead>
+                                    <SortableHead field="withdrawal" align="right" currentField={bankTable.sortField} currentOrder={bankTable.sortOrder} onSort={bankTable.handleSort}>
+                                        Withdrawal
+                                    </SortableHead>
+                                    <SortableHead field="runningBalance" align="right" currentField={bankTable.sortField} currentOrder={bankTable.sortOrder} onSort={bankTable.handleSort}>
+                                        Running Balance
+                                    </SortableHead>
+                                    <SortableHead field="createdDate" currentField={bankTable.sortField} currentOrder={bankTable.sortOrder} onSort={bankTable.handleSort}>
+                                        Date
+                                    </SortableHead>
                                     <TableHead className="w-8"></TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -678,7 +689,7 @@ export const BankTransactionList = () => {
                                             </div>
                                         </TableCell>
                                     </TableRow>
-                                ) : paginatedTransactions.length === 0 ? (
+                                ) : bankTable.paginatedData.length === 0 ? (
                                     <TableRow className="hover:bg-transparent">
                                         <TableCell colSpan={8} className="text-center py-12">
                                             <div className="flex flex-col items-center gap-2">
@@ -689,7 +700,7 @@ export const BankTransactionList = () => {
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    paginatedTransactions.map((tx, index) => (
+                                    bankTable.paginatedData.map((tx, index) => (
                                         <TableRow 
                                             key={`${tx.transactionId}-${index}`}
                                             className="hover:bg-muted/40 transition-colors border-border cursor-pointer group"
@@ -742,71 +753,49 @@ export const BankTransactionList = () => {
                             </TableBody>
                         </Table>
                         </div>
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-border bg-card/50">
-                        <div className="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
-                            <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">Rows per page:</span>
-                            <Select 
-                                value={rowsPerPage.toString()} 
-                                onValueChange={(val) => { 
-                                    setRowsPerPage(Number(val)); 
-                                    setCurrentPage(1); 
-                                }}
-                            >
-                                <SelectTrigger className="h-8 w-[70px] bg-background border-border">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="5">5</SelectItem>
-                                    <SelectItem value="10">10</SelectItem>
-                                    <SelectItem value="25">25</SelectItem>
-                                    <SelectItem value="50">50</SelectItem>
-                                    <SelectItem value="100">100</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        
-                        <div className="flex items-center gap-6">
-                            <div className="text-sm font-medium text-muted-foreground">
-                                Page {totalPages === 0 ? 0 : currentPage} of {totalPages}
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <Button 
-                                    variant="outline" 
-                                    size="icon" 
-                                    className="h-8 w-8 border-border hover:bg-muted" 
-                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))} 
-                                    disabled={currentPage === 1 || totalPages === 0}
-                                >
-                                    <ChevronLeft className="h-4 w-4" />
-                                </Button>
-                                <Button 
-                                    variant="outline" 
-                                    size="icon" 
-                                    className="h-8 w-8 border-border hover:bg-muted" 
-                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} 
-                                    disabled={currentPage === totalPages || totalPages === 0}
-                                >
-                                    <ChevronRight className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
+                    <DataTablePagination
+                        currentPage={bankTable.currentPage}
+                        totalPages={bankTable.totalPages}
+                        pageSize={bankTable.pageSize}
+                        totalItems={bankTable.totalItems}
+                        startIndex={bankTable.startIndex}
+                        endIndex={bankTable.endIndex}
+                        onPageChange={bankTable.setPage}
+                        onPageSizeChange={bankTable.setPageSize}
+                    />
                 </CardContent>
                 </TabsContent>
 
             <TabsContent value="pending" className="mt-0 border-none outline-none">
                 <CardContent className="p-0 flex flex-col">
                     <div className="overflow-x-auto">
-                        <Table className="min-w-[900px]">
+                        <Table className="min-w-[1050px]">
                             <TableHeader className="bg-muted/30 border-b border-border">
                                 <TableRow className="hover:bg-transparent border-border">
-                                    <TableHead className="font-semibold text-foreground">Approval Name</TableHead>
-                                    <TableHead className="font-semibold text-foreground">Type</TableHead>
-                                    <TableHead className="font-semibold text-foreground text-right">Amount</TableHead>
-                                    <TableHead className="font-semibold text-foreground">Bank</TableHead>
-                                    <TableHead className="font-semibold text-foreground">Distributor</TableHead>
-                                    <TableHead className="font-semibold text-foreground">Status</TableHead>
-                                    <TableHead className="font-semibold text-foreground">Created Date</TableHead>
+                                    <SortableHead field="approvalName" currentField={pendingTable.sortField} currentOrder={pendingTable.sortOrder} onSort={pendingTable.handleSort}>
+                                        Approval Name
+                                    </SortableHead>
+                                    <SortableHead field="approvalType" currentField={pendingTable.sortField} currentOrder={pendingTable.sortOrder} onSort={pendingTable.handleSort}>
+                                        Type
+                                    </SortableHead>
+                                    <SortableHead field="amount" align="right" currentField={pendingTable.sortField} currentOrder={pendingTable.sortOrder} onSort={pendingTable.handleSort}>
+                                        Amount
+                                    </SortableHead>
+                                    <SortableHead field="fromBankName" currentField={pendingTable.sortField} currentOrder={pendingTable.sortOrder} onSort={pendingTable.handleSort}>
+                                        Bank
+                                    </SortableHead>
+                                    <SortableHead field="distributorName" currentField={pendingTable.sortField} currentOrder={pendingTable.sortOrder} onSort={pendingTable.handleSort}>
+                                        Distributor
+                                    </SortableHead>
+                                    <SortableHead field="transactionStatus" currentField={pendingTable.sortField} currentOrder={pendingTable.sortOrder} onSort={pendingTable.handleSort}>
+                                        Transaction Status
+                                    </SortableHead>
+                                    <SortableHead field="currentStatus" currentField={pendingTable.sortField} currentOrder={pendingTable.sortOrder} onSort={pendingTable.handleSort}>
+                                        Current Status
+                                    </SortableHead>
+                                    <SortableHead field="createdDate" currentField={pendingTable.sortField} currentOrder={pendingTable.sortOrder} onSort={pendingTable.handleSort}>
+                                        Created Date
+                                    </SortableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -819,7 +808,7 @@ export const BankTransactionList = () => {
                                             </div>
                                         </TableCell>
                                     </TableRow>
-                                ) : filteredPendingTransactions.length === 0 ? (
+                                ) : pendingTable.paginatedData.length === 0 ? (
                                     <TableRow className="hover:bg-transparent">
                                         <TableCell colSpan={8} className="text-center py-12">
                                             <div className="flex flex-col items-center gap-2">
@@ -830,7 +819,7 @@ export const BankTransactionList = () => {
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    filteredPendingTransactions.map((tx) => {
+                                    pendingTable.paginatedData.map((tx) => {
                                         const isPayableByMe = !tx.isPaidToDistributor && tx.approvalType !== "Receipt" && currentUser?.id && currentUser.id === tx.assignedBankUserId;
                                         const isConfirmableByMe = !tx.isConfirm && (tx.isPaidToDistributor || tx.approvalType === "Receipt") && isAuthorizedConfirmUser;
                                         const isHighlighted = highlightedId ? (tx.transactionId === highlightedId || tx.approvalId === highlightedId) : false;
@@ -868,12 +857,7 @@ export const BankTransactionList = () => {
                                                 <TableCell>{tx.fromBankName || tx.toBankName || "-"}</TableCell>
                                                 <TableCell className="font-medium">{tx.distributorName || "-"}</TableCell>
                                                 <TableCell>
-                                                    {tx.derivedStatus === "Completed" || tx.isConfirm ? (
-                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">
-                                                            <CheckCircle2 className="h-3.5 w-3.5" />
-                                                            Completed
-                                                        </span>
-                                                    ) : tx.derivedStatus === "Paid to Distributor" || tx.isPaidToDistributor ? (
+                                                    {tx.derivedStatus === "Paid to Distributor" || tx.isPaidToDistributor || tx.derivedStatus === "Completed" || tx.isConfirm ? (
                                                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
                                                             <Clock className="h-3.5 w-3.5" />
                                                             <span>Paid to Distributor</span>
@@ -894,9 +878,27 @@ export const BankTransactionList = () => {
                                                             </button>
                                                         </span>
                                                     ) : (
+                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                                                            <CheckCircle2 className="h-3.5 w-3.5" />
+                                                           Approval Approved
+                                                        </span>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {tx.derivedStatus === "Completed" || tx.isConfirm ? (
+                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">
+                                                            <CheckCircle2 className="h-3.5 w-3.5" />
+                                                            Completed
+                                                        </span>
+                                                    ) : (tx.isPaidToDistributor || tx.approvalType === "Receipt" || tx.derivedStatus === "Paid to Distributor") ? (
                                                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
                                                             <Clock className="h-3.5 w-3.5" />
-                                                            Pending
+                                                            Pending Final Confirmation
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                                                            <Clock className="h-3.5 w-3.5" />
+                                                            Pending Paid to Distributor
                                                         </span>
                                                     )}
                                                 </TableCell>
@@ -911,6 +913,16 @@ export const BankTransactionList = () => {
                             </TableBody>
                         </Table>
                     </div>
+                    <DataTablePagination
+                        currentPage={pendingTable.currentPage}
+                        totalPages={pendingTable.totalPages}
+                        pageSize={pendingTable.pageSize}
+                        totalItems={pendingTable.totalItems}
+                        startIndex={pendingTable.startIndex}
+                        endIndex={pendingTable.endIndex}
+                        onPageChange={pendingTable.setPage}
+                        onPageSizeChange={pendingTable.setPageSize}
+                    />
                 </CardContent>
             </TabsContent>
 
@@ -920,14 +932,30 @@ export const BankTransactionList = () => {
                             <Table className="min-w-[800px]">
                                 <TableHeader className="bg-muted/30 border-b border-border">
                                     <TableRow className="hover:bg-transparent border-border">
-                                        <TableHead className="font-semibold text-foreground">Approval Name</TableHead>
-                                        <TableHead className="font-semibold text-foreground">Type</TableHead>
-                                        <TableHead className="font-semibold text-foreground text-right">Amount</TableHead>
-                                        <TableHead className="font-semibold text-foreground">From Bank</TableHead>
-                                        <TableHead className="font-semibold text-foreground">To Bank</TableHead>
-                                        <TableHead className="font-semibold text-foreground text-right">Running Bal (From)</TableHead>
-                                        <TableHead className="font-semibold text-foreground text-right">Running Bal (To)</TableHead>
-                                        <TableHead className="font-semibold text-foreground">Completed On</TableHead>
+                                        <SortableHead field="approvalName" currentField={allTable.sortField} currentOrder={allTable.sortOrder} onSort={allTable.handleSort}>
+                                            Approval Name
+                                        </SortableHead>
+                                        <SortableHead field="approvalType" currentField={allTable.sortField} currentOrder={allTable.sortOrder} onSort={allTable.handleSort}>
+                                            Type
+                                        </SortableHead>
+                                        <SortableHead field="amount" align="right" currentField={allTable.sortField} currentOrder={allTable.sortOrder} onSort={allTable.handleSort}>
+                                            Amount
+                                        </SortableHead>
+                                        <SortableHead field="fromBankName" currentField={allTable.sortField} currentOrder={allTable.sortOrder} onSort={allTable.handleSort}>
+                                            From Bank
+                                        </SortableHead>
+                                        <SortableHead field="toBankName" currentField={allTable.sortField} currentOrder={allTable.sortOrder} onSort={allTable.handleSort}>
+                                            To Bank
+                                        </SortableHead>
+                                        <SortableHead field="runningBalanceBank1" align="right" currentField={allTable.sortField} currentOrder={allTable.sortOrder} onSort={allTable.handleSort}>
+                                            Running Bal (From)
+                                        </SortableHead>
+                                        <SortableHead field="runningBalanceBank2" align="right" currentField={allTable.sortField} currentOrder={allTable.sortOrder} onSort={allTable.handleSort}>
+                                            Running Bal (To)
+                                        </SortableHead>
+                                        <SortableHead field="completedOn" currentField={allTable.sortField} currentOrder={allTable.sortOrder} onSort={allTable.handleSort}>
+                                            Completed On
+                                        </SortableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -937,14 +965,14 @@ export const BankTransactionList = () => {
                                                 Loading all transactions...
                                             </TableCell>
                                         </TableRow>
-                                    ) : filteredCombinedTransactions.length === 0 ? (
+                                    ) : allTable.paginatedData.length === 0 ? (
                                         <TableRow>
                                             <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                                                 No transactions found.
                                             </TableCell>
                                         </TableRow>
                                     ) : (
-                                        filteredCombinedTransactions.map((tx, idx) => (
+                                        allTable.paginatedData.map((tx, idx) => (
                                             <TableRow key={idx} className="hover:bg-muted/50">
                                                  <TableCell className="font-medium text-foreground max-w-[220px] truncate" title={getDisplayApprovalName(tx.approvalName, tx.approvalReference, tx.approvalId)}>
                                                      {getDisplayApprovalName(tx.approvalName, tx.approvalReference, tx.approvalId)}
@@ -974,6 +1002,16 @@ export const BankTransactionList = () => {
                                 </TableBody>
                             </Table>
                         </div>
+                        <DataTablePagination
+                            currentPage={allTable.currentPage}
+                            totalPages={allTable.totalPages}
+                            pageSize={allTable.pageSize}
+                            totalItems={allTable.totalItems}
+                            startIndex={allTable.startIndex}
+                            endIndex={allTable.endIndex}
+                            onPageChange={allTable.setPage}
+                            onPageSizeChange={allTable.setPageSize}
+                        />
                     </CardContent>
             </TabsContent>
             </Card>

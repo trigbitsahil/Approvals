@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 
@@ -14,6 +14,13 @@ namespace OOH.API.Filter
 
         public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
+            // Bypass conversion if the endpoint/controller is decorated with [SkipTimeZoneConversion]
+            if (context.ActionDescriptor.EndpointMetadata.OfType<SkipTimeZoneConversionAttribute>().Any())
+            {
+                await next();
+                return;
+            }
+
             var response = context.Result as ObjectResult;
             if (response?.Value != null)
             {
@@ -32,6 +39,8 @@ namespace OOH.API.Filter
 
             var type = obj.GetType();
 
+            if (type.GetCustomAttribute<SkipTimeZoneConversionAttribute>() != null) return;
+
             if (typeof(System.Collections.IEnumerable).IsAssignableFrom(type) && type != typeof(string))
             {
                 foreach (var item in (System.Collections.IEnumerable)obj)
@@ -45,6 +54,8 @@ namespace OOH.API.Filter
             foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 if (!prop.CanRead || !prop.CanWrite) continue;
+
+                if (prop.GetCustomAttribute<SkipTimeZoneConversionAttribute>() != null) continue;
 
                 var value = prop.GetValue(obj);
 

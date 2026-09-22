@@ -98,6 +98,42 @@ const getStatusIcon = (status: string | null | undefined) => {
   }
 };
 
+const parseDbDate = (dateStr: any): Date => {
+  if (!dateStr) return new Date();
+  if (dateStr instanceof Date) return dateStr;
+  const str = String(dateStr).trim();
+  const match = str.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})/);
+  if (match) {
+    const [, y, m, d, h, min, s] = match;
+    return new Date(Number(y), Number(m) - 1, Number(d), Number(h), Number(min), Number(s));
+  }
+  return new Date(str);
+};
+
+const formatRespondedDate = (dateStr: any): string => {
+  if (!dateStr) return "-";
+  const str = String(dateStr).trim();
+  const match = str.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})/);
+  if (match) {
+    const [, y, m, d, h, min, s] = match;
+    return `${d}/${m}/${y}, ${h}:${min}:${s}`;
+  }
+  return new Date(str).toLocaleString();
+};
+
+const formatCommentDate = (dateStr: any): string => {
+  if (!dateStr) return "Audit Entry";
+  const date = parseDbDate(dateStr);
+  return date.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+};
+
 export default function ApprovalDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -289,7 +325,7 @@ export default function ApprovalDetailPage() {
       try {
         const commentRes = await ApprovalCommentService.getApiVApprovalComment("1", id);
         if (commentRes.success && commentRes.data) {
-          setComments(commentRes.data.sort((a, b) => new Date(b.createdDate!).getTime() - new Date(a.createdDate!).getTime()));
+          setComments(commentRes.data.sort((a, b) => parseDbDate(b.createdDate).getTime() - parseDbDate(a.createdDate).getTime()));
         }
       } catch (error) {
         console.error("Error fetching comments:", error);
@@ -369,7 +405,7 @@ export default function ApprovalDetailPage() {
     try {
       const res = await ApprovalCommentService.getApiVApprovalComment("1", id);
       if (res.success && res.data) {
-        setComments(res.data.sort((a, b) => new Date(b.createdDate!).getTime() - new Date(a.createdDate!).getTime()));
+        setComments(res.data.sort((a, b) => parseDbDate(b.createdDate).getTime() - parseDbDate(a.createdDate).getTime()));
       }
     } catch (error) {
       console.error("Error refreshing comments:", error);
@@ -815,7 +851,7 @@ export default function ApprovalDetailPage() {
                             </span>
                             <span className="text-border">•</span>
                             <span>
-                              {comment.createdDate ? new Date(comment.createdDate).toLocaleString("en-IN", { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) : "Audit Entry"}
+                              {formatCommentDate(comment.createdDate)}
                             </span>
                           </div>
                         </div>
@@ -912,7 +948,7 @@ export default function ApprovalDetailPage() {
                               )}
                               {approver.respondedDate && (
                                 <p className="mt-1 text-[10px] text-muted-foreground/70">
-                                  Responded on {new Date(approver.respondedDate).toLocaleString()}
+                                  Responded on {formatRespondedDate(approver.respondedDate)}
                                 </p>
                               )}
                               {!approver.isResponded &&

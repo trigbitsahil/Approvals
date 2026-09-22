@@ -6,6 +6,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { CheckCircle2, Clock, Plus, Search, LayoutGrid, List, MoreVertical, Trash2, Edit2, Eye, FileText, ArrowRight, Loader2, BadgeCheck, ShieldCheck, AlertTriangle, Send, GripVertical, X, Upload, ChevronDown, ChevronUp, Users, Tag, Calendar, Wallet, Building2, Folder, Undo2, Check, ChevronsUpDown } from "lucide-react";
 import { faker } from '@faker-js/faker';
 import { toast } from "sonner";
+import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -62,6 +63,8 @@ import type { BankListVM } from "@/api/models/BankListVM";
 import { getFileExtension, getMimeType } from "@/utils/file-utils";
 import { OpenAPI } from "@/api/core/OpenAPI";
 import { getAccessToken } from "@/utils/authToken";
+import { useDataTable } from "@/hooks/useDataTable";
+import { SortableHead, DataTablePagination } from "@/components/common";
 
 
 // ----- Types -----
@@ -575,7 +578,7 @@ export default function ApprovalsPage() {
     
     if (approval.approvalType === "Initial Balance") {
       setIsInitialBalance(true);
-      setApprovalType("Bank Transfer"); // Default fallback
+      setApprovalType("Bank Transfer");  
     } else {
       setIsInitialBalance(false);
       if (approval.approvalType === "Expense") {
@@ -919,8 +922,12 @@ export default function ApprovalsPage() {
   };
 
   const filteredApprovals = approvals.filter(a => {
-    const matchesSearch = a.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      a.approvalID?.toLowerCase().includes(searchQuery.toLowerCase());
+    const approvalNameStr = a.name || a.reference || "";
+    const requestedByStr = a.requestedBy || a.createdBy || "";
+    const matchesSearch = !searchQuery ||
+      approvalNameStr.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      a.approvalID?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      requestedByStr.toLowerCase().includes(searchQuery.toLowerCase());
 
     if (!matchesSearch) return false;
 
@@ -930,18 +937,47 @@ export default function ApprovalsPage() {
     }
 
     if (!showAll) {
-
       // FinanceApprovalStatusName != "Approved" && FinanceApprovalStatusName != "Rejected" && ApprovalStatusName != "Rejected"
       const aAny = a as any;
       const isFinanceApproved = aAny.financeApprovalStatusName === "Approved";
       const isFinanceRejected = aAny.financeApprovalStatusName === "Rejected";
       const isRejected = a.approvalStatusName === "Rejected";
-      const isApproved = a.approvalStatusName === "Approved";
 
       return !isFinanceApproved && !isFinanceRejected && !isRejected;
     }
 
     return true;
+  });
+
+  // Global Table Hook for Approvals
+  const {
+    paginatedData: paginatedApprovals,
+    sortField: approvalSortField,
+    sortOrder: approvalSortOrder,
+    handleSort: handleApprovalSort,
+    currentPage: approvalPage,
+    totalPages: approvalTotalPages,
+    pageSize: approvalPageSize,
+    totalItems: approvalTotalItems,
+    startIndex: approvalStartIndex,
+    endIndex: approvalEndIndex,
+    setPage: setApprovalPage,
+    setPageSize: setApprovalPageSize,
+  } = useDataTable({
+    data: filteredApprovals,
+    initialSortField: "name",
+    initialSortOrder: "asc",
+    initialPageSize: 10,
+    customValueGetters: {
+      name: (a) => a.name || a.reference || "",
+      approvalType: (a) => a.approvalType || a.category || "",
+      approvalStatusName: (a) => a.approvalStatusName || "Pending",
+      requestedBy: (a) => a.requestedBy || a.createdBy || "",
+      createdDate: (a) => {
+        const dateStr = a.createdDate || a.requestedDate;
+        return dateStr ? new Date(dateStr).getTime() : 0;
+      },
+    },
   });
 
   const filteredFinanceApprovals = expenseApprovals.filter(item => {
@@ -1124,189 +1160,218 @@ export default function ApprovalsPage() {
               <p className="text-sm font-bold text-muted-foreground">No approvals yet</p>
               <p className="text-xs text-muted-foreground/60">Create your first approval request above.</p>
             </div>
-          ) : viewMode === "grid" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredApprovals.map((approval) => {
-                const statusIcon = getStatusIcon(approval.approvalStatusName || "");
-
-                return (
-                  <div
-                    key={approval.approvalID}
-                    className="group relative flex flex-col bg-white dark:bg-card border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-5 hover:shadow-md transition-all duration-500 shadow-sm overflow-hidden cursor-pointer"
-                    onClick={() => navigate(`/approvals/${approval.approvalID}`)}
-                  >
-                    {/* Priority Accent Bar */}
-                    <div className={`absolute left-0 top-0 bottom-0 w-1 opacity-80 ${approval.priority === "High" ? "bg-primary" :
-                      approval.priority === "Medium" ? "bg-primary" :
-                        approval.priority === "Low" ? "bg-primary" : "bg-primary/20"
-                      }`} />
-
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full animate-pulse ${approval.priority === "High" ? "bg-rose-500" :
-                          approval.priority === "Medium" ? "bg-amber-500" :
-                            approval.priority === "Low" ? "bg-blue-500" : "bg-muted-foreground"
-                          }`} />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
-                          {approval.priority || "Normal"} Priority
-                        </span>
-                      </div>
-                      <div className={`flex items-center gap-1.5 py-1 px-3 rounded-full border shadow-inner ${approval.approvalStatusName === "Approved" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500" :
-                        approval.approvalStatusName === "Rejected" ? "bg-rose-500/10 border-rose-500/20 text-rose-500" :
-                          "bg-amber-500/10 border-amber-500/20 text-amber-500"
-                        }`}>
-                        {statusIcon}
-                        <span className="text-[9px] font-black uppercase tracking-tight">{approval.approvalStatusName || "Pending"}</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 mb-4">
-                      <h3 className="text-lg font-black text-foreground leading-tight tracking-tight group-hover:text-primary transition-colors line-clamp-1">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-lg text-foreground leading-tight tracking-tight">{approval.name || approval.reference || "No Name"}</span>
-                        </div>
-                      </h3>
-                      <p className="text-[11px] text-muted-foreground/70 leading-relaxed line-clamp-2 font-medium">
-                        {approval.description || approval.details || "No description provided for this approval request."}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-4 mb-6">
-                      <div className="flex items-center gap-1.5">
-                        <Tag className="h-3.5 w-3.5 text-primary/60" />
-                        <span className="text-[12px] font-bold text-foreground/80 uppercase tracking-tight whitespace-nowrap">
-                          {approval.approvalType || approval.category || "General"}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 text-primary/60" />
-                        <span className="text-[12px] font-bold text-foreground/80 uppercase tracking-tight whitespace-nowrap">
-                          {approval.requestedDate ? new Date(approval.requestedDate).toLocaleDateString() : "No Date"}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Users className="h-3.5 w-3.5 text-primary/60" />
-                        <span className="text-[12px] font-bold text-foreground/80  tracking-tight whitespace-nowrap">
-                          By {approval.requestedBy || approval.createdBy || "System"}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2 mt-auto">
-                      <Button
-                        variant="secondary"
-                        className="flex-1 rounded-xl h-10 bg-primary/5 hover:bg-primary/10 border border-primary/10 text-primary gap-2 text-[10px] font-black uppercase tracking-widest transition-all hover:gap-3"
-                        onClick={(e) => { e.stopPropagation(); navigate(`/approvals/${approval.approvalID}`); }}
-                      >
-                        View Details
-                        <ArrowRight className="h-3 w-3" />
-                      </Button>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button
-                            className="p-2.5 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 transition-all text-muted-foreground hover:text-foreground"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MoreVertical className="h-4 w-4" />
-                          </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-card/95 backdrop-blur-xl p-1 shadow-2xl">
-                          <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); navigate(`/approvals/${approval.approvalID}`); }}>
-                            <Eye className="h-3.5 w-3.5" /> View Details
-                          </DropdownMenuItem>
-                          {/* {approval.approvalStatusName === 'Approved' && !approval.isReversed && (
-                            <DropdownMenuItem className="gap-2 rounded-xl  " onClick={(e) => { e.stopPropagation(); setReverseApprovalId(approval.approvalID || null); setIsReverseDialogOpen(true); }}>
-                              <Undo2 className="h-3.5 w-3.5" /> Reverse Transaction
-                            </DropdownMenuItem>
-                          )} */}
-                          {approval.approvalStatusName === 'Pending' && !!sessionStorage.getItem('view_password') && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
-                            <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); handleEdit(approval); }}>
-                              <Edit2 className="h-3.5 w-3.5" /> Edit Request
-                            </DropdownMenuItem>
-                          )}
-                          {approval.approvalStatusName === 'Pending' && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
-                            <DropdownMenuItem
-                              className="gap-2 rounded-xl text-rose-500 focus:bg-rose-500/10 focus:text-rose-500"
-                              onClick={(e) => { e.stopPropagation(); approval.approvalID && handleDelete(approval.approvalID); }}
-                            >
-                              <Trash2 className="h-3.5 w-3.5" /> Delete Request
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
           ) : (
-            <div className="bg-white dark:bg-card/40 border border-slate-300/80 dark:border-border/40 rounded-3xl overflow-x-auto backdrop-blur-xl shadow-sm">
-              <table className="w-full text-left border-collapse min-w-[700px]">
-                <thead>
-                  <tr className="bg-slate-50 dark:bg-muted/30 border-b border-slate-300 dark:border-border/60 text-xs font-semibold text-muted-foreground">
+            <div className="space-y-4">
+              {viewMode === "grid" ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {paginatedApprovals.map((approval) => {
+                    const statusIcon = getStatusIcon(approval.approvalStatusName || "");
 
-                    <th className="px-6 py-5">Approval Name</th>
-                    <th className="px-6 py-5">Type</th>
-                    <th className="px-6 py-5">Priority</th>
-                    <th className="px-6 py-5">Status</th>
-                    <th className="px-6 py-5"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredApprovals.map((approval) => (
-                    <tr
-                      key={approval.approvalID}
-                      className="group hover:bg-slate-50/80 dark:hover:bg-muted/30 transition-all border-b border-slate-300 dark:border-white/10 last:border-0 font-medium cursor-pointer"
-                      onClick={() => navigate(`/approvals/${approval.approvalID}`)}
-                    >
-                     
-                      <td className="px-6 py-4">
-                        <p className="text-sm font-semibold text-foreground truncate max-w-[200px]">{approval.name || approval.reference || "No Name"}</p>
-                        <p className="text-[11px] text-muted-foreground mt-0.5">by {approval.requestedBy || approval.createdBy || "—"}</p>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="text-xs text-foreground/80">{approval.approvalType || approval.category || "—"}</span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <Badge variant="outline" className={`rounded-lg px-2 py-0.5 text-[10px] font-semibold border-transparent ${getPriorityColor(approval.priority || "")}`}>
-                          {approval.priority || "—"}
-                        </Badge>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          {getStatusIcon(approval.approvalStatusName || "")}
-                          <span className="text-xs font-semibold tracking-tight text-foreground/90">{approval.approvalStatusName || "Pending"}</span>
+                    return (
+                      <div
+                        key={approval.approvalID}
+                        className="group relative flex flex-col bg-white dark:bg-card border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-5 hover:shadow-md transition-all duration-500 shadow-sm overflow-hidden cursor-pointer"
+                        onClick={() => navigate(`/approvals/${approval.approvalID}`)}
+                      >
+                        {/* Priority Accent Bar */}
+                        <div className={`absolute left-0 top-0 bottom-0 w-1 opacity-80 ${approval.priority === "High" ? "bg-primary" :
+                          approval.priority === "Medium" ? "bg-primary" :
+                            approval.priority === "Low" ? "bg-primary" : "bg-primary/20"
+                          }`} />
+
+                        <div className="flex justify-between items-start mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-2 h-2 rounded-full animate-pulse ${approval.priority === "High" ? "bg-rose-500" :
+                              approval.priority === "Medium" ? "bg-amber-500" :
+                                approval.priority === "Low" ? "bg-blue-500" : "bg-muted-foreground"
+                              }`} />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
+                              {approval.priority || "Normal"} Priority
+                            </span>
+                          </div>
+                          <div className={`flex items-center gap-1.5 py-1 px-3 rounded-full border shadow-inner ${approval.approvalStatusName === "Approved" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500" :
+                            approval.approvalStatusName === "Rejected" ? "bg-rose-500/10 border-rose-500/20 text-rose-500" :
+                              "bg-amber-500/10 border-amber-500/20 text-amber-500"
+                            }`}>
+                            {statusIcon}
+                            <span className="text-[9px] font-black uppercase tracking-tight">{approval.approvalStatusName || "Pending"}</span>
+                          </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <button
-                              className="p-2 rounded-xl hover:bg-muted  transition-all"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <MoreVertical className="h-4 w-4" />
-                            </button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="rounded-2xl border-slate-200 dark:border-border/50 bg-white dark:bg-card p-1 shadow-lg">
-                            <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); navigate(`/approvals/${approval.approvalID}`); }}>
-                              <Eye className="h-3.5 w-3.5" /> View Details
-                            </DropdownMenuItem>
-                            {approval.approvalStatusName === 'Pending' && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
-                              <DropdownMenuItem
-                                className="gap-2 rounded-xl text-red-500 focus:bg-destructive/10"
-                                onClick={(e) => { e.stopPropagation(); approval.approvalID && handleDelete(approval.approvalID); }}
+
+                        <div className="space-y-2 mb-4">
+                          <h3 className="text-lg font-black text-foreground leading-tight tracking-tight group-hover:text-primary transition-colors line-clamp-1">
+                            <div className="flex flex-col">
+                              <span className="font-bold text-lg text-foreground leading-tight tracking-tight">{approval.name || approval.reference || "No Name"}</span>
+                            </div>
+                          </h3>
+                          <p className="text-[11px] text-muted-foreground/70 leading-relaxed line-clamp-2 font-medium">
+                            {approval.description || approval.details || "No description provided for this approval request."}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-4 mb-6">
+                          <div className="flex items-center gap-1.5">
+                            <Tag className="h-3.5 w-3.5 text-primary/60" />
+                            <span className="text-[12px] font-bold text-foreground/80 uppercase tracking-tight whitespace-nowrap">
+                              {approval.approvalType || approval.category || "General"}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Calendar className="h-3.5 w-3.5 text-primary/60" />
+                            <span className="text-[12px] font-bold text-foreground/80 uppercase tracking-tight whitespace-nowrap">
+                              {approval.requestedDate ? new Date(approval.requestedDate).toLocaleDateString() : "No Date"}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Users className="h-3.5 w-3.5 text-primary/60" />
+                            <span className="text-[12px] font-bold text-foreground/80 tracking-tight whitespace-nowrap">
+                              By {approval.requestedBy || approval.createdBy || "System"}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2 mt-auto">
+                          <Button
+                            variant="secondary"
+                            className="flex-1 rounded-xl h-10 bg-primary/5 hover:bg-primary/10 border border-primary/10 text-primary gap-2 text-[10px] font-black uppercase tracking-widest transition-all hover:gap-3"
+                            onClick={(e) => { e.stopPropagation(); navigate(`/approvals/${approval.approvalID}`); }}
+                          >
+                            View Details
+                            <ArrowRight className="h-3 w-3" />
+                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button
+                                className="p-2.5 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 transition-all text-muted-foreground hover:text-foreground"
+                                onClick={(e) => e.stopPropagation()}
                               >
-                                <Trash2 className="h-3.5 w-3.5" /> Delete
+                                <MoreVertical className="h-4 w-4" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-card/95 backdrop-blur-xl p-1 shadow-2xl">
+                              <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); navigate(`/approvals/${approval.approvalID}`); }}>
+                                <Eye className="h-3.5 w-3.5" /> View Details
                               </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                              {approval.approvalStatusName === 'Pending' && !!sessionStorage.getItem('view_password') && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
+                                <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); handleEdit(approval); }}>
+                                  <Edit2 className="h-3.5 w-3.5" /> Edit Request
+                                </DropdownMenuItem>
+                              )}
+                              {approval.approvalStatusName === 'Pending' && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
+                                <DropdownMenuItem
+                                  className="gap-2 rounded-xl text-rose-500 focus:bg-rose-500/10 focus:text-rose-500"
+                                  onClick={(e) => { e.stopPropagation(); approval.approvalID && handleDelete(approval.approvalID); }}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" /> Delete Request
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="bg-white dark:bg-card/40 border border-slate-300/80 dark:border-border/40 rounded-3xl overflow-hidden backdrop-blur-xl shadow-sm">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[700px]">
+                      <thead>
+                        <tr className="bg-slate-50 dark:bg-muted/30 border-b border-slate-300 dark:border-border/60 text-xs font-semibold text-muted-foreground">
+                          <SortableHead field="name" currentField={approvalSortField} currentOrder={approvalSortOrder} onSort={handleApprovalSort} className="px-6 py-5">
+                            Approval Name
+                          </SortableHead>
+                          <SortableHead field="approvalType" currentField={approvalSortField} currentOrder={approvalSortOrder} onSort={handleApprovalSort} className="px-6 py-5">
+                            Type
+                          </SortableHead>
+                          <SortableHead field="priority" currentField={approvalSortField} currentOrder={approvalSortOrder} onSort={handleApprovalSort} className="px-6 py-5">
+                            Priority
+                          </SortableHead>
+                          <SortableHead field="approvalStatusName" currentField={approvalSortField} currentOrder={approvalSortOrder} onSort={handleApprovalSort} className="px-6 py-5">
+                            Status
+                          </SortableHead>
+                          <SortableHead field="createdDate" currentField={approvalSortField} currentOrder={approvalSortOrder} onSort={handleApprovalSort} className="px-6 py-5">
+                            Created Date
+                          </SortableHead>
+                          <th className="px-6 py-5 text-right uppercase text-xs font-semibold tracking-wider text-muted-foreground">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {paginatedApprovals.map((approval) => (
+                          <tr
+                            key={approval.approvalID}
+                            className="group hover:bg-slate-50/80 dark:hover:bg-muted/30 transition-all border-b border-slate-300 dark:border-white/10 last:border-0 font-medium cursor-pointer"
+                            onClick={() => navigate(`/approvals/${approval.approvalID}`)}
+                          >
+                            <td className="px-6 py-4">
+                              <p className="text-sm font-semibold text-foreground truncate max-w-[200px]">{approval.name || approval.reference || "No Name"}</p>
+                              <p className="text-[11px] text-muted-foreground mt-0.5">by {approval.requestedBy || approval.createdBy || "—"}</p>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-xs text-foreground/80">{approval.approvalType || approval.category || "—"}</span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <Badge variant="outline" className={`rounded-lg px-2 py-0.5 text-[10px] font-semibold border-transparent ${getPriorityColor(approval.priority || "")}`}>
+                                {approval.priority || "—"}
+                              </Badge>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-2">
+                                {getStatusIcon(approval.approvalStatusName || "")}
+                                <span className="text-xs font-semibold tracking-tight text-foreground/90">{approval.approvalStatusName || "Pending"}</span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-xs text-muted-foreground whitespace-nowrap">
+                                {approval.createdDate || approval.requestedDate
+                                  ? format(new Date(approval.createdDate || approval.requestedDate!), "MMM dd, yyyy")
+                                  : "—"}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <button
+                                    className="p-2 rounded-xl hover:bg-muted transition-all"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <MoreVertical className="h-4 w-4" />
+                                  </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="rounded-2xl border-slate-200 dark:border-border/50 bg-white dark:bg-card p-1 shadow-lg">
+                                  <DropdownMenuItem className="gap-2 rounded-xl focus:bg-primary/10" onClick={(e) => { e.stopPropagation(); navigate(`/approvals/${approval.approvalID}`); }}>
+                                    <Eye className="h-3.5 w-3.5" /> View Details
+                                  </DropdownMenuItem>
+                                  {approval.approvalStatusName === 'Pending' && (loggedInUserRoles.includes("SuperAdmin") || loggedInUserRoles.includes("Admin") || (loggedInUserEmail && (approval.createdBy === loggedInUserEmail || approval.requestedBy === loggedInUserEmail))) && (
+                                    <DropdownMenuItem
+                                      className="gap-2 rounded-xl text-red-500 focus:bg-destructive/10"
+                                      onClick={(e) => { e.stopPropagation(); approval.approvalID && handleDelete(approval.approvalID); }}
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" /> Delete
+                                    </DropdownMenuItem>
+                                  )}
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Global Pagination Control */}
+              <DataTablePagination
+                currentPage={approvalPage}
+                totalPages={approvalTotalPages}
+                pageSize={approvalPageSize}
+                totalItems={approvalTotalItems}
+                startIndex={approvalStartIndex}
+                endIndex={approvalEndIndex}
+                onPageChange={setApprovalPage}
+                onPageSizeChange={setApprovalPageSize}
+              />
             </div>
           )}
 

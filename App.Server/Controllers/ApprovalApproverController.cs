@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.StaticFiles;
  
 using Azure;
 using OOH.Application.Features.Global.Approvals.Queries.GetApprovalWithTypeDetail;
+using OOH.API.Filter;
 
 namespace OOH.API.Controllers
 {
@@ -29,6 +30,7 @@ namespace OOH.API.Controllers
     [ApiVersion(1)]
 
     [Authorize]
+    [SkipTimeZoneConversion]
     public class ApprovalApproverController : ControllerBase
     {
         private readonly IMediator _mediator;

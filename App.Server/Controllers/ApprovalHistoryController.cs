@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalHistoryList;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OOH.API.Filter;
 
 namespace OOH.API.Controllers
 {
@@ -12,6 +13,7 @@ namespace OOH.API.Controllers
     [Route("api/v{version:apiVersion}/ApprovalHistory")]
     [ApiVersion(1)]
     [Authorize]
+    [SkipTimeZoneConversion]
     public class ApprovalHistoryController : ControllerBase
     {
         private readonly IMediator _mediator;

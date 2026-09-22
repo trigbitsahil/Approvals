@@ -219,7 +219,7 @@ const SignInForm = () => {
                       <FieldLabel htmlFor="password">
                         {i18n.t({ id: "ui.Password", message: "Password" })}
                       </FieldLabel>
-                      <a
+                      {/* <a
                         href="#"
                         onClick={handleChangePassword}
                         className="ml-auto text-sm underline-offset-2 hover:underline text-primary"
@@ -228,7 +228,7 @@ const SignInForm = () => {
                           id: "ui.Forgot Your Password",
                           message: "Forgot your password?",
                         })}
-                      </a>
+                      </a> */}
                     </div>
                     <PasswordInput
                       id="password"
@@ -275,7 +275,7 @@ const SignInForm = () => {
                       )}
                     </Button>
                   </Field>
-                  <div className="text-center text-sm text-foreground">
+                  {/* <div className="text-center text-sm text-foreground">
                     {i18n.t({
                       id: "ui.Don't have an account?",
                       message: "Don't have an account?",
@@ -287,7 +287,7 @@ const SignInForm = () => {
                     >
                       {i18n.t({ id: "ui.Sign up", message: "Sign up" })}
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </AsyncForm>

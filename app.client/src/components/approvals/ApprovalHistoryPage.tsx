@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -73,14 +73,14 @@ export default function ApprovalHistoryPage() {
     fetchHistoryData();
   };
 
-  const parseUtcDate = (dateStr: any) => {
+  const parseDbDate = (dateStr: any): Date => {
     if (!dateStr) return new Date();
-    const str = String(dateStr);
-    if (!str.endsWith("Z") && !str.includes("+") && !str.includes("T")) {
-      return new Date(str.replace(" ", "T") + "Z");
-    }
-    if (!str.endsWith("Z") && !str.includes("+")) {
-      return new Date(str + "Z");
+    if (dateStr instanceof Date) return dateStr;
+    const str = String(dateStr).trim();
+    const match = str.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})/);
+    if (match) {
+      const [, y, m, d, h, min, s] = match;
+      return new Date(Number(y), Number(m) - 1, Number(d), Number(h), Number(min), Number(s));
     }
     return new Date(str);
   };
@@ -102,16 +102,24 @@ export default function ApprovalHistoryPage() {
     };
   };
 
-  const filteredHistory = historyItems.filter((item) => {
-    if (!searchQuery.trim()) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      (item.action && item.action.toLowerCase().includes(q)) ||
-      (item.description && item.description.toLowerCase().includes(q)) ||
-      (item.performedBy && item.performedBy.toLowerCase().includes(q)) ||
-      (item.remarks && item.remarks.toLowerCase().includes(q))
-    );
-  });
+  const filteredHistory = useMemo(() => {
+    return [...historyItems]
+      .sort((a, b) => {
+        const timeA = a.createdDate ? parseDbDate(a.createdDate).getTime() : 0;
+        const timeB = b.createdDate ? parseDbDate(b.createdDate).getTime() : 0;
+        return timeB - timeA;
+      })
+      .filter((item) => {
+        if (!searchQuery.trim()) return true;
+        const q = searchQuery.toLowerCase();
+        return (
+          (item.action && item.action.toLowerCase().includes(q)) ||
+          (item.description && item.description.toLowerCase().includes(q)) ||
+          (item.performedBy && item.performedBy.toLowerCase().includes(q)) ||
+          (item.remarks && item.remarks.toLowerCase().includes(q))
+        );
+      });
+  }, [historyItems, searchQuery]);
 
   if (loading) {
     return (
@@ -197,7 +205,7 @@ export default function ApprovalHistoryPage() {
             <div>
               <span className="text-muted-foreground block text-[9px] font-black uppercase tracking-widest">Requested Date</span>
               <span className="font-bold text-foreground block mt-0.5">
-                {approval.requestedDate ? format(parseUtcDate(approval.requestedDate), "MMM dd, yyyy HH:mm") : "-"}
+                {approval.requestedDate ? format(parseDbDate(approval.requestedDate), "MMM dd, yyyy HH:mm") : "-"}
               </span>
             </div>
             <div>
@@ -207,7 +215,7 @@ export default function ApprovalHistoryPage() {
             <div>
               <span className="text-muted-foreground block text-[9px] font-black uppercase tracking-widest">Latest Action</span>
               <span className="font-bold text-foreground block truncate mt-0.5">
-                {historyItems.length > 0 ? historyItems[historyItems.length - 1].action : "-"}
+                {filteredHistory.length > 0 ? filteredHistory[0].action : "-"}
               </span>
             </div>
           </div>
@@ -247,7 +255,7 @@ export default function ApprovalHistoryPage() {
 
             {filteredHistory.map((item, index) => {
               const badgeInfo = getActionBadge(item.action);
-              const eventDate = parseUtcDate(item.createdDate);
+              const eventDate = parseDbDate(item.createdDate);
               const formattedDate = format(eventDate, "MMMM dd, yyyy 'at' hh:mm:ss a");
               const relativeTime = formatDistanceToNow(eventDate, { addSuffix: true });
 

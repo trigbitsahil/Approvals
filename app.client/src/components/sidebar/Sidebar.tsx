@@ -94,7 +94,7 @@ const PROJECT_ONLY_TITLES = new Set([
 ]);
 
 const data = {
-  teams: [{ name: "OOH", logo: GalleryVerticalEnd, plan: "" }],
+  teams: [{ name: "App", logo: GalleryVerticalEnd, plan: "" }],
   user: { name: "User", email: "user@example.com", avatar: "" },
   navMain: [
      {

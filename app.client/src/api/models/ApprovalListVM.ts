@@ -35,5 +35,6 @@ export type ApprovalListVM = {
     transactionAmount?: number | null;
     isReversed?: boolean;
     contractId?: string | null;
+    projectId?: string | null;
 };
 

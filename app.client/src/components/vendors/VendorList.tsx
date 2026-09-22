@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { VendorService } from "@/api/services/VendorService";
 import { VendorCategoryService } from "@/api/services/VendorCategoryService";
@@ -9,7 +9,7 @@ import type { VendorCategoryListVM } from "@/api/models/VendorCategoryListVM";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Plus, MoreVertical, Edit2, Trash2, Truck, Eye } from "lucide-react";
+import { Plus, MoreVertical, Edit2, Trash2, Truck, Eye, Search } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -30,10 +30,13 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useConfirmation } from "@/contexts/ConfirmationContext";
+import { useDataTable } from "@/hooks/useDataTable";
+import { SortableHead, DataTablePagination } from "@/components/common";
 
 export function VendorList() {
   const navigate = useNavigate();
   const [vendors, setVendors] = useState<VendorListVM[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -53,6 +56,40 @@ export function VendorList() {
   const [isVoided, setIsVoided] = useState(false);
 
   const { confirm } = useConfirmation();
+
+  // Filtered data by search query
+  const filteredVendors = useMemo(() => {
+    if (!searchQuery.trim()) return vendors;
+    const q = searchQuery.toLowerCase();
+    return vendors.filter(
+      (v) =>
+        v.name?.toLowerCase().includes(q) ||
+        v.email?.toLowerCase().includes(q) ||
+        v.phone?.toLowerCase().includes(q) ||
+        v.address?.toLowerCase().includes(q)
+    );
+  }, [vendors, searchQuery]);
+
+  // Global Table Hook
+  const {
+    paginatedData,
+    sortField,
+    sortOrder,
+    handleSort,
+    currentPage,
+    totalPages,
+    pageSize,
+    totalItems,
+    startIndex,
+    endIndex,
+    setPage,
+    setPageSize,
+  } = useDataTable({
+    data: filteredVendors,
+    initialSortField: "name",
+    initialSortOrder: "asc",
+    initialPageSize: 10,
+  });
 
   const fetchVendors = async () => {
     try {
@@ -172,6 +209,7 @@ export function VendorList() {
 
   return (
     <div className="w-full">
+      {/* Header and Search Bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
@@ -181,188 +219,223 @@ export function VendorList() {
           <p className="text-muted-foreground mt-1">Manage your vendors and suppliers.</p>
         </div>
 
-        <Dialog 
-          open={isModalOpen} 
-          onOpenChange={(open) => {
-            if (!open) resetForm();
-            setIsModalOpen(open);
-          }}
-        >
-          <DialogTrigger asChild>
-            <Button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Plus className="mr-2 h-4 w-4" /> Add Vendor
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{isEditing ? "Edit Vendor" : "Create Vendor"}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="relative flex-1 sm:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search vendors..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 text-sm bg-card border-border"
+            />
+          </div>
+
+          <Dialog
+            open={isModalOpen}
+            onOpenChange={(open) => {
+              if (!open) resetForm();
+              setIsModalOpen(open);
+            }}
+          >
+            <DialogTrigger asChild>
+              <Button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground shrink-0">
+                <Plus className="mr-2 h-4 w-4" /> Add Vendor
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md w-full max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>{isEditing ? "Edit Vendor" : "Create Vendor"}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Name <span className="text-destructive">*</span></label>
                   <Input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Vendor Name" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Vendor Category <span className="text-destructive">*</span></label>
+                  <label className="text-sm font-medium">Category <span className="text-destructive">*</span></label>
                   <Select value={vendorCategoryId} onValueChange={setVendorCategoryId}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select Category" />
+                      <SelectValue placeholder="Select a Category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {categories.map(c => (
-                        <SelectItem key={c.vendorCategoryId} value={c.vendorCategoryId || ""}>
-                          {c.name}
+                      {categories.map((cat) => (
+                        <SelectItem key={cat.vendorCategoryId} value={cat.vendorCategoryId || ""}>
+                          {cat.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Email</label>
-                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Email</label>
+                    <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Phone</label>
+                    <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone Number" />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Phone</label>
-                  <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone Number" />
+                  <label className="text-sm font-medium">Website</label>
+                  <Input value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Website</label>
-                <Input value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">GST Number</label>
+                    <Input value={gstNumber} onChange={(e) => setGstNumber(e.target.value)} placeholder="GSTIN" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">PAN Number</label>
+                    <Input value={panNumber} onChange={(e) => setPanNumber(e.target.value)} placeholder="PAN" />
+                  </div>
+                </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">GST Number</label>
-                  <Input value={gstNumber} onChange={(e) => setGstNumber(e.target.value)} placeholder="GSTIN" />
+                  <label className="text-sm font-medium">Address</label>
+                  <Textarea value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Full Address" rows={2} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">PAN Number</label>
-                  <Input value={panNumber} onChange={(e) => setPanNumber(e.target.value)} placeholder="PAN" />
+                  <label className="text-sm font-medium">Note</label>
+                  <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Additional notes..." rows={2} />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Address</label>
-                <Textarea value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Full Address" rows={2} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Note</label>
-                <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Additional notes..." rows={2} />
-              </div>
-              <div className="flex items-center justify-between p-3 border border-border rounded-lg bg-card">
-                <div className="space-y-0.5">
-                  <label className="text-sm font-medium text-foreground">Status</label>
-                  <p className="text-xs text-muted-foreground">
-                    {isVoided ? "Inactive/Voided" : "Active Vendor"}
-                  </p>
+                <div className="flex items-center justify-between p-3 border border-border rounded-lg bg-card">
+                  <div className="space-y-0.5">
+                    <label className="text-sm font-medium text-foreground">Status</label>
+                    <p className="text-xs text-muted-foreground">
+                      {isVoided ? "Inactive/Voided" : "Active Vendor"}
+                    </p>
+                  </div>
+                  <Switch checked={!isVoided} onCheckedChange={(checked) => setIsVoided(!checked)} />
                 </div>
-                <Switch checked={!isVoided} onCheckedChange={(checked) => setIsVoided(!checked)} />
-              </div>
-              <Button type="submit" className="w-full">{isEditing ? "Update Vendor" : "Create Vendor"}</Button>
-            </form>
-          </DialogContent>
-        </Dialog>
+                <Button type="submit" className="w-full">{isEditing ? "Update Vendor" : "Create Vendor"}</Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
-      <div className="rounded-lg border border-border bg-card overflow-x-auto shadow-sm">
-        <Table>
-          <TableHeader className="bg-muted/50">
-            <TableRow>
-              <TableHead className="w-[200px]">Vendor</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Contact</TableHead>
-              <TableHead>Tax Details</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
+      <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader className="bg-muted/50">
               <TableRow>
-                <TableCell colSpan={6} className="text-center h-24">
-                  <div className="flex items-center justify-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                    <span className="text-muted-foreground">Loading vendors...</span>
-                  </div>
-                </TableCell>
+                <SortableHead field="name" currentField={sortField} currentOrder={sortOrder} onSort={handleSort} className="w-[200px]">
+                  Vendor
+                </SortableHead>
+                <SortableHead field="vendorCategoryId" currentField={sortField} currentOrder={sortOrder} onSort={handleSort}>
+                  Category
+                </SortableHead>
+                <SortableHead field="email" currentField={sortField} currentOrder={sortOrder} onSort={handleSort}>
+                  Contact
+                </SortableHead>
+                <SortableHead field="address" currentField={sortField} currentOrder={sortOrder} onSort={handleSort}>
+                  Tax / Details
+                </SortableHead>
+                <SortableHead field="isVoided" currentField={sortField} currentOrder={sortOrder} onSort={handleSort}>
+                  Status
+                </SortableHead>
+                <TableHead className="text-right uppercase text-xs font-semibold tracking-wider text-muted-foreground py-3 px-4">Actions</TableHead>
               </TableRow>
-            ) : vendors.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center h-24 text-muted-foreground">
-                  No vendors found.
-                </TableCell>
-              </TableRow>
-            ) : (
-              vendors.map((vendor) => (
-                <TableRow
-                  key={vendor.vendorID}
-                  className="group hover:bg-muted/30 transition-colors cursor-pointer"
-                  onClick={(e) => {
-                    if ((e.target as HTMLElement).closest('button, [role="menuitem"]')) return;
-                    if (vendor.vendorID) {
-                      navigate(`/vendors/${vendor.vendorID}`);
-                    }
-                  }}
-                >
-                  <TableCell className="font-medium">
-                    <div className="flex flex-col">
-                      <span className="text-foreground">{vendor.name}</span>
-                      {vendor.address && <span className="text-xs text-muted-foreground truncate max-w-[200px]">{vendor.address}</span>}
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center h-24">
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                      <span className="text-muted-foreground">Loading vendors...</span>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-sm text-muted-foreground">
-                      {categories.find(c => c.vendorCategoryId === vendor.vendorCategoryId)?.name || "None"}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col text-sm">
-                      {vendor.email && <span className="text-muted-foreground">{vendor.email}</span>}
-                      {vendor.phone && <span className="text-muted-foreground">{vendor.phone}</span>}
-                      {!vendor.email && !vendor.phone && <span className="text-muted-foreground italic">No contact info</span>}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col text-sm">
-                      {vendor.gstNumber && <span className="text-muted-foreground">Address: {vendor.address}</span>}
-                      {vendor.panNumber && <span className="text-muted-foreground">Notes: {vendor.note}</span>}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${vendor.isVoided ? "bg-destructive/10 text-destructive" : "bg-emerald-500/10 text-emerald-500"}`}>
-                      {vendor.isVoided ? "Voided" : "Active"}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <MoreVertical className="h-4 w-4 text-muted-foreground" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-[180px]">
-                        <DropdownMenuItem
-                          onClick={() => vendor.vendorID && navigate(`/vendors/${vendor.vendorID}`)}
-                          className="cursor-pointer font-medium text-primary"
-                        >
-                          <Eye className="mr-2 h-4 w-4" /> View Details & Ledger
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleEdit(vendor)} className="cursor-pointer">
-                          <Edit2 className="mr-2 h-4 w-4" /> Edit Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => vendor.vendorID && handleDelete(vendor.vendorID)} className="cursor-pointer text-red-500 focus:text-destructive focus:bg-destructive/10">
-                          <Trash2 className="mr-2 h-4 w-4" /> Delete Vendor
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : paginatedData.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center h-24 text-muted-foreground">
+                    {searchQuery ? "No vendors match your search." : "No vendors found."}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                paginatedData.map((vendor) => (
+                  <TableRow
+                    key={vendor.vendorID}
+                    className="group hover:bg-muted/30 transition-colors cursor-pointer"
+                    onClick={(e) => {
+                      if ((e.target as HTMLElement).closest('button, [role="menuitem"]')) return;
+                      if (vendor.vendorID) {
+                        navigate(`/vendors/${vendor.vendorID}`);
+                      }
+                    }}
+                  >
+                    <TableCell className="font-medium">
+                      <div className="flex flex-col">
+                        <span className="text-foreground">{vendor.name}</span>
+                        {vendor.address && <span className="text-xs text-muted-foreground truncate max-w-[200px]">{vendor.address}</span>}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm text-muted-foreground">
+                        {categories.find(c => c.vendorCategoryId === vendor.vendorCategoryId)?.name || "None"}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col text-sm">
+                        {vendor.email && <span className="text-muted-foreground">{vendor.email}</span>}
+                        {vendor.phone && <span className="text-muted-foreground">{vendor.phone}</span>}
+                        {!vendor.email && !vendor.phone && <span className="text-muted-foreground italic">No contact info</span>}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col text-sm">
+                        {vendor.gstNumber && <span className="text-muted-foreground">GST: {vendor.gstNumber}</span>}
+                        {vendor.panNumber && <span className="text-muted-foreground">PAN: {vendor.panNumber}</span>}
+                        {!vendor.gstNumber && !vendor.panNumber && <span className="text-muted-foreground italic">N/A</span>}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${vendor.isVoided ? "bg-destructive/10 text-destructive" : "bg-emerald-500/10 text-emerald-500"}`}>
+                        {vendor.isVoided ? "Voided" : "Active"}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreVertical className="h-4 w-4 text-muted-foreground" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-[180px]">
+                          <DropdownMenuItem
+                            onClick={() => vendor.vendorID && navigate(`/vendors/${vendor.vendorID}`)}
+                            className="cursor-pointer font-medium text-primary"
+                          >
+                            <Eye className="mr-2 h-4 w-4" /> View Details & Ledger
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleEdit(vendor)} className="cursor-pointer">
+                            <Edit2 className="mr-2 h-4 w-4" /> Edit Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => vendor.vendorID && handleDelete(vendor.vendorID)} className="cursor-pointer text-red-500 focus:text-destructive focus:bg-destructive/10">
+                            <Trash2 className="mr-2 h-4 w-4" /> Delete Vendor
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Global Pagination Control */}
+        <DataTablePagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          totalItems={totalItems}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+        />
       </div>
     </div>
   );

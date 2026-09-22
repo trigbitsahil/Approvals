@@ -60,7 +60,7 @@ namespace OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalH
                 PerformedBy = h.PerformedBy,
                 PerformedByName = h.PerformedByName ?? h.PerformedBy,
                 Remarks = DecryptText(h.Remarks),
-                CreatedDate = h.CreatedDate
+                CreatedDate = DateTime.SpecifyKind(h.CreatedDate, DateTimeKind.Local)
             }).ToList();
 
             // Fallback / Synthesis for legacy approvals or incomplete histories
@@ -80,7 +80,7 @@ namespace OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalH
                         Description = $"Approval request '{approvalName}' submitted.",
                         PerformedBy = approval.RequestedBy,
                         PerformedByName = approval.RequestedBy,
-                        CreatedDate = approval.RequestedDate
+                        CreatedDate = DateTime.SpecifyKind(approval.RequestedDate, DateTimeKind.Local)
                     });
 
                     // 2. Approver Responses
@@ -100,7 +100,7 @@ namespace OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalH
                                 PerformedBy = appr.ApprovalApproverEmail,
                                 PerformedByName = appr.ApprovalApproverEmail?.Split('@')[0],
                                 Remarks = appr.Remarks,
-                                CreatedDate = appr.RespondedDate ?? approval.RequestedDate.AddMinutes(5)
+                                CreatedDate = DateTime.SpecifyKind(appr.RespondedDate ?? approval.RequestedDate.AddMinutes(5), DateTimeKind.Local)
                             });
                         }
                     }
@@ -120,7 +120,7 @@ namespace OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalH
                                 Description = $"Amount ₹{pendingTx.Amount} marked as paid to distributor.",
                                 PerformedBy = "Bank Manager",
                                 PerformedByName = "Bank Manager",
-                                CreatedDate = pendingTx.CreatedDate.AddMinutes(10)
+                                CreatedDate = DateTime.SpecifyKind(pendingTx.CreatedDate.AddMinutes(10), DateTimeKind.Local)
                             });
                         }
 
@@ -134,7 +134,7 @@ namespace OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalH
                                 Description = "Bank settlement transaction fully confirmed.",
                                 PerformedBy = "Bank Manager",
                                 PerformedByName = "Bank Manager",
-                                CreatedDate = pendingTx.CreatedDate.AddMinutes(20)
+                                CreatedDate = DateTime.SpecifyKind(pendingTx.CreatedDate.AddMinutes(20), DateTimeKind.Local)
                             });
                         }
                     }
@@ -153,7 +153,7 @@ namespace OOH.Application.Features.Global.ApprovalHistories.Queries.GetApprovalH
                                 Description = $"Comment added: \"{c.CommentText}\"",
                                 PerformedBy = c.CreatedBy,
                                 PerformedByName = c.CreatedBy?.Split('@')[0],
-                                CreatedDate = c.CreatedDate
+                                CreatedDate = DateTime.SpecifyKind(c.CreatedDate, DateTimeKind.Local)
                             });
                         }
                     }
