@@ -165,6 +165,10 @@ export const BankTransactionList = () => {
     const [allFilterEndDate, setAllFilterEndDate] = useState<string>("");
     const [allTypeFilter, setAllTypeFilter] = useState<string>("all");
 
+    // Bank Account Filter State for Pending and All Tabs
+    const [pendingBankFilterId, setPendingBankFilterId] = useState<string>("all");
+    const [allBankFilterId, setAllBankFilterId] = useState<string>("all");
+
     const [searchClickCount, setSearchClickCount] = useState(0);
     const searchClickTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
     const [isUnlockOpen, setIsUnlockOpen] = useState(false);
@@ -289,7 +293,19 @@ export const BankTransactionList = () => {
     }, [dateFilteredTransactions, activeTypeFilter]);
 
     const filteredCombinedTransactions = useMemo(() => {
+        const selectedBank = banksList.find(b => b.bankId === allBankFilterId);
         return combinedTransactions.filter((tx) => {
+            if (allBankFilterId !== "all") {
+                const bankName = selectedBank?.name?.toLowerCase();
+                const fromName = tx.fromBankName?.toLowerCase();
+                const toName = tx.toBankName?.toLowerCase();
+                const matchesName = bankName && ((fromName && fromName.includes(bankName)) || (toName && toName.includes(bankName)));
+                
+                if (!matchesName) {
+                    return false;
+                }
+            }
+
             if (allTypeFilter !== "all") {
                 if (!tx.approvalType || tx.approvalType.toLowerCase() !== allTypeFilter.toLowerCase()) {
                     return false;
@@ -313,10 +329,23 @@ export const BankTransactionList = () => {
 
             return true;
         });
-    }, [combinedTransactions, allFilterStartDate, allFilterEndDate, allTypeFilter]);
+    }, [combinedTransactions, allBankFilterId, banksList, allFilterStartDate, allFilterEndDate, allTypeFilter]);
 
     const filteredPendingTransactions = useMemo(() => {
+        const selectedBank = banksList.find(b => b.bankId === pendingBankFilterId);
         return pendingTransactions.filter((tx) => {
+            if (pendingBankFilterId !== "all") {
+                const bankName = selectedBank?.name?.toLowerCase();
+                const fromName = tx.fromBankName?.toLowerCase();
+                const toName = tx.toBankName?.toLowerCase();
+                const matchesId = tx.fromBankId === pendingBankFilterId || tx.toBankId === pendingBankFilterId;
+                const matchesName = bankName && ((fromName && fromName.includes(bankName)) || (toName && toName.includes(bankName)));
+                
+                if (!matchesId && !matchesName) {
+                    return false;
+                }
+            }
+
             if (tx.createdDate) {
                 const txDate = new Date(tx.createdDate).getTime();
                 
@@ -333,7 +362,7 @@ export const BankTransactionList = () => {
             }
             return true;
         });
-    }, [pendingTransactions, allFilterStartDate, allFilterEndDate]);
+    }, [pendingTransactions, pendingBankFilterId, banksList, allFilterStartDate, allFilterEndDate]);
 
     // Data Table Hooks for Bank, Pending, and All Tabs
     const bankTable = useDataTable({
@@ -406,11 +435,13 @@ export const BankTransactionList = () => {
             bankTable.setPage(1);
         } else if (activeTab === "pending") {
             setPendingApprovalTypeFilter("all");
+            setPendingBankFilterId("all");
             pendingTable.setPage(1);
         } else {
             setAllFilterStartDate("");
             setAllFilterEndDate("");
             setAllTypeFilter("all");
+            setAllBankFilterId("all");
             allTable.setPage(1);
         }
     };
@@ -418,8 +449,8 @@ export const BankTransactionList = () => {
     const hasActiveFilters = activeTab === "bank" 
         ? bankFilterStartDate || bankFilterEndDate 
         : activeTab === "pending"
-        ? pendingApprovalTypeFilter !== "all"
-        : allFilterStartDate || allFilterEndDate || allTypeFilter !== "all";
+        ? pendingApprovalTypeFilter !== "all" || pendingBankFilterId !== "all"
+        : allFilterStartDate || allFilterEndDate || allTypeFilter !== "all" || allBankFilterId !== "all";
     const totalDeposits = dateFilteredTransactions.reduce((sum, tx) => sum + (tx.deposit || 0), 0);
     const totalWithdrawals = dateFilteredTransactions.reduce((sum, tx) => sum + (tx.withdrawal || 0), 0);
     const selectedBank = banksList.find(b => b.bankId === filterBankId);
@@ -551,6 +582,7 @@ export const BankTransactionList = () => {
                                         <SelectValue placeholder="Select a Bank" />
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value="all">All Bank Accounts</SelectItem>
                                         {banksList.map(bank => (
                                             <SelectItem key={bank.bankId} value={bank.bankId!}>{bank.name}</SelectItem>
                                         ))}
@@ -560,41 +592,73 @@ export const BankTransactionList = () => {
                         )}
 
                         {activeTab === "pending" && (
-                            <div className="flex flex-col gap-2 flex-1 min-w-[150px]">
-                                <label className="text-xs font-semibold text-foreground">Approval Type</label>
-                                <Select value={pendingApprovalTypeFilter} onValueChange={(val) => setPendingApprovalTypeFilter(val)}>
-                                    <SelectTrigger className="h-9 bg-muted border-border text-foreground">
-                                        <SelectValue placeholder="All Approval Types" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="all">All Approval Types</SelectItem>
-                                        <SelectItem value="Expense">Expense</SelectItem>
-                                        <SelectItem value="Receipt">Receipt</SelectItem>
-                                        <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
-                                        <SelectItem value="Convert">Convert</SelectItem>
-                                        <SelectItem value="Finalize">Finalize</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                            <>
+                                <div className="flex flex-col gap-2 flex-1 min-w-[150px]">
+                                    <label className="text-xs font-semibold text-foreground">Bank Account</label>
+                                    <Select value={pendingBankFilterId} onValueChange={(val) => { setPendingBankFilterId(val); pendingTable.setPage(1); }}>
+                                        <SelectTrigger className="h-9 bg-muted border-border text-foreground">
+                                            <SelectValue placeholder="All Bank Accounts" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">All Bank Accounts</SelectItem>
+                                            {banksList.map(bank => (
+                                                <SelectItem key={bank.bankId} value={bank.bankId!}>{bank.name}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="flex flex-col gap-2 flex-1 min-w-[150px]">
+                                    <label className="text-xs font-semibold text-foreground">Approval Type</label>
+                                    <Select value={pendingApprovalTypeFilter} onValueChange={(val) => { setPendingApprovalTypeFilter(val); pendingTable.setPage(1); }}>
+                                        <SelectTrigger className="h-9 bg-muted border-border text-foreground">
+                                            <SelectValue placeholder="All Approval Types" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">All Approval Types</SelectItem>
+                                            <SelectItem value="Expense">Expense</SelectItem>
+                                            <SelectItem value="Receipt">Receipt</SelectItem>
+                                            <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
+                                            <SelectItem value="Convert">Convert</SelectItem>
+                                            <SelectItem value="Finalize">Finalize</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </>
                         )}
 
                         {activeTab === "all" && (
-                            <div className="flex flex-col gap-2 flex-1 min-w-[150px]">
-                                <label className="text-xs font-semibold text-foreground">Approval Type</label>
-                                <Select value={allTypeFilter} onValueChange={(val) => setAllTypeFilter(val)}>
-                                    <SelectTrigger className="h-9 bg-muted border-border text-foreground">
-                                        <SelectValue placeholder="All Approval Types" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="all">All Approval Types</SelectItem>
-                                        <SelectItem value="Expense">Expense</SelectItem>
-                                        <SelectItem value="Receipt">Receipt</SelectItem>
-                                        <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
-                                        <SelectItem value="Convert">Convert</SelectItem>
-                                        <SelectItem value="Finalize">Finalize</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                            <>
+                                <div className="flex flex-col gap-2 flex-1 min-w-[150px]">
+                                    <label className="text-xs font-semibold text-foreground">Bank Account</label>
+                                    <Select value={allBankFilterId} onValueChange={(val) => { setAllBankFilterId(val); allTable.setPage(1); }}>
+                                        <SelectTrigger className="h-9 bg-muted border-border text-foreground">
+                                            <SelectValue placeholder="All Bank Accounts" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">All Bank Accounts</SelectItem>
+                                            {banksList.map(bank => (
+                                                <SelectItem key={bank.bankId} value={bank.bankId!}>{bank.name}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="flex flex-col gap-2 flex-1 min-w-[150px]">
+                                    <label className="text-xs font-semibold text-foreground">Approval Type</label>
+                                    <Select value={allTypeFilter} onValueChange={(val) => { setAllTypeFilter(val); allTable.setPage(1); }}>
+                                        <SelectTrigger className="h-9 bg-muted border-border text-foreground">
+                                            <SelectValue placeholder="All Approval Types" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">All Approval Types</SelectItem>
+                                            <SelectItem value="Expense">Expense</SelectItem>
+                                            <SelectItem value="Receipt">Receipt</SelectItem>
+                                            <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
+                                            <SelectItem value="Convert">Convert</SelectItem>
+                                            <SelectItem value="Finalize">Finalize</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </>
                         )}
 
                         <div className="flex flex-col gap-2 flex-1 min-w-[130px]">
