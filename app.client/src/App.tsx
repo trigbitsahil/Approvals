@@ -35,7 +35,7 @@ import  ApprovalsPage  from "@/components/approvals/ApprovalsPage";
 import ApprovalDetailPage from "@/components/approvals/ApprovalDetailPage";
 import ApprovalHistoryPage from "@/components/approvals/ApprovalHistoryPage";
 import  LedgerPage  from "@/components/ledger/LedgerPage";
-import SignUpForm from "./modules/auth/signUp";
+// import SignUpForm from "./modules/auth/signUp";
 import SignInForm from "./modules/auth/signIn";
 import { BankList } from "@/components/banks/BankList";
 import { VendorList } from "@/components/vendors/VendorList";
@@ -339,14 +339,14 @@ function AppContent() {
                     </PublicRoute>
                   }
                 />
-                <Route
+                {/* <Route
                   path="/signup"
                   element={
                     <PublicRoute>
                       <SignUpForm />
                     </PublicRoute>
                   }
-                />
+                /> */}
                 <Route
                   path="/forgot-password"
                   element={

@@ -86,9 +86,9 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             {
                 var t = item.Primary;
                 var approval = approvals.FirstOrDefault(a => a.ApprovalId == t.ApprovalId);
-                var fromBank = banks.FirstOrDefault(b => b.BankId == (t.FromBankId ?? approval?.FromBankId));
-                var toBank = banks.FirstOrDefault(b => b.BankId == (t.ToBankId ?? approval?.ToBankId));
-                var vendor = vendors.FirstOrDefault(v => v.VendorId == (t.VendorId ?? approval?.VendorId));
+                var fromBank = banks.FirstOrDefault(b => b.BankId == t.FromBankId) ?? banks.FirstOrDefault(b => b.BankId == approval?.FromBankId);
+                var toBank = banks.FirstOrDefault(b => b.BankId == t.ToBankId) ?? banks.FirstOrDefault(b => b.BankId == approval?.ToBankId);
+                var vendor = vendors.FirstOrDefault(v => v.VendorId == t.VendorId) ?? vendors.FirstOrDefault(v => v.VendorId == approval?.VendorId);
 
                 string approvalName = approval != null ? SafeDecrypt(approval.Name) : null;
                 string approvalRef = approval != null ? SafeDecrypt(approval.Reference) : null;

@@ -72,11 +72,11 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetPendingBan
             foreach (var tx in pendingTxs)
             {
                 var approval = approvals.FirstOrDefault(a => a.ApprovalId == tx.ApprovalId);
-                var fromBank = banks.FirstOrDefault(b => b.BankId == (tx.FromBankId ?? approval?.FromBankId));
-                var toBank = banks.FirstOrDefault(b => b.BankId == (tx.ToBankId ?? approval?.ToBankId));
-                var vendor = vendors.FirstOrDefault(v => v.VendorId == (tx.VendorId ?? approval?.VendorId));
-                var debtor = debtors.FirstOrDefault(d => d.DebtorId == (tx.DebtorId ?? approval?.DebtorId));
-                var distributor = distributors.FirstOrDefault(d => d.DistributorId == (tx.DistributorId ?? approval?.DistributorId));
+                var fromBank = banks.FirstOrDefault(b => b.BankId == tx.FromBankId) ?? banks.FirstOrDefault(b => b.BankId == approval?.FromBankId);
+                var toBank = banks.FirstOrDefault(b => b.BankId == tx.ToBankId) ?? banks.FirstOrDefault(b => b.BankId == approval?.ToBankId);
+                var vendor = vendors.FirstOrDefault(v => v.VendorId == tx.VendorId) ?? vendors.FirstOrDefault(v => v.VendorId == approval?.VendorId);
+                var debtor = debtors.FirstOrDefault(d => d.DebtorId == tx.DebtorId) ?? debtors.FirstOrDefault(d => d.DebtorId == approval?.DebtorId);
+                var distributor = distributors.FirstOrDefault(d => d.DistributorId == tx.DistributorId) ?? distributors.FirstOrDefault(d => d.DistributorId == approval?.DistributorId);
 
                 string approvalName = approval != null ? SafeDecrypt(approval.Name) : null;
                 string approvalReference = approval != null ? SafeDecrypt(approval.Reference) : null;

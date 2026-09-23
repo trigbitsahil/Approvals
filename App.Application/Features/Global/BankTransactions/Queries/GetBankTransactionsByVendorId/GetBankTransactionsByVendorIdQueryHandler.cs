@@ -66,8 +66,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             foreach (var t in vendorTxs)
             {
                 var approval = approvals.FirstOrDefault(a => a.ApprovalId == t.ApprovalId);
-                var fromBank = banks.FirstOrDefault(b => b.BankId == (t.FromBankId ?? approval?.FromBankId));
-                var toBank = banks.FirstOrDefault(b => b.BankId == (t.ToBankId ?? approval?.ToBankId));
+                var fromBank = banks.FirstOrDefault(b => b.BankId == t.FromBankId) ?? banks.FirstOrDefault(b => b.BankId == approval?.FromBankId);
+                var toBank = banks.FirstOrDefault(b => b.BankId == t.ToBankId) ?? banks.FirstOrDefault(b => b.BankId == approval?.ToBankId);
                 var distId = t.DistributorId ?? approval?.DistributorId;
                 var distributor = distributors.FirstOrDefault(d => d.DistributorId == distId);
 

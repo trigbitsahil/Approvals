@@ -555,7 +555,8 @@ export default function DistributorDetailPage() {
                   </TableRow>
                 ) : (
                   paginatedTransactions.map((tx, index) => {
-                    const toEntity = tx.toBankName ? `Bank: ${tx.toBankName}` : tx.vendorName ? `Vendor: ${tx.vendorName}` : "-";
+                    const destinationBankName = tx.toBankName || (tx.bankName && tx.bankName !== tx.fromBankName ? tx.bankName : null);
+                    const toEntity = destinationBankName ? `Bank: ${destinationBankName}` : tx.vendorName ? `Vendor: ${tx.vendorName}` : "-";
                     const serialNumber = (currentPage - 1) * pageSize + index + 1;
                     const isUnlocked = !!sessionStorage.getItem('view_password');
                     const displayApprovalName = isUnlocked
@@ -588,7 +589,7 @@ export default function DistributorDetailPage() {
                           {tx.isConfirm ? (
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">
                               <ArrowUpRight className="h-3.5 w-3.5" />
-                              Paid to {tx.toBankName || tx.vendorName || "Destination"}
+                              Paid to {destinationBankName || tx.vendorName || "Destination"}
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
