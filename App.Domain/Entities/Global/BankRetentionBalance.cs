@@ -34,9 +34,18 @@ namespace OOH.Domain.Entities.Global
         [Column("tenant_id")]
         public string TenantId { get; set; }
 
+        [Column("is_voided")]
+        public bool IsVoided { get; set; } = false;
+
+        [Column("created_by")]
+        public string? CreatedBy { get; set; }
+
         [Required]
         [Column("created_date")]
         public DateTime CreatedDate { get; set; }
+
+        [Column("last_modified_by")]
+        public string? LastModifiedBy { get; set; }
 
         [Column("last_modified_date")]
         public DateTime? LastModifiedDate { get; set; }

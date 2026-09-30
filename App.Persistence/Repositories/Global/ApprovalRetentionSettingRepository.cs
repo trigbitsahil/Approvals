@@ -262,6 +262,7 @@ namespace OOH.Persistence.Repositories.Global
                             SET total_deposit = total_deposit + @depToAdd,
                                 total_withdrawal = total_withdrawal + @wthToAdd,
                                 running_balance = running_balance + @rbDelta,
+                                last_modified_by = 'System',
                                 last_modified_date = (NOW() AT TIME ZONE 'utc')
                             WHERE id = @existingId;";
 
@@ -271,9 +272,9 @@ namespace OOH.Persistence.Repositories.Global
                     {
                         string insertQuery = @"
                             INSERT INTO bank_retention_balance (
-                                id, approval_id, bank_id, entity_type, total_deposit, total_withdrawal, running_balance, tenant_id, created_date, last_modified_date
+                                id, approval_id, bank_id, entity_type, total_deposit, total_withdrawal, running_balance, tenant_id, is_voided, created_by, created_date, last_modified_by, last_modified_date
                             ) VALUES (
-                                @id, @aId, @eId, @eType, @depToAdd, @wthToAdd, @rbDelta, @bTenant, (NOW() AT TIME ZONE 'utc'), (NOW() AT TIME ZONE 'utc')
+                                @id, @aId, @eId, @eType, @depToAdd, @wthToAdd, @rbDelta, @bTenant, false, 'System', (NOW() AT TIME ZONE 'utc'), 'System', (NOW() AT TIME ZONE 'utc')
                             );";
 
                         await dbConn.ExecuteAsync(insertQuery, new {
