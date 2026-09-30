@@ -12,13 +12,20 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IBankRepository _bankRepository;
         private readonly IApprovalRepository _approvalRepository;
+        private readonly OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository _bankRetentionBalanceRepository;
         private readonly OOH.Application.Contracts.Infrastructure.IEncryptionService _encryptionService;
 
-        public GetBankTransactionByIdQueryHandler(IBankTransactionRepository bankTransactionRepository, IBankRepository bankRepository, IApprovalRepository approvalRepository, OOH.Application.Contracts.Infrastructure.IEncryptionService encryptionService)
+        public GetBankTransactionByIdQueryHandler(
+            IBankTransactionRepository bankTransactionRepository,
+            IBankRepository bankRepository,
+            IApprovalRepository approvalRepository,
+            OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository bankRetentionBalanceRepository,
+            OOH.Application.Contracts.Infrastructure.IEncryptionService encryptionService)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
             _approvalRepository = approvalRepository;
+            _bankRetentionBalanceRepository = bankRetentionBalanceRepository;
             _encryptionService = encryptionService;
         }
 
@@ -47,6 +54,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             var banks = await _bankRepository.ListAllAsync();
             var approvals = await _approvalRepository.ListAllAsync();
             var requestedBank = banks.FirstOrDefault(b => b.BankId == request.BankId);
+            var retBal = await _bankRetentionBalanceRepository.GetByBankIdAsync(request.BankId);
             
             // Filter by BankId:
             // - FromBank transactions: included if IsPaidToDistributor || IsConfirm (deducts from FromBank)
@@ -60,7 +68,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                 .ToList();
 
             var dtos = new List<BankTransactionListVM>();
-            decimal runningBalance = 0;
+            decimal runningBalance = retBal?.RunningBalance ?? 0;
 
             foreach (var t in bankTransactions)
             {
@@ -122,7 +130,10 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             return new GetBankTransactionsListQueryResponse
             {
                 Success = true,
-                Data = dtos
+                Data = dtos,
+                RetentionTotalDeposit = retBal?.TotalDeposit ?? 0,
+                RetentionTotalWithdrawal = retBal?.TotalWithdrawal ?? 0,
+                RetentionRunningBalance = retBal?.RunningBalance ?? 0
             };
         }
     }

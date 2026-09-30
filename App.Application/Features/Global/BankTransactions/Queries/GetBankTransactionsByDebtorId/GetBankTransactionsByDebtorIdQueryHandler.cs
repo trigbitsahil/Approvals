@@ -14,17 +14,20 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
         private readonly IBankRepository _bankRepository;
         private readonly IApprovalRepository _approvalRepository;
         private readonly IEncryptionService _encryptionService;
+        private readonly OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository _bankRetentionBalanceRepository;
 
         public GetBankTransactionsByDebtorIdQueryHandler(
             IBankTransactionRepository bankTransactionRepository,
             IBankRepository bankRepository,
             IApprovalRepository approvalRepository,
-            IEncryptionService encryptionService)
+            IEncryptionService encryptionService,
+            OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository bankRetentionBalanceRepository)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
             _approvalRepository = approvalRepository;
             _encryptionService = encryptionService;
+            _bankRetentionBalanceRepository = bankRetentionBalanceRepository;
         }
 
         private string SafeDecrypt(string value)
@@ -108,10 +111,24 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                 });
             }
 
+            decimal retReceived = 0;
+            decimal retSettled = 0;
+            if (_bankRetentionBalanceRepository != null)
+            {
+                var ret = await _bankRetentionBalanceRepository.GetByBankIdAsync(request.DebtorId, entityType: "Debtor");
+                if (ret != null)
+                {
+                    retReceived = ret.RunningBalance;
+                    retSettled = ret.TotalDeposit;
+                }
+            }
+
             return new GetBankTransactionsByDebtorIdQueryResponse
             {
                 Success = true,
-                Data = dtos
+                Data = dtos,
+                RetentionTotalReceived = retReceived,
+                RetentionTotalSettled = retSettled
             };
         }
     }

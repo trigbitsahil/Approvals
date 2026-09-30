@@ -451,9 +451,16 @@ export const BankTransactionList = () => {
         : activeTab === "pending"
         ? pendingApprovalTypeFilter !== "all" || pendingBankFilterId !== "all"
         : allFilterStartDate || allFilterEndDate || allTypeFilter !== "all" || allBankFilterId !== "all";
-    const totalDeposits = dateFilteredTransactions.reduce((sum, tx) => sum + (tx.deposit || 0), 0);
-    const totalWithdrawals = dateFilteredTransactions.reduce((sum, tx) => sum + (tx.withdrawal || 0), 0);
     const selectedBank = banksList.find(b => b.bankId === filterBankId);
+    const retentionDeposits = filterBankId !== "all"
+        ? (selectedBank?.retentionTotalDeposit || 0)
+        : banksList.reduce((sum, b) => sum + (b.retentionTotalDeposit || 0), 0);
+    const retentionWithdrawals = filterBankId !== "all"
+        ? (selectedBank?.retentionTotalWithdrawal || 0)
+        : banksList.reduce((sum, b) => sum + (b.retentionTotalWithdrawal || 0), 0);
+
+    const totalDeposits = dateFilteredTransactions.reduce((sum, tx) => sum + (tx.deposit || 0), 0) + (bankFilterStartDate ? 0 : retentionDeposits);
+    const totalWithdrawals = dateFilteredTransactions.reduce((sum, tx) => sum + (tx.withdrawal || 0), 0) + (bankFilterStartDate ? 0 : retentionWithdrawals);
     const currentRunningBalance = filterBankId !== "all"
         ? (transactions.length > 0 ? (transactions[0].runningBalance || 0) : (selectedBank?.runningBalance || 0))
         : banksList.reduce((sum, b) => sum + (b.runningBalance || 0), 0);

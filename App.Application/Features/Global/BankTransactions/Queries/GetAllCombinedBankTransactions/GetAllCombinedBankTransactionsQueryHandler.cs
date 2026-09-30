@@ -18,6 +18,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
         private readonly IDebtorRepository _debtorRepository;
         private readonly IDistributorRepository _distributorRepository;
         private readonly OOH.Application.Contracts.Infrastructure.IEncryptionService _encryptionService;
+        private readonly OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository _bankRetentionBalanceRepository;
 
         public GetAllCombinedBankTransactionsQueryHandler(
             IBankTransactionRepository bankTransactionRepository,
@@ -26,7 +27,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
             IVendorRepository vendorRepository,
             IDebtorRepository debtorRepository,
             OOH.Application.Contracts.Infrastructure.IEncryptionService encryptionService,
-            IDistributorRepository distributorRepository = null)
+            IDistributorRepository distributorRepository = null,
+            OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository bankRetentionBalanceRepository = null)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
@@ -35,6 +37,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
             _debtorRepository = debtorRepository;
             _encryptionService = encryptionService;
             _distributorRepository = distributorRepository;
+            _bankRetentionBalanceRepository = bankRetentionBalanceRepository;
         }
 
         private string SafeDecrypt(string value)
@@ -58,6 +61,10 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
             var vendors = await _vendorRepository.ListAllAsync();
             var debtors = await _debtorRepository.ListAllAsync();
             var distributors = _distributorRepository != null ? await _distributorRepository.ListAllAsync() : new List<OOH.Domain.Entities.Tenders.Distributor>();
+            var retentionList = _bankRetentionBalanceRepository != null 
+                ? await _bankRetentionBalanceRepository.GetAllRetentionBalancesAsync() 
+                : new List<OOH.Domain.Entities.Global.BankRetentionBalance>();
+            var retentionMap = retentionList.ToDictionary(r => r.BankId);
 
             var dtos = new List<CombinedBankTransactionVM>();
 
@@ -131,14 +138,14 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
 
                     // Source bank running balance (from debit row)
                     decimal? rbSourceBank = debitTxn != null
-                        ? (debitTxn.RunningBalance != 0 ? debitTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, debitTxn.FromBankId, debitTxn.TransactionId))
+                        ? (debitTxn.RunningBalance != 0 ? debitTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, debitTxn.FromBankId, debitTxn.TransactionId, retentionMap))
                         : null;
 
                     // distDep = the amount paid to this distributor for this specific approval
                     decimal distDep = distributorDepositTxn.Deposit > 0 ? distributorDepositTxn.Deposit : distributorDepositTxn.Amount;
 
                     // Prior distributor balance across all previous approvals
-                    decimal priorDistributorBalance = CalculatePriorDistributorBalance(transactions, distId, distributorDepositTxn.CreatedDate, approvalId);
+                    decimal priorDistributorBalance = CalculatePriorDistributorBalance(transactions, distId, distributorDepositTxn.CreatedDate, approvalId, retentionMap);
 
                     // Running balance of distributor after this deposit is received
                     decimal rbDistributor = priorDistributorBalance + distDep;
@@ -230,11 +237,11 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                     var toBankId = primaryTxn.ToBankId ?? approval?.ToBankId;
 
                     decimal? rbBank1 = !string.IsNullOrEmpty(fromBankId) && banks.Any(b => b.BankId == fromBankId)
-                        ? (primaryTxn.RunningBalance != 0 && primaryTxn.FromBankId == fromBankId ? primaryTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, fromBankId, primaryTxn.TransactionId))
+                        ? (primaryTxn.RunningBalance != 0 && primaryTxn.FromBankId == fromBankId ? primaryTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, fromBankId, primaryTxn.TransactionId, retentionMap))
                         : null;
 
                     decimal? rbBank2 = !string.IsNullOrEmpty(toBankId) && banks.Any(b => b.BankId == toBankId)
-                        ? CalculateDynamicRunningBalance(transactions, toBankId, primaryTxn.TransactionId)
+                        ? CalculateDynamicRunningBalance(transactions, toBankId, primaryTxn.TransactionId, retentionMap)
                         : null;
 
                     string resolvedFromBankName = null;
@@ -320,8 +327,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                     else if (revDebitTxn != null || revCreditTxn != null)
                     {
                         var primaryRevTxn = revDebitTxn ?? revCreditTxn;
-                        decimal? revRbBank1 = revDebitTxn != null ? (revDebitTxn.RunningBalance != 0 ? revDebitTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, revDebitTxn.FromBankId, revDebitTxn.TransactionId)) : null;
-                        decimal? revRbBank2 = revCreditTxn != null ? (revCreditTxn.RunningBalance != 0 ? revCreditTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, revCreditTxn.ToBankId, revCreditTxn.TransactionId)) : null;
+                        decimal? revRbBank1 = revDebitTxn != null ? (revDebitTxn.RunningBalance != 0 ? revDebitTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, revDebitTxn.FromBankId, revDebitTxn.TransactionId, retentionMap)) : null;
+                        decimal? revRbBank2 = revCreditTxn != null ? (revCreditTxn.RunningBalance != 0 ? revCreditTxn.RunningBalance : CalculateDynamicRunningBalance(transactions, revCreditTxn.ToBankId, revCreditTxn.TransactionId, retentionMap)) : null;
 
                         string resolvedRevFromBankName = null;
                         if (revDebitTxn != null)
@@ -395,7 +402,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                     {
                         decimal distDep = distTxForApproval.Deposit > 0 ? distTxForApproval.Deposit : distTxForApproval.Amount;
                         decimal distWth = distTxForApproval.Withdrawal;
-                        decimal priorDistBal = CalculatePriorDistributorBalance(transactions, distId, distTxForApproval.CreatedDate, approvalId);
+                        decimal priorDistBal = CalculatePriorDistributorBalance(transactions, distId, distTxForApproval.CreatedDate, approvalId, retentionMap);
                         rbDistributor = Math.Max(0, (priorDistBal + distDep) - (distWth + totalRefundsForGroup));
                     }
 
@@ -429,7 +436,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
             return response;
         }
 
-        private decimal CalculateDynamicRunningBalance(IReadOnlyList<OOH.Domain.Entities.Global.BankTransaction> allTransactions, string bankId, string upToTransactionId)
+        private decimal CalculateDynamicRunningBalance(IReadOnlyList<OOH.Domain.Entities.Global.BankTransaction> allTransactions, string bankId, string upToTransactionId, Dictionary<string, OOH.Domain.Entities.Global.BankRetentionBalance> retentionMap = null)
         {
             var bankTransactions = allTransactions
                 .Where(t => !t.IsVoided && (
@@ -439,7 +446,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                 .OrderBy(x => x.CreatedDate)
                 .ToList();
 
-            decimal runningBalance = 0;
+            decimal runningBalance = retentionMap != null && retentionMap.TryGetValue(bankId, out var rb) ? rb.RunningBalance : 0;
             foreach (var t in bankTransactions)
             {
                 bool isWithdrawal = t.FromBankId == bankId;
@@ -465,7 +472,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
             IReadOnlyList<OOH.Domain.Entities.Global.BankTransaction> allTransactions,
             string distributorId,
             System.DateTime beforeDate,
-            string currentApprovalId)
+            string currentApprovalId,
+            Dictionary<string, OOH.Domain.Entities.Global.BankRetentionBalance> retentionMap = null)
         {
             var priorDepositRows = allTransactions
                 .Where(t => !t.IsVoided &&
@@ -475,7 +483,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetAllCombine
                             t.CreatedDate < beforeDate)
                 .ToList();
 
-            decimal balance = 0;
+            decimal startingBalance = retentionMap != null && retentionMap.TryGetValue(distributorId, out var rb) ? rb.RunningBalance : 0;
+            decimal balance = startingBalance;
             foreach (var row in priorDepositRows)
             {
                 decimal dep = row.Deposit > 0 ? row.Deposit : row.Amount;

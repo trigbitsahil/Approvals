@@ -11,13 +11,16 @@ namespace OOH.Application.Features.Tenders.Vendors.Queries.GetVendorSummary
     {
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IApprovalRepository _approvalRepository;
+        private readonly OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository _bankRetentionBalanceRepository;
 
         public GetVendorSummaryQueryHandler(
             IBankTransactionRepository bankTransactionRepository,
-            IApprovalRepository approvalRepository)
+            IApprovalRepository approvalRepository,
+            OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository bankRetentionBalanceRepository)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _approvalRepository = approvalRepository;
+            _bankRetentionBalanceRepository = bankRetentionBalanceRepository;
         }
 
         public async Task<GetVendorSummaryQueryResponse> Handle(GetVendorSummaryQuery request, CancellationToken cancellationToken)
@@ -37,6 +40,13 @@ namespace OOH.Application.Features.Tenders.Vendors.Queries.GetVendorSummary
 
             decimal totalPaid = vendorTxs.Where(t => t.IsConfirm).Sum(t => t.Amount);
             decimal pendingAmount = vendorTxs.Where(t => !t.IsConfirm).Sum(t => t.Amount);
+
+            if (_bankRetentionBalanceRepository != null)
+            {
+                var ret = await _bankRetentionBalanceRepository.GetByBankIdAsync(request.VendorId, entityType: "Vendor");
+                decimal retentionPaid = ret?.TotalWithdrawal ?? ret?.RunningBalance ?? 0;
+                totalPaid += retentionPaid;
+            }
 
             return new GetVendorSummaryQueryResponse
             {

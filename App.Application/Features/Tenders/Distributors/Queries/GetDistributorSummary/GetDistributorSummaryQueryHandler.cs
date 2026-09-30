@@ -10,13 +10,16 @@ namespace OOH.Application.Features.Tenders.Distributors.Queries.GetDistributorSu
     {
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IApprovalRepository _approvalRepository;
+        private readonly OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository _bankRetentionBalanceRepository;
 
         public GetDistributorSummaryQueryHandler(
             IBankTransactionRepository bankTransactionRepository,
-            IApprovalRepository approvalRepository)
+            IApprovalRepository approvalRepository,
+            OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository bankRetentionBalanceRepository)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _approvalRepository = approvalRepository;
+            _bankRetentionBalanceRepository = bankRetentionBalanceRepository;
         }
 
         public async Task<GetDistributorSummaryQueryResponse> Handle(GetDistributorSummaryQuery request, CancellationToken cancellationToken)
@@ -68,6 +71,17 @@ namespace OOH.Application.Features.Tenders.Distributors.Queries.GetDistributorSu
             var standaloneTxs = distTxs.Where(t => string.IsNullOrEmpty(t.ApprovalId) || t.ApprovalId == "-").ToList();
             totalReceived += standaloneTxs.Where(t => t.ToBankId == distId || (t.DistributorId == distId && t.TransactionType != "Refund")).Sum(t => t.Deposit > 0 ? t.Deposit : t.Amount);
             totalPaid += standaloneTxs.Where(t => t.FromBankId == distId || t.TransactionType == "Refund").Sum(t => t.Withdrawal > 0 ? t.Withdrawal : t.Amount);
+
+            // Add historical retention amounts from purged approvals
+            if (_bankRetentionBalanceRepository != null)
+            {
+                var ret = await _bankRetentionBalanceRepository.GetByBankIdAsync(distId);
+                if (ret != null)
+                {
+                    totalReceived += ret.TotalDeposit;
+                    totalPaid += ret.TotalWithdrawal;
+                }
+            }
 
             decimal runningBalance = Math.Max(0, totalReceived - totalPaid);
             int totalCount = approvalGroups.Count + standaloneTxs.Count;

@@ -16,19 +16,22 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
         private readonly IApprovalRepository _approvalRepository;
         private readonly IDistributorRepository _distributorRepository;
         private readonly IEncryptionService _encryptionService;
+        private readonly OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository _bankRetentionBalanceRepository;
 
         public GetBankTransactionsByVendorIdQueryHandler(
             IBankTransactionRepository bankTransactionRepository,
             IBankRepository bankRepository,
             IApprovalRepository approvalRepository,
             IDistributorRepository distributorRepository,
-            IEncryptionService encryptionService)
+            IEncryptionService encryptionService,
+            OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository bankRetentionBalanceRepository)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
             _approvalRepository = approvalRepository;
             _distributorRepository = distributorRepository;
             _encryptionService = encryptionService;
+            _bankRetentionBalanceRepository = bankRetentionBalanceRepository;
         }
 
         private string SafeDecrypt(string value)
@@ -121,10 +124,18 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                 });
             }
 
+            decimal retPaid = 0;
+            if (_bankRetentionBalanceRepository != null)
+            {
+                var ret = await _bankRetentionBalanceRepository.GetByBankIdAsync(request.VendorId, entityType: "Vendor");
+                retPaid = ret?.TotalWithdrawal ?? ret?.RunningBalance ?? 0;
+            }
+
             return new GetBankTransactionsByVendorIdQueryResponse
             {
                 Success = true,
-                Data = dtos
+                Data = dtos,
+                RetentionTotalPaid = retPaid
             };
         }
     }

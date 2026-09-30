@@ -31,4 +31,5 @@ export type BankTransactionListVM = {
     paidToDistributorDate?: string | null;
     assignedBankUserId?: string | null;
     derivedStatus?: string;
+    remarks?: string | null;
 };

@@ -11,5 +11,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
         }
 
         public List<BankTransactionListVM>? Data { get; set; }
+        public decimal RetentionTotalDeposit { get; set; }
+        public decimal RetentionTotalWithdrawal { get; set; }
+        public decimal RetentionRunningBalance { get; set; }
     }
 }

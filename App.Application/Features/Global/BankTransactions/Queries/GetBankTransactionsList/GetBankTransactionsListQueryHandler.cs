@@ -11,6 +11,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
         private readonly IBankTransactionRepository _bankTransactionRepository;
         private readonly IBankRepository _bankRepository;
         private readonly IApprovalRepository _approvalRepository;
+        private readonly OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository _bankRetentionBalanceRepository;
         private readonly OOH.Application.Contracts.Infrastructure.ILoggedInUserService _loggedInUserService;
         private readonly OOH.Application.Contracts.Infrastructure.IEncryptionService _encryptionService;
 
@@ -27,11 +28,18 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             }
         }
 
-        public GetBankTransactionsListQueryHandler(IBankTransactionRepository bankTransactionRepository, IBankRepository bankRepository, IApprovalRepository approvalRepository, OOH.Application.Contracts.Infrastructure.ILoggedInUserService loggedInUserService, OOH.Application.Contracts.Infrastructure.IEncryptionService encryptionService)
+        public GetBankTransactionsListQueryHandler(
+            IBankTransactionRepository bankTransactionRepository,
+            IBankRepository bankRepository,
+            IApprovalRepository approvalRepository,
+            OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository bankRetentionBalanceRepository,
+            OOH.Application.Contracts.Infrastructure.ILoggedInUserService loggedInUserService,
+            OOH.Application.Contracts.Infrastructure.IEncryptionService encryptionService)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
             _approvalRepository = approvalRepository;
+            _bankRetentionBalanceRepository = bankRetentionBalanceRepository;
             _loggedInUserService = loggedInUserService;
             _encryptionService = encryptionService;
         }
@@ -41,8 +49,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             var transactions = await _bankTransactionRepository.ListAllAsync();
             var banks = await _bankRepository.ListAllAsync();
             var approvals = await _approvalRepository.ListAllAsync();
-            
-
+            var retentionList = await _bankRetentionBalanceRepository.GetAllRetentionBalancesAsync();
+            var retentionMap = retentionList.ToDictionary(r => r.BankId);
 
             var dtos = new System.Collections.Generic.List<BankTransactionListVM>();
 
@@ -56,8 +64,8 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                     .OrderBy(x => x.CreatedDate)
                     .ToList();
 
-
-                decimal runningBalance = 0;
+                decimal startingBalance = retentionMap.TryGetValue(bank.BankId, out var rb) ? rb.RunningBalance : 0;
+                decimal runningBalance = startingBalance;
 
                 foreach (var t in bankTransactions)
                 {
@@ -120,7 +128,10 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
             return new GetBankTransactionsListQueryResponse
             {
                 Success = true,
-                Data = orderedDtos
+                Data = orderedDtos,
+                RetentionTotalDeposit = retentionList.Sum(r => r.TotalDeposit),
+                RetentionTotalWithdrawal = retentionList.Sum(r => r.TotalWithdrawal),
+                RetentionRunningBalance = retentionList.Sum(r => r.RunningBalance)
             };
         }
     }

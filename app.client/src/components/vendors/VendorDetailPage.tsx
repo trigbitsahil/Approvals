@@ -73,6 +73,7 @@ export default function VendorDetailPage() {
   const [endDate, setEndDate] = useState("");
   const [selectedTxForTimeline, setSelectedTxForTimeline] = useState<BankTransactionListVM | null>(null);
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
+  const [retentionTotalPaid, setRetentionTotalPaid] = useState(0);
 
   // Sorting & Pagination state
   const [sortColumn, setSortColumn] = useState<string>("createdDate");
@@ -157,6 +158,10 @@ export default function VendorDetailPage() {
         if (found) setVendor(found);
       }
 
+      if (txRes) {
+        setRetentionTotalPaid((txRes as any).retentionTotalPaid || 0);
+      }
+
       if (txRes?.data) {
         const txData = txRes.data;
         if (!isUnlocked) {
@@ -238,9 +243,12 @@ export default function VendorDetailPage() {
     setCurrentPage(1);
   }, [startDate, endDate, pageSize]);
 
+  const isUnlocked = !!sessionStorage.getItem('view_password');
+  const divisor = isUnlocked ? 1 : 1000;
+
   const totalPaidAmount = summary?.totalPaidAmount !== undefined && !startDate && !endDate
     ? summary.totalPaidAmount
-    : filteredTransactions.filter(t => t.isConfirm).reduce((sum, t) => sum + (t.amount || 0), 0);
+    : (filteredTransactions.filter(t => t.isConfirm).reduce((sum, t) => sum + (t.amount || 0), 0) + (retentionTotalPaid / divisor));
 
   const pendingVendorBalance = summary?.pendingAmount !== undefined && !startDate && !endDate
     ? summary.pendingAmount

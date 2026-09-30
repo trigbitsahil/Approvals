@@ -23,5 +23,6 @@ export type UpdateApprovalCommand = {
     transactionAmount?: number | null;
     vendorId?: string | null;
     contractId ?: string | null;
+
 };
 

@@ -13,5 +13,10 @@ namespace OOH.Application.Features.Global.Banks.Queries.GetBankList
         public string Status { get; set; }
         public bool IsActive { get; set; }
         public decimal RunningBalance { get; set; }
+        public decimal TotalDeposit { get; set; }
+        public decimal TotalWithdrawal { get; set; }
+        public decimal RetentionTotalDeposit { get; set; }
+        public decimal RetentionTotalWithdrawal { get; set; }
+        public decimal RetentionRunningBalance { get; set; }
     }
 }

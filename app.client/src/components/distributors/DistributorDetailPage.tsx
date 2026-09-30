@@ -72,6 +72,8 @@ export default function DistributorDetailPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedTxForTimeline, setSelectedTxForTimeline] = useState<any | null>(null);
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
+  const [retentionTotalReceived, setRetentionTotalReceived] = useState(0);
+  const [retentionTotalPaid, setRetentionTotalPaid] = useState(0);
 
   // Sorting & Pagination state
   const [sortColumn, setSortColumn] = useState<string>("createdDate");
@@ -145,6 +147,11 @@ export default function DistributorDetailPage() {
         setSummary(summaryRes.data);
       }
 
+      if (txRes) {
+        setRetentionTotalReceived((txRes as any).retentionTotalReceived || 0);
+        setRetentionTotalPaid((txRes as any).retentionTotalPaid || 0);
+      }
+
       if (txRes?.data) {
         const txData = txRes.data;
         const isUnlocked = !!sessionStorage.getItem('view_password');
@@ -173,6 +180,10 @@ export default function DistributorDetailPage() {
     if (!id) return;
     try {
       const txRes = await BankTransactionService.getBankTransactionsByDistributorId(id, status);
+      if (txRes) {
+        setRetentionTotalReceived((txRes as any).retentionTotalReceived || 0);
+        setRetentionTotalPaid((txRes as any).retentionTotalPaid || 0);
+      }
       if (txRes?.data) {
         const txData = txRes.data;
         const isUnlocked = !!sessionStorage.getItem('view_password');
@@ -266,19 +277,19 @@ export default function DistributorDetailPage() {
 
   const totalReceivedAmount = summary?.totalReceivedAmount != null
     ? summary.totalReceivedAmount / divisor
-    : filteredTransactions
+    : (filteredTransactions
         .filter(t => t.isPaidToDistributor || t.isConfirm)
-        .reduce((sum, t) => sum + (t.deposit || t.amount || 0), 0);
+        .reduce((sum, t) => sum + (t.deposit || t.amount || 0), 0) + (retentionTotalReceived / divisor));
 
   const totalSettledAmount = summary?.totalPaidAmount != null
     ? summary.totalPaidAmount / divisor
-    : filteredTransactions
+    : (filteredTransactions
         .filter(t => t.isConfirm)
-        .reduce((sum, t) => sum + (t.withdrawal || t.amount || 0), 0);
+        .reduce((sum, t) => sum + (t.withdrawal || t.amount || 0), 0) + (retentionTotalPaid / divisor));
 
   const distributorRunningBalance = summary?.runningBalance != null
     ? summary.runningBalance / divisor
-    : (totalReceivedAmount - totalSettledAmount);
+    : Math.max(0, totalReceivedAmount - totalSettledAmount);
 
   if (loading) {
     return (

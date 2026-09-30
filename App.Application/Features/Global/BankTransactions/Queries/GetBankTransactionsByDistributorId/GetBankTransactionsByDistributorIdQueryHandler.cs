@@ -15,19 +15,22 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
         private readonly IApprovalRepository _approvalRepository;
         private readonly OOH.Application.Contracts.Persistence.Tenders.IVendorRepository _vendorRepository;
         private readonly IEncryptionService _encryptionService;
+        private readonly OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository _bankRetentionBalanceRepository;
 
         public GetBankTransactionsByDistributorIdQueryHandler(
             IBankTransactionRepository bankTransactionRepository,
             IBankRepository bankRepository,
             IApprovalRepository approvalRepository,
             OOH.Application.Contracts.Persistence.Tenders.IVendorRepository vendorRepository,
-            IEncryptionService encryptionService)
+            IEncryptionService encryptionService,
+            OOH.Application.Contracts.Persistence.Global.IBankRetentionBalanceRepository bankRetentionBalanceRepository)
         {
             _bankTransactionRepository = bankTransactionRepository;
             _bankRepository = bankRepository;
             _approvalRepository = approvalRepository;
             _vendorRepository = vendorRepository;
             _encryptionService = encryptionService;
+            _bankRetentionBalanceRepository = bankRetentionBalanceRepository;
         }
 
         private string SafeDecrypt(string value)
@@ -142,10 +145,25 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
                 });
             }
 
+            decimal retReceived = 0;
+            decimal retPaid = 0;
+            if (_bankRetentionBalanceRepository != null)
+            {
+                var ret = await _bankRetentionBalanceRepository.GetByBankIdAsync(request.DistributorId);
+                if (ret != null)
+                {
+                    retReceived = ret.TotalDeposit;
+                    retPaid = ret.TotalWithdrawal;
+                }
+            }
+
             return new GetBankTransactionsByDistributorIdQueryResponse
             {
                 Success = true,
-                Data = dtos
+                Data = dtos,
+                RetentionTotalReceived = retReceived,
+                RetentionTotalPaid = retPaid,
+                RetentionRunningBalance = Math.Max(0, retReceived - retPaid)
             };
         }
     }

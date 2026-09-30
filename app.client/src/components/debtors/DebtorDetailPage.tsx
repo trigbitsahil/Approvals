@@ -69,6 +69,8 @@ export default function DebtorDetailPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedTxForTimeline, setSelectedTxForTimeline] = useState<any | null>(null);
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
+  const [retentionTotalReceived, setRetentionTotalReceived] = useState(0);
+  const [retentionTotalSettled, setRetentionTotalSettled] = useState(0);
 
   // Sorting & Pagination state
   const [sortColumn, setSortColumn] = useState<string>("createdDate");
@@ -122,6 +124,11 @@ export default function DebtorDetailPage() {
         if (found) setDebtor(found);
       }
 
+      if (txRes) {
+        setRetentionTotalReceived((txRes as any).retentionTotalReceived || 0);
+        setRetentionTotalSettled((txRes as any).retentionTotalSettled || 0);
+      }
+
       if (txRes?.data) {
         const txData = txRes.data;
         const isUnlocked = !!sessionStorage.getItem('view_password');
@@ -146,6 +153,10 @@ export default function DebtorDetailPage() {
     if (!id) return;
     try {
       const txRes = await BankTransactionService.getBankTransactionsByDebtorId(id, status);
+      if (txRes) {
+        setRetentionTotalReceived((txRes as any).retentionTotalReceived || 0);
+        setRetentionTotalSettled((txRes as any).retentionTotalSettled || 0);
+      }
       if (txRes?.data) {
         const txData = txRes.data;
         const isUnlocked = !!sessionStorage.getItem('view_password');
@@ -232,12 +243,15 @@ export default function DebtorDetailPage() {
     setCurrentPage(1);
   }, [startDate, endDate, selectedStatus, pageSize]);
 
+  const isUnlocked = !!sessionStorage.getItem('view_password');
+  const divisor = isUnlocked ? 1 : 1000;
+
   const totalTransactionsCount = filteredTransactions.length;
 
-  const totalReceivedAmount = filteredTransactions
+  const totalReceivedAmount = (!startDate && !endDate ? (retentionTotalReceived / divisor) : 0) + filteredTransactions
     .reduce((sum, t) => sum + (t.amount || 0), 0);
 
-  const totalSettledAmount = filteredTransactions
+  const totalSettledAmount = (!startDate && !endDate ? (retentionTotalSettled / divisor) : 0) + filteredTransactions
     .filter(t => t.isConfirm)
     .reduce((sum, t) => sum + (t.amount || 0), 0);
 

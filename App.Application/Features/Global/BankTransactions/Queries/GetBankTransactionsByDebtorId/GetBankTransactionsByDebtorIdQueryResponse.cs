@@ -10,5 +10,7 @@ namespace OOH.Application.Features.Global.BankTransactions.Queries.GetBankTransa
         }
 
         public List<BankTransactionByDebtorIdVM>? Data { get; set; }
+        public decimal RetentionTotalReceived { get; set; }
+        public decimal RetentionTotalSettled { get; set; }
     }
 }

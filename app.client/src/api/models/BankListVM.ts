@@ -8,4 +8,9 @@ export type BankListVM = {
     status?: string | null;
     isActive?: boolean;
     runningBalance: number;
+    totalDeposit?: number;
+    totalWithdrawal?: number;
+    retentionTotalDeposit?: number;
+    retentionTotalWithdrawal?: number;
+    retentionRunningBalance?: number;
 };

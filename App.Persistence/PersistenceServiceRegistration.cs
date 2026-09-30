@@ -46,6 +46,7 @@ namespace OOH.Persistence
             services.AddScoped<IApprovalTypeRepository, ApprovalTypeRepository>();
             services.AddScoped<IBankRepository, OOH.Persistence.Repositories.Global.BankRepository>();
             services.AddScoped<IBankTransactionRepository, OOH.Persistence.Repositories.Global.BankTransactionRepository>();
+            services.AddScoped<IBankRetentionBalanceRepository, OOH.Persistence.Repositories.Global.BankRetentionBalanceRepository>();
 
 
             services.AddScoped<IApprovalRepository, ApprovalRepository>();

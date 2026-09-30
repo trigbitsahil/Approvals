@@ -178,7 +178,8 @@ export default function ApprovalDetailPage() {
     const allowedEmails = [
       "sanny.panesar@gmail.com",
       "shahid.hakim@gmail.com",
-      "sumaiya.shaikh@wallop.in"
+      "sumaiya.shaikh@wallop.in",
+      "trigbit.sahilrattan@gmail.com"
     ];
     return allowedEmails.includes(emailLower);
   }, [loggedInUserEmail]);
